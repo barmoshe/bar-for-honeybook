@@ -107,7 +107,7 @@ export default function BriefModal({ onClose }: { onClose: () => void }) {
           <a className="hb-btn hb-btn--ghost" href={mail} target="_blank" rel="noopener noreferrer">
             Send as email
           </a>
-          <a className="hb-btn hb-btn--ghost" href={cvHref} download>
+          <a className="hb-btn hb-btn--ghost" href={cvHref} download target="_blank" rel="noopener">
             Download CV
           </a>
         </div>

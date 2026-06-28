@@ -154,7 +154,7 @@ export default function HoneyBookApp() {
               <button className="hb-btn hb-btn--primary hb-btn--lg hb-magnetic" onClick={open}>
                 Let&apos;s talk
               </button>
-              <a className="hb-btn hb-btn--ghost" href={cvHref} download>
+              <a className="hb-btn hb-btn--ghost" href={cvHref} download target="_blank" rel="noopener">
                 Download CV
               </a>
             </div>
@@ -272,7 +272,7 @@ export default function HoneyBookApp() {
               <a className="hb-btn hb-btn--ghost-invert" href={mailtoHref}>
                 Email
               </a>
-              <a className="hb-btn hb-btn--ghost-invert" href={cvHref} download>
+              <a className="hb-btn hb-btn--ghost-invert" href={cvHref} download target="_blank" rel="noopener">
                 Download CV
               </a>
             </div>

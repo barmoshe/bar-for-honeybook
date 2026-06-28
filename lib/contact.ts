@@ -25,4 +25,4 @@ export const buildMailtoHref = (
 
 export const whatsappHref = buildWhatsAppHref();
 export const mailtoHref = buildMailtoHref();
-export const cvHref = "/cv/bar-moshe-cv.pdf";
+export const cvHref = "/Bar_Moshe_Resume.pdf";
