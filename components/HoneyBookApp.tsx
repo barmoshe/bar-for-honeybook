@@ -167,6 +167,35 @@ export default function HoneyBookApp() {
       </header>
 
       <main id="main">
+        {/* ===== Pull quote / the hybrid method ===== */}
+        <section className="hb-section hb-section--quote" id="method" aria-label="How I work">
+          <div className="hb-wrap">
+            <figure className="hb-quote hb-reveal">
+              <blockquote className="hb-quote-body">
+                <p>
+                  <strong>Today anyone can open an AI tool and get something working in minutes.</strong>{" "}
+                  That&apos;s amazing, but you&apos;re still left alone with a blank prompt, and
+                  the code was never really the hard part.
+                </p>
+                <p>
+                  <strong>The hard part is figuring out what&apos;s worth making, how to put it,
+                  and what to leave out.</strong>{" "}You don&apos;t need it all worked out first.
+                  Just describe it, I build a first version, and once it&apos;s real it&apos;s
+                  much easier to see what to change. That&apos;s the idea: a person who actually
+                  gets what you&apos;re after, with AI and code that move fast.
+                </p>
+                <p>
+                  <strong>I figure out what&apos;s needed, dig into it, find the words, build it
+                  with AI, and go over everything like a developer.</strong>{" "}I only take on
+                  things I genuinely want to make, and if it&apos;s not a fit, I&apos;ll say so
+                  up front.
+                </p>
+              </blockquote>
+              <figcaption className="hb-quote-cite">Bar Moshe</figcaption>
+            </figure>
+          </div>
+        </section>
+
         {/* ===== About / How I build (consolidated) ===== */}
         <section className="hb-section hb-section--about" id="about">
           <Sparkle className="hb-deco hb-floaty2" style={{ top: "12%", right: "9%", color: "var(--hb-yellow-deep)", width: 26, height: 26 }} />

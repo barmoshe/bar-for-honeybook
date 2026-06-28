@@ -685,6 +685,58 @@ body {
   text-align: center;
 }
 
+/* ---- pull quote / hybrid method ---- */
+.hb-section--quote {
+  background: var(--hb-cream);
+}
+.hb-quote {
+  position: relative;
+  max-width: 64ch;
+  margin: 0 auto;
+}
+.hb-quote::before {
+  content: "\201C";
+  display: block;
+  font-size: clamp(4rem, 9vw, 6.5rem);
+  line-height: 0.7;
+  color: var(--hb-yellow-deep);
+  margin-bottom: 0.25rem;
+}
+.hb-quote-body {
+  margin: 0;
+}
+.hb-quote-body p {
+  font-size: clamp(1.1rem, 2.3vw, 1.65rem);
+  line-height: 1.5;
+  font-weight: 500;
+  color: var(--hb-ink);
+  margin: 0 0 1.1rem;
+}
+.hb-quote-body p:last-child {
+  margin-bottom: 0;
+}
+.hb-quote-body strong {
+  font-weight: 800;
+}
+.hb-quote-cite {
+  margin-top: 1.6rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--hb-ink);
+  opacity: 0.72;
+}
+.hb-quote-cite::before {
+  content: "";
+  display: inline-block;
+  width: 1.75rem;
+  height: 2px;
+  background: var(--hb-yellow-deep);
+  vertical-align: middle;
+  margin-right: 0.6rem;
+}
+
 /* ---- fit grid ---- */
 .hb-fit-grid {
   margin-top: clamp(2.5rem, 5vw, 3.5rem);
