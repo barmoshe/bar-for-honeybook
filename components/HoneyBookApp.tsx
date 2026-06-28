@@ -175,8 +175,9 @@ export default function HoneyBookApp() {
               <p className="hb-eyebrow hb-reveal">About</p>
               <h2 className="hb-h2 hb-reveal">Claude Code. Any stack. Always current.</h2>
               <p className="hb-lead hb-reveal">
-                I run my own agent-operated workshop on Claude Code, which gives one builder
-                the throughput of a small team. I track the frontier and verify against live
+                I build with AI agents on Claude Code every day. It lets one builder move like
+                a small team: a short brief becomes working software in days. I track the
+                frontier and verify against live
                 docs, not stale memory. The stack is whatever fits; the judgment, taste, and
                 last 10% are the constant. I would rather hand you a running thing than a deck.
               </p>

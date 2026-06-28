@@ -34,7 +34,7 @@ export const PROJECTS: Project[] = [
   {
     name: "Creative Harness",
     blurb:
-      "The agent-operated workshop this page came out of. Skills, hooks, and decision logs that let one builder ship like a team.",
+      "An open AI agent harness for Claude Code: skills, hooks and tooling that let one builder ship like a small team.",
     tag: "AI agents · Systems",
     href: "https://github.com/barmoshe/claude-creative-stack",
     accent: "slate",
