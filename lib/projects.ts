@@ -24,12 +24,20 @@ export const PROJECTS: Project[] = [
     span: 2,
   },
   {
+    name: "Temporal Data Service",
+    blurb:
+      "A cross-language data-processing service built on Temporal for durable, fault-tolerant workflows. Featured on Temporal's official code exchange. Go, Python, and TypeScript workers under one orchestration.",
+    tag: "Backend · Durable workflows",
+    href: "https://temporal.io/code-exchange/cross-language-data-processing-service-with-temporal",
+    accent: "teal",
+  },
+  {
     name: "Creative Harness",
     blurb:
       "The agent-operated workshop this page came out of. Skills, hooks, and decision logs that let one builder ship like a team.",
     tag: "AI agents · Systems",
     href: "https://github.com/barmoshe/claude-creative-stack",
-    accent: "teal",
+    accent: "slate",
   },
   {
     name: "Apartment Hunter",

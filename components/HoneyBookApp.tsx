@@ -16,6 +16,7 @@ const HERO_TITLE = "I want to build the next thing at HoneyBook.";
 const SKILLS = [
   "Claude Code",
   "AI agent workflows",
+  "Temporal · durable workflows",
   "Any stack, fit to the job",
   "Idea → production",
 ];
