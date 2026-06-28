@@ -5,7 +5,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ClientflowGraphic from "./ClientflowGraphic";
 import { Sparkle } from "./Decor";
-import Stats from "./Stats";
 import BriefModal from "./BriefModal";
 import { PROJECTS } from "@/lib/projects";
 import { whatsappHref, mailtoHref, cvHref } from "@/lib/contact";
@@ -168,13 +167,6 @@ export default function HoneyBookApp() {
       </header>
 
       <main id="main">
-        {/* ===== Stats (the one bold yellow beat) ===== */}
-        <section className="hb-section hb-section--stats">
-          <div className="hb-wrap">
-            <Stats />
-          </div>
-        </section>
-
         {/* ===== About / How I build (consolidated) ===== */}
         <section className="hb-section hb-section--about" id="about">
           <Sparkle className="hb-deco hb-floaty2" style={{ top: "12%", right: "9%", color: "var(--hb-yellow-deep)", width: 26, height: 26 }} />
