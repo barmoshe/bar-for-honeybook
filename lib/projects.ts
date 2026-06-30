@@ -24,6 +24,14 @@ export const PROJECTS: Project[] = [
     span: 2,
   },
   {
+    name: "Catalogue Orchestrator",
+    blurb:
+      "A local-first AI video orchestrator: point it at a catalogue of clips and an intent, it indexes everything, retrieves the right moments with RAG, and plans an edit that a deterministic ffmpeg compiler renders into a finished cut. The AI only emits a validated edit list, never raw ffmpeg, so the output stays reproducible. Open source.",
+    tag: "Open source · AI video",
+    href: "https://github.com/barmoshe/catalogue-orchestrator",
+    accent: "yellow",
+  },
+  {
     name: "Temporal Data Service",
     blurb:
       "A cross-language data-processing service built on Temporal for durable, fault-tolerant workflows. Featured on Temporal's official code exchange. Go, Python, and TypeScript workers under one orchestration.",
