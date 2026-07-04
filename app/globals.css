@@ -1086,50 +1086,80 @@ body {
 }
 
 /* ============================================================
-   How I work — steps
+   Where I'd plug in — idea cards
    ============================================================ */
-.hb-section--process {
-  background: var(--hb-cool);
-}
-.hb-steps {
+.hb-ideas {
   list-style: none;
   margin-top: clamp(2.5rem, 5vw, 3.5rem);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
-  counter-reset: step;
-}
-.hb-steps--three {
   grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
 }
-.hb-step {
+.hb-idea {
   position: relative;
+  overflow: hidden;
   background: var(--hb-white);
   border-radius: var(--hb-radius);
-  padding: 1.6rem;
+  padding: 1.75rem;
   border: 1px solid oklch(0.255 0.018 230 / 0.06);
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
 }
-.hb-step-n {
-  display: inline-grid;
+.hb-idea:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 46px -26px oklch(0.255 0.018 230 / 0.35);
+}
+/* oversized ghost numeral in the card's accent color */
+.hb-idea-index {
+  position: absolute;
+  top: 0.85rem;
+  right: 1.1rem;
+  font-size: clamp(2.8rem, 4vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ac, var(--hb-yellow));
+  user-select: none;
+}
+.hb-idea-icon {
+  display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  font-weight: 800;
-  font-size: 0.95rem;
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  background: var(--ac, var(--hb-yellow));
   color: var(--hb-ink);
-  background: var(--hb-yellow);
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
+  transition: transform 0.25s ease;
 }
-.hb-step h3 {
-  font-size: 1.2rem;
+.hb-idea:hover .hb-idea-icon {
+  transform: rotate(-6deg) scale(1.06);
+}
+.hb-idea-icon svg {
+  width: 32px;
+  height: 32px;
+}
+.hb-idea h3 {
+  font-size: 1.15rem;
   font-weight: 800;
-  margin-bottom: 0.45rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.4rem;
 }
-.hb-step p {
+.hb-idea p {
   font-size: 0.97rem;
   line-height: 1.5;
   color: var(--hb-muted);
+}
+.hb-ideas-note {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--hb-muted);
+}
+.hb-ideas-note .hb-spark {
+  flex: none;
 }
 
 /* ============================================================
@@ -1271,8 +1301,8 @@ body {
   .hb-about {
     grid-template-columns: 1fr;
   }
-  .hb-steps {
-    grid-template-columns: repeat(2, 1fr);
+  .hb-ideas {
+    grid-template-columns: 1fr;
   }
   .hb-stats {
     grid-template-columns: repeat(2, 1fr);
@@ -1292,9 +1322,6 @@ body {
   }
   .hb-tile--wide {
     grid-column: span 1;
-  }
-  .hb-steps {
-    grid-template-columns: 1fr;
   }
   .hb-stat::after {
     display: none !important;
@@ -2052,34 +2079,6 @@ body {
     font-variant-numeric: tabular-nums;
   }
 
-  /* "what I'd build" steps → vertical timeline */
-  .hb-root .hb-steps {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 1.4rem;
-  }
-  .hb-root .hb-steps::before {
-    content: "";
-    position: absolute;
-    left: 20px;
-    top: 12px;
-    bottom: 12px;
-    border-left: 2px dashed oklch(0.255 0.018 230 / 0.22);
-  }
-  .hb-root .hb-step {
-    margin-left: 3.1rem;
-  }
-  .hb-root .hb-step .hb-step-n {
-    position: absolute;
-    left: -3.05rem;
-    top: 1.35rem;
-    width: 40px;
-    height: 40px;
-    margin: 0;
-    border: 3px solid var(--hb-white);
-    font-size: 0.78rem;
-  }
 
   /* fixed bottom action bar */
   .hbai-tabbar {

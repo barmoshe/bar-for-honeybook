@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ClientflowGraphic from "./ClientflowGraphic";
 import ProductPreview from "./ProductPreviews";
-import { Sparkle } from "./Decor";
+import { Sparkle, IdeaIcon } from "./Decor";
 import BriefModal from "./BriefModal";
 import HoneyBookLogo from "./HoneyBookLogo";
 import { PROJECTS } from "@/lib/projects";
@@ -22,6 +22,7 @@ const SKILLS = [
   "Any stack, fit to the job",
   "Idea → production",
 ];
+const IDEA_ACCENTS = ["var(--hb-yellow)", "var(--hb-mint)", "var(--hb-slate)"];
 const FITS = [
   { n: "01", t: "Faster decisions", d: "Ideas reach a clickable, deployed surface the same day. You decide on a running thing, not a doc." },
   { n: "02", t: "AI on the weight, judgment human", d: "Agents carry the repetitive load. I own the architecture, the taste, and the last 10%." },
@@ -392,19 +393,28 @@ export default function HoneyBookApp() {
           <div className="hb-wrap">
             <p className="hb-eyebrow hb-reveal">Where I&apos;d plug in</p>
             <h2 className="hb-h2 hb-reveal">Three ideas, to start.</h2>
-            <p className="hb-lead hb-reveal">
-              Not a roadmap — just proof I&apos;ve thought about the product. Point me at
-              whatever the team actually needs.
-            </p>
-            <ol className="hb-steps hb-steps--three">
+            <ol className="hb-ideas">
               {PRODUCT_IDEAS.map((idea, i) => (
-                <li className="hb-step hb-reveal" key={idea.t}>
-                  <span className="hb-step-n">{String(i + 1).padStart(2, "0")}</span>
+                <li
+                  className="hb-idea hb-reveal"
+                  key={idea.key}
+                  style={{ "--ac": IDEA_ACCENTS[i % IDEA_ACCENTS.length] } as React.CSSProperties}
+                >
+                  <span className="hb-idea-index" aria-hidden="true">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="hb-idea-icon">
+                    <IdeaIcon kind={idea.key} />
+                  </span>
                   <h3>{idea.t}</h3>
                   <p>{idea.d}</p>
                 </li>
               ))}
             </ol>
+            <p className="hb-ideas-note hb-reveal">
+              <Sparkle style={{ width: 14, height: 14, color: "var(--hb-yellow-deep)" }} />
+              Not a roadmap — point me anywhere.
+            </p>
           </div>
         </section>
 
