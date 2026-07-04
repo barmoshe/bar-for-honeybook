@@ -285,12 +285,10 @@ export default function HoneyBookApp() {
               </ul>
             </div>
             <div className="hb-about-card hb-reveal">
-              <div
-                className="hb-about-photo"
-                role="img"
-                aria-label="Portrait of Bar Moshe"
-                style={{ backgroundImage: "url(/bar.png)" }}
-              />
+              <div className="hb-about-monogram" aria-hidden="true">
+                BM
+                <Sparkle className="hb-about-spark" />
+              </div>
               <div className="hb-about-name">Bar Moshe</div>
               <div className="hb-about-role">AI-native builder</div>
               <div className="hb-about-meta" aria-hidden="true">
@@ -298,6 +296,9 @@ export default function HoneyBookApp() {
                 <span>Ships solo, fast</span>
                 <span>Current by default</span>
               </div>
+              <button className="hb-btn hb-btn--primary hb-about-cta hb-magnetic" onClick={open}>
+                Let&apos;s talk
+              </button>
             </div>
           </div>
         </section>

@@ -1029,21 +1029,36 @@ body {
 .hb-about-card {
   background: var(--hb-ink);
   border-radius: var(--hb-radius);
-  padding: 2rem;
+  padding: 2.4rem 2rem;
   color: var(--hb-white);
   text-align: center;
   box-shadow: 0 30px 60px -30px oklch(0.255 0.018 230 / 0.5);
 }
-.hb-about-photo {
-  width: 100%;
-  aspect-ratio: 1 / 1;
+.hb-about-monogram {
+  position: relative;
+  width: 84px;
+  height: 84px;
   margin: 0 auto 1.2rem;
-  border-radius: 18px;
-  background-size: cover;
-  background-position: 50% 18%;
-  background-repeat: no-repeat;
-  outline: 3px solid var(--hb-yellow);
-  outline-offset: -3px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--hb-yellow);
+  color: var(--hb-ink);
+  font-size: 1.7rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.hb-about-spark {
+  position: absolute;
+  top: -7px;
+  right: -9px;
+  width: 22px;
+  height: 22px;
+  color: var(--hb-yellow-deep);
+}
+.hb-about-cta {
+  margin-top: 1.4rem;
+  width: 100%;
 }
 .hb-about-name {
   font-size: 1.35rem;
@@ -1269,6 +1284,10 @@ body {
 @media (max-width: 600px) {
   .hb-grid {
     grid-template-columns: 1fr;
+  }
+  /* the floating action bar already carries the CTA on phones */
+  .hb-about-cta {
+    display: none;
   }
   .hb-tile--wide {
     grid-column: span 1;
