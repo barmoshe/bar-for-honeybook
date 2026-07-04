@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ClientflowGraphic from "./ClientflowGraphic";
+import AiPreview from "./AiPreviews";
 import { Sparkle } from "./Decor";
 import BriefModal from "./BriefModal";
 import { PROJECTS } from "@/lib/projects";
+import { AI_FEATURES, AI_FACTS, AI_IDEAS, AI_SOURCES } from "@/lib/honeybookAi";
 import { whatsappHref, mailtoHref, cvHref } from "@/lib/contact";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -39,7 +40,10 @@ function Blobs({ dim = false }: { dim?: boolean }) {
 export default function HoneyBookApp() {
   const [modalOpen, setModalOpen] = useState(false);
   const [navShown, setNavShown] = useState(false);
+  const [active, setActive] = useState(0);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const cardRefs = useRef<(HTMLElement | null)[]>([]);
   const open = () => setModalOpen(true);
 
   useEffect(() => {
@@ -48,6 +52,31 @@ export default function HoneyBookApp() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Mobile AI carousel: keep the active dot/chip in sync with the snap scroll.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const onScroll = () => {
+      const center = track.scrollLeft + track.clientWidth / 2;
+      let best = 0;
+      let bestDist = Infinity;
+      cardRefs.current.forEach((el, i) => {
+        if (!el) return;
+        const dist = Math.abs(el.offsetLeft + el.offsetWidth / 2 - center);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = i;
+        }
+      });
+      setActive(best);
+    };
+    track.addEventListener("scroll", onScroll, { passive: true });
+    return () => track.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const goTo = (i: number) =>
+    cardRefs.current[i]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
 
   useEffect(() => {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -76,6 +105,14 @@ export default function HoneyBookApp() {
         ease: "power3.out",
         stagger: 0.07,
         scrollTrigger: { trigger: ".hb-grid", start: "top 82%" },
+      });
+      gsap.from(".hbai-card", {
+        y: 34,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power3.out",
+        stagger: 0.08,
+        scrollTrigger: { trigger: ".hbai-grid", start: "top 82%" },
       });
       gsap.to(".hb-flow", {
         y: -70,
@@ -110,7 +147,7 @@ export default function HoneyBookApp() {
   }, []);
 
   return (
-    <div className="hb-root" ref={rootRef} dir="ltr" lang="en">
+    <div className="hb-root hbai-root" ref={rootRef} dir="ltr" lang="en">
       <a className="hb-skip" href="#main">
         Skip to content
       </a>
@@ -120,8 +157,8 @@ export default function HoneyBookApp() {
           <span className="hb-mark">Bar Moshe</span>
           <nav className="hb-nav-links" aria-label="Sections">
             <a href="#about">About</a>
+            <a href="#ai">AI</a>
             <a href="#work">Work</a>
-            <Link href="/ai">HoneyBook × AI</Link>
             <button className="hb-btn hb-btn--primary hb-btn--sm hb-magnetic" onClick={open} tabIndex={navShown ? 0 : -1}>
               Let&apos;s talk
             </button>
@@ -159,9 +196,9 @@ export default function HoneyBookApp() {
               <a className="hb-btn hb-btn--ghost" href={cvHref} download target="_blank" rel="noopener">
                 Download CV
               </a>
-              <Link className="hb-btn hb-btn--ghost" href="/ai">
-                HoneyBook × AI →
-              </Link>
+              <a className="hb-btn hb-btn--ghost" href="#ai">
+                See the AI homework →
+              </a>
             </div>
           </div>
           <ClientflowGraphic />
@@ -241,6 +278,107 @@ export default function HoneyBookApp() {
           </div>
         </section>
 
+        {/* ===== Researched HoneyBook facts ===== */}
+        <section className="hb-section hb-section--stats" aria-label="HoneyBook facts">
+          <div className="hb-wrap">
+            <div className="hb-stats">
+              {AI_FACTS.map((f) => (
+                <div className="hb-stat hb-reveal" key={f.num}>
+                  <div className="hb-stat-num">{f.num}</div>
+                  <div className="hb-stat-label">{f.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ===== HoneyBook AI, previewed live ===== */}
+        <section className="hb-section hbai-section-previews" id="ai">
+          <Sparkle
+            className="hb-deco hb-floaty2"
+            style={{ top: "6%", left: "4%", color: "var(--hb-yellow-deep)", width: 24, height: 24 }}
+          />
+          <div className="hb-wrap">
+            <p className="hb-eyebrow hb-reveal">I did the homework</p>
+            <h2 className="hb-h2 hb-reveal">Your AI surface, previewed live.</h2>
+            <p className="hb-lead hb-reveal">
+              I researched what HoneyBook is actually shipping — priority leads, the AI
+              Notetaker, the plain-language automations builder — and rebuilt each one by hand
+              as a living, animated preview. Nothing here is a screenshot or a video. It&apos;s
+              all code, moving right now, in your brand.
+            </p>
+            {/* mobile-only: feature chips that drive the preview carousel */}
+            <nav className="hbai-chips hb-reveal" aria-label="Jump to a preview">
+              {AI_FEATURES.map((f, i) => (
+                <button
+                  key={f.key}
+                  className={`hbai-chipbtn${active === i ? " is-active" : ""}`}
+                  onClick={() => goTo(i)}
+                >
+                  {f.name}
+                </button>
+              ))}
+            </nav>
+          </div>
+          <div className="hb-wrap hbai-grid" ref={trackRef}>
+            {AI_FEATURES.map((f, i) => (
+              <article
+                key={f.key}
+                ref={(el) => {
+                  cardRefs.current[i] = el;
+                }}
+                className={`hbai-card${f.span === 2 ? " hbai-card--wide" : ""}`}
+              >
+                <AiPreview feature={f.key} />
+                <div className="hbai-card-body">
+                  <span className="hb-tile-tag">{f.tag}</span>
+                  <h3 className="hbai-card-name">{f.name}</h3>
+                  <p className="hbai-card-blurb">{f.blurb}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+          {/* mobile-only: carousel progress */}
+          <div className="hbai-dots">
+            {AI_FEATURES.map((f, i) => (
+              <button
+                key={f.key}
+                className={active === i ? "is-active" : ""}
+                aria-label={`Go to ${f.name}`}
+                onClick={() => goTo(i)}
+              />
+            ))}
+            <span className="hbai-dots-count" aria-hidden="true">
+              {active + 1}/{AI_FEATURES.length}
+            </span>
+          </div>
+          <div className="hb-wrap hbai-sources hb-reveal">
+            <span>Researched from:</span>
+            {AI_SOURCES.map((s) => (
+              <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer">
+                {s.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {/* ===== What I'd build on it ===== */}
+        <section className="hb-section hb-section--ai" aria-label="What I'd build on it">
+          <div className="hb-wrap">
+            <p className="hb-eyebrow hb-reveal">Where I&apos;d plug in</p>
+            <h2 className="hb-h2 hb-reveal">What I&apos;d build on top of it.</h2>
+            <ol className="hb-steps hb-steps--three">
+              {AI_IDEAS.map((idea, i) => (
+                <li className="hb-step hb-reveal" key={idea.t}>
+                  <span className="hb-step-n">{String(i + 1).padStart(2, "0")}</span>
+                  <h3>{idea.t}</h3>
+                  <p>{idea.d}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
         {/* ===== Why I'd fit ===== */}
         <section className="hb-section hb-section--fit">
           <span className="hb-deco hb-deco--ring hb-spin-slow" style={{ width: 60, height: 60, top: "9%", right: "6%", color: "var(--hb-slate)" }} />
@@ -265,15 +403,6 @@ export default function HoneyBookApp() {
           <div className="hb-wrap">
             <p className="hb-eyebrow hb-reveal">Proof I can build</p>
             <h2 className="hb-h2 hb-reveal">Shipped, mostly solo.</h2>
-            <p className="hb-lead hb-reveal">
-              And because homework beats talk: I researched HoneyBook&apos;s AI surface and
-              rebuilt it as live animated previews, on its own page.
-            </p>
-            <div className="hb-work-more hb-reveal">
-              <Link className="hb-btn hb-btn--ghost" href="/ai">
-                See HoneyBook × AI, previewed live →
-              </Link>
-            </div>
           </div>
           <div className="hb-grid hb-wrap">
             {PROJECTS.map((p) => (
@@ -303,7 +432,7 @@ export default function HoneyBookApp() {
             <p className="hb-eyebrow hb-eyebrow--onink hb-reveal">The ask</p>
             <h2 className="hb-h2 hb-h2--invert hb-reveal">I&apos;d love to build here. Let&apos;s talk.</h2>
             <p className="hb-lead hb-lead--invert hb-reveal">
-              If there is a place for a builder who ships this fast, I want to be in the room.
+              This page took me an evening. Imagine what a quarter looks like.
             </p>
             <div className="hb-close-cta hb-reveal">
               <button className="hb-btn hb-btn--primary hb-btn--lg hb-magnetic" onClick={open}>
@@ -326,7 +455,6 @@ export default function HoneyBookApp() {
       <footer className="hb-footer">
         <span>Bar Moshe · AI-native builder</span>
         <span className="hb-footer-links">
-          <Link href="/ai">HoneyBook × AI</Link>
           <a href={mailtoHref}>Email</a>
           <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
             WhatsApp
@@ -337,6 +465,19 @@ export default function HoneyBookApp() {
         </span>
         <span>Made for HoneyBook</span>
       </footer>
+
+      {/* mobile-only: app-style bottom action bar */}
+      <div className="hbai-tabbar">
+        <a href="#ai" className="hbai-tab">
+          AI previews
+        </a>
+        <a className="hbai-tab" href={whatsappHref} target="_blank" rel="noopener noreferrer">
+          WhatsApp
+        </a>
+        <button className="hb-btn hb-btn--primary hbai-tab-cta" onClick={open}>
+          Let&apos;s talk
+        </button>
+      </div>
 
       {modalOpen && <BriefModal onClose={() => setModalOpen(false)} />}
     </div>

@@ -779,10 +779,6 @@ body {
   color: var(--hb-muted);
 }
 
-.hb-work-more {
-  margin-top: 1.4rem;
-}
-
 /* ---- modular grid ---- */
 .hb-grid {
   margin-top: clamp(2.5rem, 5vw, 3.5rem);
@@ -1063,6 +1059,9 @@ body {
   gap: 1.25rem;
   counter-reset: step;
 }
+.hb-steps--three {
+  grid-template-columns: repeat(3, 1fr);
+}
 .hb-step {
   position: relative;
   background: var(--hb-white);
@@ -1269,47 +1268,8 @@ body {
 }
 
 /* ============================================================
-   /ai page — HoneyBook × AI, live animated previews
+   HoneyBook × AI block — live animated previews (home page)
    ============================================================ */
-.hbai-hero {
-  position: relative;
-  overflow: hidden;
-  background: var(--hb-cream);
-  padding-block: clamp(8rem, 16vh, 11rem) clamp(3rem, 7vw, 5rem);
-}
-.hbai-topnav {
-  display: flex;
-  align-items: center;
-  gap: clamp(0.9rem, 2.5vw, 1.6rem);
-}
-.hbai-topnav a {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--hb-ink);
-  text-decoration: none;
-  opacity: 0.78;
-  transition: opacity 0.2s ease;
-}
-.hbai-topnav a:hover {
-  opacity: 1;
-}
-.hbai-hero-inner {
-  position: relative;
-  z-index: 2;
-}
-.hbai-title {
-  margin-top: 1.1rem;
-  font-size: clamp(2.4rem, 5.4vw, 4.2rem);
-  font-weight: 900;
-  line-height: 1.06;
-  letter-spacing: -0.035em;
-  max-width: 16ch;
-  color: var(--hb-ink);
-}
-.hbai-title-mark {
-  background: linear-gradient(transparent 58%, var(--hb-yellow) 58%);
-}
-
 .hbai-section-previews {
   background: var(--hb-cool);
 }
@@ -1763,9 +1723,6 @@ body {
   }
 }
 @media (max-width: 560px) {
-  .hbai-topnav a {
-    display: none;
-  }
   .hbai-node {
     font-size: 0.72rem;
     padding: 0.5rem 0.6rem;
@@ -1784,19 +1741,9 @@ body {
 }
 
 @media (max-width: 720px) {
-  /* compact, app-splash hero */
-  .hbai-hero {
-    padding-block: 6.2rem 2.1rem;
-  }
-  .hbai-title {
-    font-size: clamp(2.1rem, 9vw, 2.6rem);
-  }
-  .hbai-hero .hb-lead {
-    font-size: 1rem;
-    margin-top: 0.9rem;
-  }
-  .hbai-topnav .hb-btn {
-    display: none; /* the bottom bar owns the CTA on mobile */
+  /* the bottom bar owns the CTA on mobile — no duplicate in the sticky nav */
+  .hbai-root .hb-nav .hb-btn {
+    display: none;
   }
 
   /* feature chips — horizontally scrollable, drive the carousel */
@@ -1913,14 +1860,14 @@ body {
     font-variant-numeric: tabular-nums;
   }
 
-  /* ideas → vertical timeline */
-  .hbai-root .hb-fit-grid {
+  /* "what I'd build" steps → vertical timeline */
+  .hbai-root .hb-steps {
     position: relative;
     display: flex;
     flex-direction: column;
     gap: 1.4rem;
   }
-  .hbai-root .hb-fit-grid::before {
+  .hbai-root .hb-steps::before {
     content: "";
     position: absolute;
     left: 20px;
@@ -1928,20 +1875,16 @@ body {
     bottom: 12px;
     border-left: 2px dashed oklch(0.255 0.018 230 / 0.22);
   }
-  .hbai-root .hb-fit-card {
-    position: relative;
+  .hbai-root .hb-step {
     margin-left: 3.1rem;
   }
-  .hbai-root .hb-fit-num {
+  .hbai-root .hb-step .hb-step-n {
     position: absolute;
     left: -3.05rem;
     top: 1.35rem;
     width: 40px;
     height: 40px;
-    display: grid;
-    place-items: center;
     margin: 0;
-    padding: 0;
     border: 3px solid var(--hb-white);
     font-size: 0.78rem;
   }

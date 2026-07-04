@@ -1,12 +1,6 @@
-import type { Metadata } from "next";
-import AiPage from "@/components/AiPage";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "HoneyBook × AI, previewed live — Bar Moshe",
-  description:
-    "HoneyBook's real AI features — priority leads, AI Notetaker, the automations builder — researched and rebuilt by hand as live animated previews.",
-};
-
+// The /ai content now lives on the home page; keep shared links working.
 export default function Page() {
-  return <AiPage />;
+  redirect("/#ai");
 }
