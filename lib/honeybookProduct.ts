@@ -72,18 +72,21 @@ export const PRODUCT_FACTS = [
 
 export const PRODUCT_IDEAS = [
   {
-    t: "Durable agentic clientflow",
-    d: "An agent that runs the whole follow-up thread — drafts, waits, escalates — built the way I build Temporal workers: durable, resumable, safe to retry.",
+    key: "agent",
+    t: "Agentic clientflow",
+    d: "A follow-up agent that drafts, waits, and escalates — and never loses its place.",
   },
   {
-    t: "An eval harness for AI features",
-    d: "Notetaker summaries and lead scoring deserve regression tests. I already run this discipline on my own agent stack; I'd point it at yours.",
+    key: "evals",
+    t: "Evals for the AI",
+    d: "Regression tests for prompts, so every change ships with proof.",
   },
   {
-    t: "Prompt → on-brand document",
-    d: "A member describes a proposal and gets a design-locked, branded file — the exact compiler pattern I shipped as MDP, aimed at clientflow.",
+    key: "docgen",
+    t: "Prompt → branded doc",
+    d: "One sentence in, an on-brand proposal out.",
   },
-];
+] as const;
 
 export const PRODUCT_SOURCES = [
   { label: "honeybook.com/product/ai", href: "https://www.honeybook.com/product/ai" },
