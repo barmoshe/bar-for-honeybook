@@ -17,8 +17,8 @@ export const PROJECTS: Project[] = [
   {
     name: "MDP",
     blurb:
-      "An open-source compiler that turns one Markdown source into design-locked decks, pages, and docs. Built for AI agents to write into. Zero-dependency Node engine, on npm.",
-    tag: "Open source · AI tooling",
+      "A compiler that turns one Markdown source into design-locked decks, pages, and docs. Built for AI agents to write into. Zero-dependency Node engine, on npm.",
+    tag: "Compiler · AI tooling",
     href: "https://barmoshe.github.io/mdp/",
     accent: "yellow",
     span: 2,
@@ -26,16 +26,16 @@ export const PROJECTS: Project[] = [
   {
     name: "Entailer",
     blurb:
-      "A logician's-pass linter for prose and specs — think markdownlint, but for logical validity. An LLM-in-the-loop translator formalizes the load-bearing claims, a deterministic core checks whether arguments follow and requirements are consistent, and every verdict ships with the formalization it judged. Open source, on npm.",
-    tag: "Open source · AI + formal logic",
+      "A logician's-pass linter for prose and specs — think markdownlint, but for logical validity. An LLM-in-the-loop translator formalizes the load-bearing claims, a deterministic core checks whether arguments follow and requirements are consistent, and every verdict ships with the formalization it judged. On npm.",
+    tag: "Linter · AI + formal logic",
     href: "https://barmoshe.github.io/entailer/",
     accent: "slate",
   },
   {
     name: "Catalogue Orchestrator",
     blurb:
-      "A local-first AI video orchestrator: point it at a catalogue of clips and an intent, it indexes everything, retrieves the right moments with RAG, and plans an edit that a deterministic ffmpeg compiler renders into a finished cut. The AI only emits a validated edit list, never raw ffmpeg, so the output stays reproducible. Open source.",
-    tag: "Open source · AI video",
+      "A local-first AI video orchestrator: point it at a catalogue of clips and an intent, it indexes everything, retrieves the right moments with RAG, and plans an edit that a deterministic ffmpeg compiler renders into a finished cut. The AI only emits a validated edit list, never raw ffmpeg, so the output stays reproducible.",
+    tag: "AI video · Orchestration",
     href: "https://barmoshe.github.io/catalogue-orchestrator/",
     accent: "yellow",
   },
@@ -50,7 +50,7 @@ export const PROJECTS: Project[] = [
   {
     name: "Creative Harness",
     blurb:
-      "An open AI agent harness for Claude Code: skills, hooks and tooling that let one builder ship like a small team.",
+      "An AI agent harness for Claude Code: skills, hooks and tooling that let one builder ship like a small team.",
     tag: "AI agents · Systems",
     href: "https://github.com/barmoshe/claude-creative-stack",
     accent: "slate",
