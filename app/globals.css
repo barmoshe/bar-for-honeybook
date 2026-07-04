@@ -6,7 +6,8 @@
    ============================================================ */
 
 :root {
-  --font-hb: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  /* Closest free match to HoneyBook's brand face, Aeonik (commercial) */
+  --font-hb: "DM Sans Variable", system-ui, -apple-system, sans-serif;
 }
 
 * {

@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
-import { Hanken_Grotesk } from "next/font/google";
 import ScrollRestorer from "@/components/ScrollRestorer";
+import "@fontsource-variable/dm-sans";
 import "./globals.css";
-
-const hanken = Hanken_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-  variable: "--font-hb",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bar-for-honeybook.vercel.app"),
@@ -37,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" dir="ltr" className={hanken.variable}>
+    <html lang="en" dir="ltr">
       <body>
         <ScrollRestorer />
         {children}
