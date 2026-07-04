@@ -197,7 +197,7 @@ export default function HoneyBookApp() {
                 Download CV
               </a>
               <a className="hb-btn hb-btn--ghost" href="#ai">
-                See the AI homework →
+                HoneyBook × AI, live →
               </a>
             </div>
           </div>
