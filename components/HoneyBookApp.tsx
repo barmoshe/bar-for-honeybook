@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ClientflowGraphic from "./ClientflowGraphic";
@@ -53,26 +53,36 @@ export default function HoneyBookApp() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Mobile AI carousel: keep the active dot/chip in sync with the snap scroll.
+  // Mobile carousel: keep the active dot/chip in sync with the snap scroll.
+  // rAF-throttled, and setActive only fires when the index actually changes,
+  // so a swipe costs a handful of renders instead of one per scroll event.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
+    let raf = 0;
     const onScroll = () => {
-      const center = track.scrollLeft + track.clientWidth / 2;
-      let best = 0;
-      let bestDist = Infinity;
-      cardRefs.current.forEach((el, i) => {
-        if (!el) return;
-        const dist = Math.abs(el.offsetLeft + el.offsetWidth / 2 - center);
-        if (dist < bestDist) {
-          bestDist = dist;
-          best = i;
-        }
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const center = track.scrollLeft + track.clientWidth / 2;
+        let best = 0;
+        let bestDist = Infinity;
+        cardRefs.current.forEach((el, i) => {
+          if (!el) return;
+          const dist = Math.abs(el.offsetLeft + el.offsetWidth / 2 - center);
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = i;
+          }
+        });
+        setActive((prev) => (prev === best ? prev : best));
       });
-      setActive(best);
     };
     track.addEventListener("scroll", onScroll, { passive: true });
-    return () => track.removeEventListener("scroll", onScroll);
+    return () => {
+      track.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   const goTo = (i: number) =>
@@ -179,10 +189,14 @@ export default function HoneyBookApp() {
           <div className="hb-hero-copy">
             <p className="hb-eyebrow hb-reveal">A builder who wants in</p>
             <h1 className="hb-hero-title">
+              {/* real spaces between word spans: screen readers and copy-paste
+                  must see separate words, not one glued string */}
               {HERO_TITLE.split(" ").map((w, i) => (
-                <span className="hb-word" key={i}>
-                  <span>{w}</span>
-                </span>
+                <Fragment key={i}>
+                  <span className="hb-word">
+                    <span>{w}</span>
+                  </span>{" "}
+                </Fragment>
               ))}
             </h1>
             <p className="hb-hero-sub hb-reveal">
