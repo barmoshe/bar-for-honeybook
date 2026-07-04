@@ -3,8 +3,8 @@
 import type { AiFeature } from "@/lib/honeybookAi";
 
 /**
- * Live animated previews of HoneyBook's real AI features, rebuilt by hand as
- * looping product-UI scenes (pure CSS/SVG keyframes, no video, no WebGL).
+ * Original hand-coded animated scenes inspired by HoneyBook's real AI features,
+ * built as looping product-UI vignettes (pure CSS/SVG keyframes, no video, no WebGL).
  * Each scene sits in a shared browser-chrome frame. Decorative: aria-hidden,
  * and every loop dies under prefers-reduced-motion via the global kill rule.
  */

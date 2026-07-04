@@ -292,7 +292,7 @@ export default function HoneyBookApp() {
           </div>
         </section>
 
-        {/* ===== HoneyBook, studied & rebuilt ===== */}
+        {/* ===== HoneyBook, studied up close ===== */}
         <section className="hb-section hbai-section-previews" id="ai">
           <Sparkle
             className="hb-deco hb-floaty2"
@@ -300,11 +300,12 @@ export default function HoneyBookApp() {
           />
           <div className="hb-wrap">
             <p className="hb-eyebrow hb-reveal">I came prepared</p>
-            <h2 className="hb-h2 hb-reveal">HoneyBook. Studied. Rebuilt.</h2>
+            <h2 className="hb-h2 hb-reveal">HoneyBook, studied up close.</h2>
             <p className="hb-lead hb-reveal">
               Before asking for a seat, I learned the product. Six real HoneyBook features —
-              clientflow, growth, and the AI toolkit — recreated as hand-coded animated
-              scenes. No screenshots, no video, all in your brand.
+              clientflow, growth, and the AI toolkit — each one an original, hand-coded
+              animated scene inspired by the real thing. No screenshots, no video, all in
+              your brand.
             </p>
             {/* mobile-only: feature chips that drive the preview carousel */}
             <nav className="hbai-chips hb-reveal" aria-label="Jump to a preview">
