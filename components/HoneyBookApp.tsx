@@ -197,7 +197,7 @@ export default function HoneyBookApp() {
                 Download CV
               </a>
               <a className="hb-btn hb-btn--ghost" href="#ai">
-                HoneyBook × AI, live →
+                Inspired by your AI →
               </a>
             </div>
           </div>
@@ -299,13 +299,11 @@ export default function HoneyBookApp() {
             style={{ top: "6%", left: "4%", color: "var(--hb-yellow-deep)", width: 24, height: 24 }}
           />
           <div className="hb-wrap">
-            <p className="hb-eyebrow hb-reveal">I did the homework</p>
-            <h2 className="hb-h2 hb-reveal">Your AI surface, previewed live.</h2>
+            <p className="hb-eyebrow hb-reveal">Research, running</p>
+            <h2 className="hb-h2 hb-reveal">Your AI. Rebuilt. Live.</h2>
             <p className="hb-lead hb-reveal">
-              I researched what HoneyBook is actually shipping — priority leads, the AI
-              Notetaker, the plain-language automations builder — and rebuilt each one by hand
-              as a living, animated preview. Nothing here is a screenshot or a video. It&apos;s
-              all code, moving right now, in your brand.
+              Five real HoneyBook AI features, researched and rebuilt by hand as living scenes.
+              No screenshots. No video. Just code, moving right now, in your brand.
             </p>
             {/* mobile-only: feature chips that drive the preview carousel */}
             <nav className="hbai-chips hb-reveal" aria-label="Jump to a preview">
