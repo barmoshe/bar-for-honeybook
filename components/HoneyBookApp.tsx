@@ -159,6 +159,9 @@ export default function HoneyBookApp() {
               <a className="hb-btn hb-btn--ghost" href={cvHref} download target="_blank" rel="noopener">
                 Download CV
               </a>
+              <Link className="hb-btn hb-btn--ghost" href="/ai">
+                HoneyBook × AI →
+              </Link>
             </div>
           </div>
           <ClientflowGraphic />
@@ -323,6 +326,7 @@ export default function HoneyBookApp() {
       <footer className="hb-footer">
         <span>Bar Moshe · AI-native builder</span>
         <span className="hb-footer-links">
+          <Link href="/ai">HoneyBook × AI</Link>
           <a href={mailtoHref}>Email</a>
           <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
             WhatsApp
