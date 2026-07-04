@@ -1831,6 +1831,7 @@ body {
     display: flex;
     gap: 0.5rem;
     overflow-x: auto;
+    overflow-y: hidden;
     margin-top: 1.5rem;
     padding-bottom: 0.4rem;
     scrollbar-width: none;
@@ -1863,6 +1864,7 @@ body {
     display: flex;
     gap: 0.8rem;
     overflow-x: auto;
+    overflow-y: hidden;
     scroll-snap-type: x mandatory;
     padding-bottom: 0.4rem;
     scrollbar-width: none;
@@ -1908,12 +1910,16 @@ body {
     display: none;
   }
 
-  /* previews → full-width snap carousel */
+  /* previews → full-width snap carousel; X-only — overflow-x:auto alone
+     would compute overflow-y to auto and let the track wiggle vertically */
   .hbai-grid {
     display: flex;
+    align-items: stretch;
     margin-top: 1.6rem;
     gap: 0.9rem;
     overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
     scroll-padding-inline: var(--hb-pad);
     padding-bottom: 0.5rem;
