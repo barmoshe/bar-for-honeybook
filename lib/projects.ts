@@ -10,10 +10,13 @@ export type Project = {
 };
 
 /**
- * Shipped proofs, ordered for an engineering audience: AI / agent / systems
- * work first, then the craft demos. Blurbs are in Bar's plain "I" voice.
+ * Shipped proofs, ordered as four grid rows for an engineering audience:
+ * flagship AI tooling + backend up top, then AI systems, then product apps,
+ * then the craft demos. Two wide tiles (MDP, Apartment Hunter) keep the
+ * 3-column grid filling exactly — reorder with the cell count in mind.
  */
 export const PROJECTS: Project[] = [
+  // Row 1 — the headline: AI tooling flagship + backend credibility
   {
     name: "MDP",
     blurb:
@@ -24,12 +27,29 @@ export const PROJECTS: Project[] = [
     span: 2,
   },
   {
+    name: "Temporal Data Service",
+    blurb:
+      "A cross-language data-processing service built on Temporal for durable, fault-tolerant workflows. Featured on Temporal's official code exchange. Go, Python, and TypeScript workers under one orchestration.",
+    tag: "Backend · Durable workflows",
+    href: "https://temporal.io/code-exchange/cross-language-data-processing-service-with-temporal",
+    accent: "teal",
+  },
+  // Row 2 — AI systems
+  {
     name: "Entailer",
     blurb:
       "A logician's-pass linter for prose and specs — think markdownlint, but for logical validity. An LLM-in-the-loop translator formalizes the load-bearing claims, a deterministic core checks whether arguments follow and requirements are consistent, and every verdict ships with the formalization it judged. On npm.",
     tag: "Linter · AI + formal logic",
     href: "https://barmoshe.github.io/entailer/",
     accent: "slate",
+  },
+  {
+    name: "Creative Harness",
+    blurb:
+      "An AI agent harness for Claude Code: skills, hooks and tooling that let one builder ship like a small team.",
+    tag: "AI agents · Systems",
+    href: "https://github.com/barmoshe/claude-creative-stack",
+    accent: "sage",
   },
   {
     name: "Catalogue Orchestrator",
@@ -39,29 +59,15 @@ export const PROJECTS: Project[] = [
     href: "https://barmoshe.github.io/catalogue-orchestrator/",
     accent: "yellow",
   },
-  {
-    name: "Temporal Data Service",
-    blurb:
-      "A cross-language data-processing service built on Temporal for durable, fault-tolerant workflows. Featured on Temporal's official code exchange. Go, Python, and TypeScript workers under one orchestration.",
-    tag: "Backend · Durable workflows",
-    href: "https://temporal.io/code-exchange/cross-language-data-processing-service-with-temporal",
-    accent: "teal",
-  },
-  {
-    name: "Creative Harness",
-    blurb:
-      "An AI agent harness for Claude Code: skills, hooks and tooling that let one builder ship like a small team.",
-    tag: "AI agents · Systems",
-    href: "https://github.com/barmoshe/claude-creative-stack",
-    accent: "slate",
-  },
+  // Row 3 — product apps, anchored by a wide feature tile
   {
     name: "Apartment Hunter",
     blurb:
       "A real-estate decision tool: side-by-side comparison, Israeli purchase-tax brackets, a full mortgage calculator. Product-grade UI, shipped solo.",
     tag: "Product · Web app",
     href: "https://apartment-hunter-one.vercel.app",
-    accent: "sage",
+    accent: "teal",
+    span: 2,
   },
   {
     name: "Trip Planner",
@@ -70,6 +76,15 @@ export const PROJECTS: Project[] = [
     tag: "Product · Web app",
     href: "https://trip-planner-six-iota.vercel.app",
     accent: "slate",
+  },
+  // Row 4 — craft demos
+  {
+    name: "Bloom Garden",
+    blurb:
+      "A webcam hand-gesture game: pinch to pluck flowers, on-device MediaPipe, no video ever leaves the browser.",
+    tag: "Computer vision · Game",
+    href: "https://bloom-garden-five.vercel.app",
+    accent: "sage",
   },
   {
     name: "Biome",
@@ -86,13 +101,5 @@ export const PROJECTS: Project[] = [
     tag: "WebGL · Graphics",
     href: "https://aurora-eight-iota.vercel.app",
     accent: "teal",
-  },
-  {
-    name: "Bloom Garden",
-    blurb:
-      "A webcam hand-gesture game: pinch to pluck flowers, on-device MediaPipe, no video ever leaves the browser.",
-    tag: "Computer vision · Game",
-    href: "https://bloom-garden-five.vercel.app",
-    accent: "sage",
   },
 ];
