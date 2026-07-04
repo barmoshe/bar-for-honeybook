@@ -100,7 +100,7 @@ function BuilderScene() {
   return (
     <Frame title="honeybook.com · automations">
       <div className="hbai-prompt">
-        <span className="hbai-prompt-text">When a lead books, send the contract, then the invoice…</span>
+        <span className="hbai-prompt-text">When a lead books, send the contract…</span>
         <span className="hbai-caret" />
       </div>
       <div className="hbai-flowrow">
