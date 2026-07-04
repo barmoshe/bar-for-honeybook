@@ -299,11 +299,11 @@ export default function HoneyBookApp() {
             style={{ top: "6%", left: "4%", color: "var(--hb-yellow-deep)", width: 24, height: 24 }}
           />
           <div className="hb-wrap">
-            <p className="hb-eyebrow hb-reveal">Research, running</p>
-            <h2 className="hb-h2 hb-reveal">Your AI. Rebuilt. Live.</h2>
+            <p className="hb-eyebrow hb-reveal">Research, rebuilt</p>
+            <h2 className="hb-h2 hb-reveal">Your AI. Rebuilt by hand.</h2>
             <p className="hb-lead hb-reveal">
-              Five real HoneyBook AI features, researched and rebuilt by hand as living scenes.
-              No screenshots. No video. Just code, moving right now, in your brand.
+              Five real HoneyBook AI features, researched and recreated as animated scenes.
+              No screenshots. No video. Every pixel hand-coded, in your brand.
             </p>
             {/* mobile-only: feature chips that drive the preview carousel */}
             <nav className="hbai-chips hb-reveal" aria-label="Jump to a preview">
