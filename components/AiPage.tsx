@@ -15,11 +15,44 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * /ai — "I did the homework": HoneyBook's real AI surface, researched and
  * rebuilt as live animated previews, then the three things I'd build on it.
+ *
+ * Two layouts share one DOM: desktop is a scrolling page with a card grid;
+ * mobile (≤720px) becomes an app-like view — feature chips in the hero, the
+ * previews as a snap carousel with synced dots, facts as swipeable stat
+ * cards, ideas as a timeline, and a fixed bottom action bar.
  */
 export default function AiPage() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [active, setActive] = useState(0);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const cardRefs = useRef<(HTMLElement | null)[]>([]);
   const open = () => setModalOpen(true);
+
+  // Mobile carousel: keep the active dot/chip in sync with the snap scroll.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const onScroll = () => {
+      const center = track.scrollLeft + track.clientWidth / 2;
+      let best = 0;
+      let bestDist = Infinity;
+      cardRefs.current.forEach((el, i) => {
+        if (!el) return;
+        const dist = Math.abs(el.offsetLeft + el.offsetWidth / 2 - center);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = i;
+        }
+      });
+      setActive(best);
+    };
+    track.addEventListener("scroll", onScroll, { passive: true });
+    return () => track.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const goTo = (i: number) =>
+    cardRefs.current[i]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
 
   useEffect(() => {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -54,7 +87,7 @@ export default function AiPage() {
   }, []);
 
   return (
-    <div className="hb-root" ref={rootRef} dir="ltr" lang="en">
+    <div className="hb-root hbai-root" ref={rootRef} dir="ltr" lang="en">
       <a className="hb-skip" href="#main">
         Skip to content
       </a>
@@ -89,6 +122,18 @@ export default function AiPage() {
             animated preview. Nothing below is a screenshot or a video. It&apos;s all code,
             moving right now, in your brand.
           </p>
+          {/* mobile-only: feature chips that drive the preview carousel */}
+          <nav className="hbai-chips hb-reveal" aria-label="Jump to a preview">
+            {AI_FEATURES.map((f, i) => (
+              <button
+                key={f.key}
+                className={`hbai-chipbtn${active === i ? " is-active" : ""}`}
+                onClick={() => goTo(i)}
+              >
+                {f.name}
+              </button>
+            ))}
+          </nav>
         </div>
       </header>
 
@@ -121,10 +166,13 @@ export default function AiPage() {
               This is how I work: read the docs, understand the product, then show it running.
             </p>
           </div>
-          <div className="hb-wrap hbai-grid">
-            {AI_FEATURES.map((f) => (
+          <div className="hb-wrap hbai-grid" ref={trackRef}>
+            {AI_FEATURES.map((f, i) => (
               <article
                 key={f.key}
+                ref={(el) => {
+                  cardRefs.current[i] = el;
+                }}
                 className={`hbai-card${f.span === 2 ? " hbai-card--wide" : ""}`}
               >
                 <AiPreview feature={f.key} />
@@ -135,6 +183,20 @@ export default function AiPage() {
                 </div>
               </article>
             ))}
+          </div>
+          {/* mobile-only: carousel progress */}
+          <div className="hbai-dots">
+            {AI_FEATURES.map((f, i) => (
+              <button
+                key={f.key}
+                className={active === i ? "is-active" : ""}
+                aria-label={`Go to ${f.name}`}
+                onClick={() => goTo(i)}
+              />
+            ))}
+            <span className="hbai-dots-count" aria-hidden="true">
+              {active + 1}/{AI_FEATURES.length}
+            </span>
           </div>
           <div className="hb-wrap hbai-sources hb-reveal">
             <span>Researched from:</span>
@@ -205,6 +267,19 @@ export default function AiPage() {
         </span>
         <span>Made for HoneyBook</span>
       </footer>
+
+      {/* mobile-only: app-style bottom action bar */}
+      <div className="hbai-tabbar">
+        <Link href="/" className="hbai-tab">
+          ← Pitch
+        </Link>
+        <a className="hbai-tab" href={whatsappHref} target="_blank" rel="noopener noreferrer">
+          WhatsApp
+        </a>
+        <button className="hb-btn hb-btn--primary hbai-tab-cta" onClick={open}>
+          Let&apos;s talk
+        </button>
+      </div>
 
       {modalOpen && <BriefModal onClose={() => setModalOpen(false)} />}
     </div>

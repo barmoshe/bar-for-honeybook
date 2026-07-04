@@ -1773,6 +1773,222 @@ body {
 }
 
 /* ============================================================
+   /ai mobile — a different view entirely: app-like screen with
+   feature chips, a snap carousel + dots, swipeable stat cards,
+   a timeline, and a fixed bottom action bar.
+   ============================================================ */
+.hbai-chips,
+.hbai-dots,
+.hbai-tabbar {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  /* compact, app-splash hero */
+  .hbai-hero {
+    padding-block: 6.2rem 2.1rem;
+  }
+  .hbai-title {
+    font-size: clamp(2.1rem, 9vw, 2.6rem);
+  }
+  .hbai-hero .hb-lead {
+    font-size: 1rem;
+    margin-top: 0.9rem;
+  }
+  .hbai-topnav .hb-btn {
+    display: none; /* the bottom bar owns the CTA on mobile */
+  }
+
+  /* feature chips — horizontally scrollable, drive the carousel */
+  .hbai-chips {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    margin-top: 1.5rem;
+    padding-bottom: 0.4rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hbai-chips::-webkit-scrollbar {
+    display: none;
+  }
+  .hbai-chipbtn {
+    flex: none;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--hb-ink);
+    background: var(--hb-white);
+    border: 1.5px solid oklch(0.255 0.018 230 / 0.14);
+    border-radius: 999px;
+    padding: 0.55rem 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .hbai-chipbtn.is-active {
+    background: var(--hb-ink);
+    color: var(--hb-white);
+    border-color: var(--hb-ink);
+  }
+
+  /* facts band → swipeable stat cards */
+  .hbai-root .hb-stats {
+    display: flex;
+    gap: 0.8rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.4rem;
+    scrollbar-width: none;
+  }
+  .hbai-root .hb-stats::-webkit-scrollbar {
+    display: none;
+  }
+  .hbai-root .hb-stat {
+    flex: 0 0 64%;
+    scroll-snap-align: center;
+    text-align: left;
+    background: var(--hb-white);
+    border-radius: 18px;
+    padding: 1.2rem 1.1rem;
+    box-shadow: 0 14px 30px -18px oklch(0.255 0.018 230 / 0.35);
+  }
+  .hbai-root .hb-stat::after {
+    display: none !important;
+  }
+
+  /* previews → full-width snap carousel */
+  .hbai-grid {
+    display: flex;
+    gap: 0.9rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--hb-pad);
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hbai-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .hbai-card,
+  .hbai-card--wide {
+    flex: 0 0 86%;
+    scroll-snap-align: start;
+  }
+  .hbai-scene {
+    min-height: 196px;
+    padding: 1rem 1.1rem;
+  }
+  .hbai-card-body {
+    padding: 1.1rem 1.2rem 1.3rem;
+  }
+
+  /* carousel progress dots */
+  .hbai-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.1rem;
+  }
+  .hbai-dots button {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: oklch(0.255 0.018 230 / 0.22);
+    cursor: pointer;
+    transition: width 0.25s ease, background 0.25s ease;
+  }
+  .hbai-dots button.is-active {
+    width: 24px;
+    background: var(--hb-ink);
+  }
+  .hbai-dots-count {
+    margin-left: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--hb-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ideas → vertical timeline */
+  .hbai-root .hb-fit-grid {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+  }
+  .hbai-root .hb-fit-grid::before {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: 12px;
+    bottom: 12px;
+    border-left: 2px dashed oklch(0.255 0.018 230 / 0.22);
+  }
+  .hbai-root .hb-fit-card {
+    position: relative;
+    margin-left: 3.1rem;
+  }
+  .hbai-root .hb-fit-num {
+    position: absolute;
+    left: -3.05rem;
+    top: 1.35rem;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 0;
+    border: 3px solid var(--hb-white);
+    font-size: 0.78rem;
+  }
+
+  /* fixed bottom action bar */
+  .hbai-tabbar {
+    position: fixed;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem;
+    background: oklch(1 0 0 / 0.92);
+    backdrop-filter: blur(14px);
+    border: 1px solid oklch(0.255 0.018 230 / 0.1);
+    border-radius: 999px;
+    box-shadow: 0 18px 40px -18px oklch(0.255 0.018 230 / 0.5);
+  }
+  .hbai-tab {
+    flex: 1;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--hb-ink);
+    text-decoration: none;
+    padding: 0.7rem 0.4rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .hbai-tab-cta {
+    flex: 1.25;
+    font-size: 0.9rem;
+    padding: 0.7rem 0.9rem;
+  }
+  /* keep the bar from covering the footer / close CTAs */
+  .hbai-root .hb-footer {
+    padding-bottom: 6.5rem;
+  }
+  .hbai-root .hb-section--close {
+    padding-bottom: 7.5rem;
+  }
+}
+
+/* ============================================================
    Reduced motion — kill motion, show a clean static frame
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
