@@ -391,7 +391,11 @@ export default function HoneyBookApp() {
         <section className="hb-section hb-section--ai" aria-label="What I'd build on it">
           <div className="hb-wrap">
             <p className="hb-eyebrow hb-reveal">Where I&apos;d plug in</p>
-            <h2 className="hb-h2 hb-reveal">What I&apos;d build on top of it.</h2>
+            <h2 className="hb-h2 hb-reveal">Three ideas, to start.</h2>
+            <p className="hb-lead hb-reveal">
+              Not a roadmap — just proof I&apos;ve thought about the product. Point me at
+              whatever the team actually needs.
+            </p>
             <ol className="hb-steps hb-steps--three">
               {PRODUCT_IDEAS.map((idea, i) => (
                 <li className="hb-step hb-reveal" key={idea.t}>
