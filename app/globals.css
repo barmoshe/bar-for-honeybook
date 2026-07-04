@@ -379,16 +379,40 @@ body {
   padding: clamp(1.25rem, 3vw, 2rem) var(--hb-pad);
 }
 .hb-mark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
   font-weight: 800;
   letter-spacing: -0.01em;
   font-size: 1.05rem;
   color: var(--hb-ink);
 }
-.hb-topbar-for {
-  font-size: 0.8125rem;
+.hb-mark-for {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4em;
+  font-size: 0.8em;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: var(--hb-muted);
+}
+.hb-forlogo {
+  height: 0.72em;
+  width: auto;
+  display: inline-block;
+  align-self: center;
+  transform: translateY(0.04em);
+  color: var(--hb-ink);
+}
+.hb-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 .hb-hero-grid {
   position: relative;
@@ -1249,7 +1273,7 @@ body {
   .hb-tile--wide {
     grid-column: span 1;
   }
-  .hb-topbar-for {
+  .hb-nav .hb-mark-for {
     display: none;
   }
   .hb-steps {

@@ -7,6 +7,7 @@ import ClientflowGraphic from "./ClientflowGraphic";
 import ProductPreview from "./ProductPreviews";
 import { Sparkle } from "./Decor";
 import BriefModal from "./BriefModal";
+import HoneyBookLogo from "./HoneyBookLogo";
 import { PROJECTS } from "@/lib/projects";
 import { PRODUCT_FEATURES, PRODUCT_FACTS, PRODUCT_IDEAS, PRODUCT_SOURCES } from "@/lib/honeybookProduct";
 import { whatsappHref, mailtoHref, cvHref } from "@/lib/contact";
@@ -162,7 +163,13 @@ export default function HoneyBookApp() {
 
       <div className={`hb-nav${navShown ? " is-shown" : ""}`} aria-hidden={!navShown}>
         <div className="hb-nav-inner">
-          <span className="hb-mark">Bar Moshe</span>
+          <span className="hb-mark">
+            Bar Moshe
+            <span className="hb-mark-for">
+              for <HoneyBookLogo />
+              <span className="hb-sr-only">HoneyBook</span>
+            </span>
+          </span>
           <nav className="hb-nav-links" aria-label="Sections">
             <a href="#about">About</a>
             <a href="#ai">HoneyBook</a>
@@ -180,8 +187,13 @@ export default function HoneyBookApp() {
         <Sparkle className="hb-deco hb-floaty2" style={{ top: "13%", left: "48%", color: "var(--hb-yellow-deep)", width: 30, height: 30 }} />
         <span className="hb-deco hb-deco--plus" style={{ top: "11%", left: "6%", color: "oklch(0.255 0.018 230 / 0.5)" }} />
         <div className="hb-topbar">
-          <span className="hb-mark">Bar Moshe</span>
-          <span className="hb-topbar-for">For the HoneyBook team</span>
+          <span className="hb-mark">
+            Bar Moshe
+            <span className="hb-mark-for">
+              for <HoneyBookLogo />
+              <span className="hb-sr-only">HoneyBook</span>
+            </span>
+          </span>
         </div>
         <div className="hb-hero-grid">
           <div className="hb-hero-copy">
