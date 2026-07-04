@@ -73,15 +73,15 @@ export const PRODUCT_FACTS = [
 export const PRODUCT_IDEAS = [
   {
     t: "Durable agentic clientflow",
-    d: "An agent that runs the whole follow-up thread — drafts, waits, escalates — built the way I build Temporal workers: durable, resumable, safe to retry.",
+    d: "An agent that runs the whole follow-up thread — drafts, waits, escalates — built as a durable workflow, so it can pause for days and pick up exactly where it left off.",
   },
   {
     t: "An eval harness for AI features",
-    d: "Notetaker summaries and lead scoring deserve regression tests. I already run this discipline on my own agent stack; I'd point it at yours.",
+    d: "Regression tests for the AI itself: score Notetaker summaries and lead scoring against fixed cases, so every prompt or model change ships with proof it didn't get worse.",
   },
   {
     t: "Prompt → on-brand document",
-    d: "A member describes a proposal and gets a design-locked, branded file — the exact compiler pattern I shipped as MDP, aimed at clientflow.",
+    d: "A member describes a proposal in a sentence and gets back a finished file in their brand — fonts, colors, layout locked. No design step between the ask and the send.",
   },
 ];
 
