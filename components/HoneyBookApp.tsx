@@ -163,13 +163,7 @@ export default function HoneyBookApp() {
 
       <div className={`hb-nav${navShown ? " is-shown" : ""}`} aria-hidden={!navShown}>
         <div className="hb-nav-inner">
-          <span className="hb-mark">
-            Bar Moshe
-            <span className="hb-mark-for">
-              for <HoneyBookLogo />
-              <span className="hb-sr-only">HoneyBook</span>
-            </span>
-          </span>
+          <span className="hb-mark">Bar Moshe</span>
           <nav className="hb-nav-links" aria-label="Sections">
             <a href="#about">About</a>
             <a href="#ai">HoneyBook</a>

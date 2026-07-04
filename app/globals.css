@@ -1273,9 +1273,6 @@ body {
   .hb-tile--wide {
     grid-column: span 1;
   }
-  .hb-nav .hb-mark-for {
-    display: none;
-  }
   .hb-steps {
     grid-template-columns: 1fr;
   }
