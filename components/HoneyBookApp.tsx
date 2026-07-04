@@ -197,7 +197,7 @@ export default function HoneyBookApp() {
                 Download CV
               </a>
               <a className="hb-btn hb-btn--ghost" href="#ai">
-                Inspired by your AI →
+                I did my research →
               </a>
             </div>
           </div>
@@ -299,11 +299,12 @@ export default function HoneyBookApp() {
             style={{ top: "6%", left: "4%", color: "var(--hb-yellow-deep)", width: 24, height: 24 }}
           />
           <div className="hb-wrap">
-            <p className="hb-eyebrow hb-reveal">Research, rebuilt</p>
-            <h2 className="hb-h2 hb-reveal">Your AI. Rebuilt by hand.</h2>
+            <p className="hb-eyebrow hb-reveal">I came prepared</p>
+            <h2 className="hb-h2 hb-reveal">Your AI. Studied. Rebuilt.</h2>
             <p className="hb-lead hb-reveal">
-              Five real HoneyBook AI features, researched and recreated as animated scenes.
-              No screenshots. No video. Every pixel hand-coded, in your brand.
+              Before asking for a seat, I learned the product. Five real HoneyBook AI
+              features, researched and recreated as hand-coded animated scenes — no
+              screenshots, no video, all in your brand.
             </p>
             {/* mobile-only: feature chips that drive the preview carousel */}
             <nav className="hbai-chips hb-reveal" aria-label="Jump to a preview">
