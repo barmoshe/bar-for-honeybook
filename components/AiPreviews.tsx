@@ -172,12 +172,65 @@ function TrendsScene() {
   );
 }
 
+/* Referral engine: a booked client's trackable link travels across and
+   becomes a brand-new lead. */
+function ReferralScene() {
+  return (
+    <Frame title="honeybook.com · referrals">
+      <div className="hbai-ref-row">
+        <div className="hbai-ref-card">
+          <span className="hbai-avatar hbai-avatar--a" />
+          <span className="hbai-ref-name">
+            Dana
+            <em>Booked · loved it</em>
+          </span>
+        </div>
+        <div className="hbai-ref-path">
+          <svg viewBox="0 0 220 40" preserveAspectRatio="none">
+            <path
+              d="M4,20 C60,4 160,36 216,20"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeDasharray="3 8"
+              strokeLinecap="round"
+              fill="none"
+            />
+            <circle className="hbai-ref-dot" r="6">
+              <animateMotion
+                dur="4s"
+                repeatCount="indefinite"
+                keyPoints="0;1;1"
+                keyTimes="0;0.55;1"
+                calcMode="linear"
+                path="M4,20 C60,4 160,36 216,20"
+              />
+            </circle>
+          </svg>
+        </div>
+        <div className="hbai-ref-card hbai-ref-card--new">
+          <span className="hbai-avatar hbai-avatar--b" />
+          <span className="hbai-ref-name">
+            New lead
+            <em>via Dana&apos;s link</em>
+          </span>
+        </div>
+      </div>
+      <div className="hbai-ref-link">
+        <span className="hbai-ref-link-icon">⚭</span>
+        honeybook.com/r/dana — tracked
+      </div>
+      <span className="hbai-chip hbai-chip--yellow">Referred → booked</span>
+    </Frame>
+  );
+}
+
 const SCENES: Record<AiFeature["key"], () => React.ReactElement> = {
   leads: LeadsScene,
   notetaker: NotetakerScene,
   builder: BuilderScene,
   email: EmailScene,
   trends: TrendsScene,
+  referral: ReferralScene,
 };
 
 export default function AiPreview({ feature }: { feature: AiFeature["key"] }) {

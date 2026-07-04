@@ -6,7 +6,7 @@
  */
 
 export type AiFeature = {
-  key: "leads" | "notetaker" | "builder" | "email" | "trends";
+  key: "leads" | "notetaker" | "builder" | "email" | "trends" | "referral";
   name: string;
   tag: string;
   blurb: string;
@@ -51,6 +51,14 @@ export const AI_FEATURES: AiFeature[] = [
     blurb:
       "Every morning starts with an AI-built priority list, and the business trends view tracks shifts in leads and revenue without a spreadsheet.",
   },
+  {
+    key: "referral",
+    name: "Referral engine",
+    tag: "New in the product",
+    blurb:
+      "HoneyBook's newest growth play: a pre-written referral ask with a trackable link, so word-of-mouth gets followed all the way from shared link to booked project.",
+    span: 2,
+  },
 ];
 
 export const AI_FACTS = [
@@ -87,4 +95,8 @@ export const AI_SOURCES = [
     href: "https://www.businesswire.com/news/home/20260514449052/en/HoneyBook-Data-Reveals-Small-Businesses-Using-AI-Earn-$400K-More-Per-Year-Than-Those-Who-Dont",
   },
   { label: "Wikipedia — HoneyBook", href: "https://en.wikipedia.org/wiki/HoneyBook" },
+  {
+    label: "Product updates, Feb 2026",
+    href: "https://www.honeybook.com/blog/product-updates-february-2026",
+  },
 ];

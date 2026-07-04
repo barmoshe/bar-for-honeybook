@@ -157,7 +157,7 @@ export default function HoneyBookApp() {
           <span className="hb-mark">Bar Moshe</span>
           <nav className="hb-nav-links" aria-label="Sections">
             <a href="#about">About</a>
-            <a href="#ai">AI</a>
+            <a href="#ai">HoneyBook</a>
             <a href="#work">Work</a>
             <button className="hb-btn hb-btn--primary hb-btn--sm hb-magnetic" onClick={open} tabIndex={navShown ? 0 : -1}>
               Let&apos;s talk
@@ -292,7 +292,7 @@ export default function HoneyBookApp() {
           </div>
         </section>
 
-        {/* ===== HoneyBook AI, previewed live ===== */}
+        {/* ===== HoneyBook, studied & rebuilt ===== */}
         <section className="hb-section hbai-section-previews" id="ai">
           <Sparkle
             className="hb-deco hb-floaty2"
@@ -300,11 +300,11 @@ export default function HoneyBookApp() {
           />
           <div className="hb-wrap">
             <p className="hb-eyebrow hb-reveal">I came prepared</p>
-            <h2 className="hb-h2 hb-reveal">Your AI. Studied. Rebuilt.</h2>
+            <h2 className="hb-h2 hb-reveal">HoneyBook. Studied. Rebuilt.</h2>
             <p className="hb-lead hb-reveal">
-              Before asking for a seat, I learned the product. Five real HoneyBook AI
-              features, researched and recreated as hand-coded animated scenes — no
-              screenshots, no video, all in your brand.
+              Before asking for a seat, I learned the product. Six real HoneyBook features —
+              clientflow, growth, and the AI toolkit — recreated as hand-coded animated
+              scenes. No screenshots, no video, all in your brand.
             </p>
             {/* mobile-only: feature chips that drive the preview carousel */}
             <nav className="hbai-chips hb-reveal" aria-label="Jump to a preview">
@@ -468,7 +468,7 @@ export default function HoneyBookApp() {
       {/* mobile-only: app-style bottom action bar */}
       <div className="hbai-tabbar">
         <a href="#ai" className="hbai-tab">
-          AI previews
+          Product tour
         </a>
         <a className="hbai-tab" href={whatsappHref} target="_blank" rel="noopener noreferrer">
           WhatsApp
