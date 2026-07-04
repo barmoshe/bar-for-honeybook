@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk } from "next/font/google";
+import ScrollRestorer from "@/components/ScrollRestorer";
 import "./globals.css";
 
 const hanken = Hanken_Grotesk({
@@ -37,7 +38,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" dir="ltr" className={hanken.variable}>
-      <body>{children}</body>
+      <body>
+        <ScrollRestorer />
+        {children}
+      </body>
     </html>
   );
 }
