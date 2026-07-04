@@ -1965,6 +1965,38 @@ body {
     padding: 1.1rem 1.2rem 1.3rem;
   }
 
+  /* section bottom: sources become one swipeable row of pill links
+     instead of a ragged multi-line clump under the dots */
+  .hbai-section-previews {
+    padding-bottom: 3.2rem;
+  }
+  .hbai-sources {
+    margin-top: 1.8rem;
+    flex-wrap: nowrap;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 0.5rem;
+    padding-bottom: 0.3rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hbai-sources::-webkit-scrollbar {
+    display: none;
+  }
+  .hbai-sources span {
+    flex: none;
+  }
+  .hbai-sources a {
+    flex: none;
+    text-decoration: none;
+    font-size: 0.78rem;
+    background: var(--hb-white);
+    border: 1px solid oklch(0.255 0.018 230 / 0.1);
+    border-radius: 999px;
+    padding: 0.45rem 0.8rem;
+  }
+
   /* carousel progress dots */
   .hbai-dots {
     display: flex;
