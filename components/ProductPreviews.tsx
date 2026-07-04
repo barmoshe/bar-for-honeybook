@@ -1,6 +1,6 @@
 "use client";
 
-import type { AiFeature } from "@/lib/honeybookAi";
+import type { ProductFeature } from "@/lib/honeybookProduct";
 
 /**
  * Original hand-coded animated scenes inspired by HoneyBook's real AI features,
@@ -32,35 +32,38 @@ function Frame({
 }
 
 /* Priority leads: inbox rows, AI badges pulse onto the hot ones. */
+const LEAD_ROWS = [
+  { d: "0s", avatar: "a", lines: [72, 46], badge: "hot" as const },
+  { d: "0.5s", avatar: "b", lines: [60, 38], badge: "budget" as const },
+  { d: "1s", avatar: "c", lines: [52, 30], dim: true },
+];
+
 function LeadsScene() {
   return (
     <Frame title="honeybook.com · leads">
-      <div className="hbai-lead" style={{ "--d": "0s" } as React.CSSProperties}>
-        <span className="hbai-avatar hbai-avatar--a" />
-        <span className="hbai-lead-lines">
-          <i style={{ width: "72%" }} />
-          <i style={{ width: "46%" }} />
-        </span>
-        <span className="hbai-badge hbai-badge--hot">
-          <span className="hbai-badge-pulse" />
-          Likely to book
-        </span>
-      </div>
-      <div className="hbai-lead" style={{ "--d": "0.5s" } as React.CSSProperties}>
-        <span className="hbai-avatar hbai-avatar--b" />
-        <span className="hbai-lead-lines">
-          <i style={{ width: "60%" }} />
-          <i style={{ width: "38%" }} />
-        </span>
-        <span className="hbai-badge hbai-badge--budget">High budget</span>
-      </div>
-      <div className="hbai-lead hbai-lead--dim" style={{ "--d": "1s" } as React.CSSProperties}>
-        <span className="hbai-avatar hbai-avatar--c" />
-        <span className="hbai-lead-lines">
-          <i style={{ width: "52%" }} />
-          <i style={{ width: "30%" }} />
-        </span>
-      </div>
+      {LEAD_ROWS.map((row) => (
+        <div
+          key={row.avatar}
+          className={`hbai-lead${row.dim ? " hbai-lead--dim" : ""}`}
+          style={{ "--d": row.d } as React.CSSProperties}
+        >
+          <span className={`hbai-avatar hbai-avatar--${row.avatar}`} />
+          <span className="hbai-lead-lines">
+            {row.lines.map((w) => (
+              <i key={w} style={{ width: `${w}%` }} />
+            ))}
+          </span>
+          {row.badge === "hot" && (
+            <span className="hbai-badge hbai-badge--hot">
+              <span className="hbai-badge-pulse" />
+              Likely to book
+            </span>
+          )}
+          {row.badge === "budget" && (
+            <span className="hbai-badge hbai-badge--budget">High budget</span>
+          )}
+        </div>
+      ))}
     </Frame>
   );
 }
@@ -79,9 +82,13 @@ function NotetakerScene() {
         </span>
       </div>
       <div className="hbai-notes">
-        <div className="hbai-note" style={{ "--d": "0s", "--w": "88%" } as React.CSSProperties} />
-        <div className="hbai-note" style={{ "--d": "1.1s", "--w": "72%" } as React.CSSProperties} />
-        <div className="hbai-note" style={{ "--d": "2.2s", "--w": "58%" } as React.CSSProperties} />
+        {[88, 72, 58].map((w, i) => (
+          <div
+            key={w}
+            className="hbai-note"
+            style={{ "--d": `${i * 1.1}s`, "--w": `${w}%` } as React.CSSProperties}
+          />
+        ))}
       </div>
       <span className="hbai-chip">✓ Next steps captured</span>
     </Frame>
@@ -124,10 +131,13 @@ function EmailScene() {
         <span className="hbai-spark">✦ AI draft</span>
       </div>
       <div className="hbai-notes hbai-notes--mail">
-        <div className="hbai-note" style={{ "--d": "0s", "--w": "92%" } as React.CSSProperties} />
-        <div className="hbai-note" style={{ "--d": "0.9s", "--w": "80%" } as React.CSSProperties} />
-        <div className="hbai-note" style={{ "--d": "1.8s", "--w": "64%" } as React.CSSProperties} />
-        <div className="hbai-note" style={{ "--d": "2.7s", "--w": "40%" } as React.CSSProperties} />
+        {[92, 80, 64, 40].map((w, i) => (
+          <div
+            key={w}
+            className="hbai-note"
+            style={{ "--d": `${i * 0.9}s`, "--w": `${w}%` } as React.CSSProperties}
+          />
+        ))}
       </div>
       <span className="hbai-send">Send follow-up</span>
     </Frame>
@@ -148,7 +158,9 @@ function TrendsScene() {
           stroke="currentColor"
           strokeWidth="1"
         />
+        {/* the dot rides the drawn line via mpath — one path, one source of truth */}
         <path
+          id="hbai-chart-path"
           className="hbai-chart-line"
           d="M8,100 C50,92 70,64 105,70 C140,76 160,40 200,44 C240,48 262,24 292,16"
           fill="none"
@@ -163,8 +175,9 @@ function TrendsScene() {
             keyPoints="0;1;1"
             keyTimes="0;0.7;1"
             calcMode="linear"
-            path="M8,100 C50,92 70,64 105,70 C140,76 160,40 200,44 C240,48 262,24 292,16"
-          />
+          >
+            <mpath href="#hbai-chart-path" />
+          </animateMotion>
         </circle>
       </svg>
       <span className="hbai-chip">Today: follow up with 3 warm leads</span>
@@ -178,7 +191,7 @@ function ReferralScene() {
   return (
     <Frame title="honeybook.com · referrals">
       <div className="hbai-ref-row">
-        <div className="hbai-ref-card">
+        <div className="hbai-lead hbai-ref-card">
           <span className="hbai-avatar hbai-avatar--a" />
           <span className="hbai-ref-name">
             Dana
@@ -188,6 +201,7 @@ function ReferralScene() {
         <div className="hbai-ref-path">
           <svg viewBox="0 0 220 40" preserveAspectRatio="none">
             <path
+              id="hbai-ref-curve"
               d="M4,20 C60,4 160,36 216,20"
               stroke="currentColor"
               strokeWidth="2"
@@ -202,12 +216,13 @@ function ReferralScene() {
                 keyPoints="0;1;1"
                 keyTimes="0;0.55;1"
                 calcMode="linear"
-                path="M4,20 C60,4 160,36 216,20"
-              />
+              >
+                <mpath href="#hbai-ref-curve" />
+              </animateMotion>
             </circle>
           </svg>
         </div>
-        <div className="hbai-ref-card hbai-ref-card--new">
+        <div className="hbai-lead hbai-ref-card hbai-ref-card--new">
           <span className="hbai-avatar hbai-avatar--b" />
           <span className="hbai-ref-name">
             New lead
@@ -224,7 +239,7 @@ function ReferralScene() {
   );
 }
 
-const SCENES: Record<AiFeature["key"], () => React.ReactElement> = {
+const SCENES: Record<ProductFeature["key"], () => React.ReactElement> = {
   leads: LeadsScene,
   notetaker: NotetakerScene,
   builder: BuilderScene,
@@ -233,7 +248,7 @@ const SCENES: Record<AiFeature["key"], () => React.ReactElement> = {
   referral: ReferralScene,
 };
 
-export default function AiPreview({ feature }: { feature: AiFeature["key"] }) {
+export default function ProductPreview({ feature }: { feature: ProductFeature["key"] }) {
   const Scene = SCENES[feature];
   return <Scene />;
 }

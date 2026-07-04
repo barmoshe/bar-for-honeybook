@@ -4,11 +4,11 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ClientflowGraphic from "./ClientflowGraphic";
-import AiPreview from "./AiPreviews";
+import ProductPreview from "./ProductPreviews";
 import { Sparkle } from "./Decor";
 import BriefModal from "./BriefModal";
 import { PROJECTS } from "@/lib/projects";
-import { AI_FEATURES, AI_FACTS, AI_IDEAS, AI_SOURCES } from "@/lib/honeybookAi";
+import { PRODUCT_FEATURES, PRODUCT_FACTS, PRODUCT_IDEAS, PRODUCT_SOURCES } from "@/lib/honeybookProduct";
 import { whatsappHref, mailtoHref, cvHref } from "@/lib/contact";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -108,21 +108,19 @@ export default function HoneyBookApp() {
           scrollTrigger: { trigger: el, start: "top 88%" },
         });
       });
-      gsap.from(".hb-tile", {
-        y: 34,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power3.out",
-        stagger: 0.07,
-        scrollTrigger: { trigger: ".hb-grid", start: "top 82%" },
-      });
-      gsap.from(".hbai-card", {
-        y: 34,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power3.out",
-        stagger: 0.08,
-        scrollTrigger: { trigger: ".hbai-grid", start: "top 82%" },
+      // both card grids share one entrance treatment
+      [
+        [".hb-tile", ".hb-grid"],
+        [".hbai-card", ".hbai-grid"],
+      ].forEach(([card, grid]) => {
+        gsap.from(card, {
+          y: 34,
+          opacity: 0,
+          duration: 0.6,
+          ease: "power3.out",
+          stagger: 0.07,
+          scrollTrigger: { trigger: grid, start: "top 82%" },
+        });
       });
       gsap.to(".hb-flow", {
         y: -70,
@@ -157,7 +155,7 @@ export default function HoneyBookApp() {
   }, []);
 
   return (
-    <div className="hb-root hbai-root" ref={rootRef} dir="ltr" lang="en">
+    <div className="hb-root" ref={rootRef} dir="ltr" lang="en">
       <a className="hb-skip" href="#main">
         Skip to content
       </a>
@@ -296,7 +294,7 @@ export default function HoneyBookApp() {
         <section className="hb-section hb-section--stats" aria-label="HoneyBook facts">
           <div className="hb-wrap">
             <div className="hb-stats">
-              {AI_FACTS.map((f) => (
+              {PRODUCT_FACTS.map((f) => (
                 <div className="hb-stat hb-reveal" key={f.num}>
                   <div className="hb-stat-num">{f.num}</div>
                   <div className="hb-stat-label">{f.label}</div>
@@ -323,7 +321,7 @@ export default function HoneyBookApp() {
             </p>
             {/* mobile-only: feature chips that drive the preview carousel */}
             <nav className="hbai-chips hb-reveal" aria-label="Jump to a preview">
-              {AI_FEATURES.map((f, i) => (
+              {PRODUCT_FEATURES.map((f, i) => (
                 <button
                   key={f.key}
                   className={`hbai-chipbtn${active === i ? " is-active" : ""}`}
@@ -335,7 +333,7 @@ export default function HoneyBookApp() {
             </nav>
           </div>
           <div className="hb-wrap hbai-grid" ref={trackRef}>
-            {AI_FEATURES.map((f, i) => (
+            {PRODUCT_FEATURES.map((f, i) => (
               <article
                 key={f.key}
                 ref={(el) => {
@@ -343,7 +341,7 @@ export default function HoneyBookApp() {
                 }}
                 className={`hbai-card${f.span === 2 ? " hbai-card--wide" : ""}`}
               >
-                <AiPreview feature={f.key} />
+                <ProductPreview feature={f.key} />
                 <div className="hbai-card-body">
                   <span className="hb-tile-tag">{f.tag}</span>
                   <h3 className="hbai-card-name">{f.name}</h3>
@@ -354,7 +352,7 @@ export default function HoneyBookApp() {
           </div>
           {/* mobile-only: carousel progress */}
           <div className="hbai-dots">
-            {AI_FEATURES.map((f, i) => (
+            {PRODUCT_FEATURES.map((f, i) => (
               <button
                 key={f.key}
                 className={active === i ? "is-active" : ""}
@@ -363,12 +361,12 @@ export default function HoneyBookApp() {
               />
             ))}
             <span className="hbai-dots-count" aria-hidden="true">
-              {active + 1}/{AI_FEATURES.length}
+              {active + 1}/{PRODUCT_FEATURES.length}
             </span>
           </div>
           <div className="hb-wrap hbai-sources hb-reveal">
             <span>Researched from:</span>
-            {AI_SOURCES.map((s) => (
+            {PRODUCT_SOURCES.map((s) => (
               <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer">
                 {s.label}
               </a>
@@ -382,7 +380,7 @@ export default function HoneyBookApp() {
             <p className="hb-eyebrow hb-reveal">Where I&apos;d plug in</p>
             <h2 className="hb-h2 hb-reveal">What I&apos;d build on top of it.</h2>
             <ol className="hb-steps hb-steps--three">
-              {AI_IDEAS.map((idea, i) => (
+              {PRODUCT_IDEAS.map((idea, i) => (
                 <li className="hb-step hb-reveal" key={idea.t}>
                   <span className="hb-step-n">{String(i + 1).padStart(2, "0")}</span>
                   <h3>{idea.t}</h3>

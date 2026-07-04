@@ -1,11 +1,13 @@
 /**
- * Researched facts about HoneyBook's AI work (2026-07), used by the /ai page.
- * Sources: honeybook.com product + blog pages, BusinessWire (2025-03-25 AI
- * acceleration release; 2026-05-14 "$400K more" data study), Wikipedia,
- * Times of Israel (unicorn round). Kept as data so the copy stays honest.
+ * Researched facts about HoneyBook's product and AI work (2026-07), feeding
+ * the home page's "HoneyBook, studied up close" section. Not everything here
+ * is AI — the referral engine is a growth feature. Sources: honeybook.com
+ * product + blog pages, BusinessWire (2025-03-25 AI acceleration release;
+ * 2026-05-14 "$400K more" data study), Wikipedia, Times of Israel (unicorn
+ * round). Kept as data so the copy stays honest.
  */
 
-export type AiFeature = {
+export type ProductFeature = {
   key: "leads" | "notetaker" | "builder" | "email" | "trends" | "referral";
   name: string;
   tag: string;
@@ -14,7 +16,7 @@ export type AiFeature = {
   span?: 2;
 };
 
-export const AI_FEATURES: AiFeature[] = [
+export const PRODUCT_FEATURES: ProductFeature[] = [
   {
     key: "builder",
     name: "AI automations builder",
@@ -61,14 +63,14 @@ export const AI_FEATURES: AiFeature[] = [
   },
 ];
 
-export const AI_FACTS = [
+export const PRODUCT_FACTS = [
   { num: "2013", label: "Born in Tel Aviv, HQ in SF — R&D still in TLV" },
   { num: "$10B+", label: "In business booked through the platform" },
   { num: "70%", label: "Of members using HoneyBook AI decide with more confidence" },
   { num: "$400K", label: "More per year earned by AI-using members, per HoneyBook's own data" },
 ];
 
-export const AI_IDEAS = [
+export const PRODUCT_IDEAS = [
   {
     t: "Durable agentic clientflow",
     d: "An agent that runs the whole follow-up thread — drafts, waits, escalates — built the way I build Temporal workers: durable, resumable, safe to retry.",
@@ -83,7 +85,7 @@ export const AI_IDEAS = [
   },
 ];
 
-export const AI_SOURCES = [
+export const PRODUCT_SOURCES = [
   { label: "honeybook.com/product/ai", href: "https://www.honeybook.com/product/ai" },
   { label: "HoneyBook AI vision (blog)", href: "https://www.honeybook.com/blog/honeybook-ai-vision" },
   {

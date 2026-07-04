@@ -1394,14 +1394,20 @@ body {
   border: 2px solid var(--hb-white);
   box-shadow: 0 4px 10px -4px oklch(0.255 0.018 230 / 0.4);
 }
+.hbai-avatar {
+  background: radial-gradient(circle at 35% 30%, var(--av-from), var(--av-to));
+}
 .hbai-avatar--a {
-  background: radial-gradient(circle at 35% 30%, var(--hb-mint), var(--hb-teal));
+  --av-from: var(--hb-mint);
+  --av-to: var(--hb-teal);
 }
 .hbai-avatar--b {
-  background: radial-gradient(circle at 35% 30%, var(--hb-yellow), var(--hb-sage));
+  --av-from: var(--hb-yellow);
+  --av-to: var(--hb-sage);
 }
 .hbai-avatar--c {
-  background: radial-gradient(circle at 35% 30%, var(--hb-slate), var(--hb-teal));
+  --av-from: var(--hb-slate);
+  --av-to: var(--hb-teal);
 }
 .hbai-lead-lines {
   flex: 1;
@@ -1680,16 +1686,9 @@ body {
   align-items: center;
   gap: 0.6rem;
 }
+/* cards share the .hbai-lead recipe; this only pins them in the row */
 .hbai-ref-card {
   flex: none;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  background: var(--hb-white);
-  border: 1px solid oklch(0.255 0.018 230 / 0.07);
-  border-radius: 14px;
-  padding: 0.65rem 0.85rem;
-  animation: hb-floaty 6s ease-in-out infinite;
 }
 .hbai-ref-card--new {
   /* synced to the traveling dot: it lands at 55% of the 4s loop */
@@ -1811,9 +1810,9 @@ body {
 }
 
 /* ============================================================
-   /ai mobile — a different view entirely: app-like screen with
-   feature chips, a snap carousel + dots, swipeable stat cards,
-   a timeline, and a fixed bottom action bar.
+   HoneyBook section, mobile (≤720px) — app-like view: feature
+   chips + snap carousel + dots, swipeable stat cards, a steps
+   timeline, and a fixed bottom action bar.
    ============================================================ */
 .hbai-chips,
 .hbai-dots,
@@ -1823,7 +1822,7 @@ body {
 
 @media (max-width: 720px) {
   /* the bottom bar owns the CTA on mobile — no duplicate in the sticky nav */
-  .hbai-root .hb-nav .hb-btn {
+  .hb-root .hb-nav .hb-btn {
     display: none;
   }
 
@@ -1860,7 +1859,7 @@ body {
   }
 
   /* facts band → swipeable stat cards */
-  .hbai-root .hb-stats {
+  .hb-root .hb-stats {
     display: flex;
     gap: 0.8rem;
     overflow-x: auto;
@@ -1868,10 +1867,10 @@ body {
     padding-bottom: 0.4rem;
     scrollbar-width: none;
   }
-  .hbai-root .hb-stats::-webkit-scrollbar {
+  .hb-root .hb-stats::-webkit-scrollbar {
     display: none;
   }
-  .hbai-root .hb-stat {
+  .hb-root .hb-stat {
     flex: 0 0 64%;
     scroll-snap-align: center;
     text-align: left;
@@ -1880,7 +1879,7 @@ body {
     padding: 1.2rem 1.1rem;
     box-shadow: 0 14px 30px -18px oklch(0.255 0.018 230 / 0.35);
   }
-  .hbai-root .hb-stat::after {
+  .hb-root .hb-stat::after {
     display: none !important;
   }
 
@@ -1924,8 +1923,7 @@ body {
   .hbai-grid::-webkit-scrollbar {
     display: none;
   }
-  .hbai-card,
-  .hbai-card--wide {
+  .hbai-card {
     flex: 0 0 86%;
     scroll-snap-align: start;
   }
@@ -1968,13 +1966,13 @@ body {
   }
 
   /* "what I'd build" steps → vertical timeline */
-  .hbai-root .hb-steps {
+  .hb-root .hb-steps {
     position: relative;
     display: flex;
     flex-direction: column;
     gap: 1.4rem;
   }
-  .hbai-root .hb-steps::before {
+  .hb-root .hb-steps::before {
     content: "";
     position: absolute;
     left: 20px;
@@ -1982,10 +1980,10 @@ body {
     bottom: 12px;
     border-left: 2px dashed oklch(0.255 0.018 230 / 0.22);
   }
-  .hbai-root .hb-step {
+  .hb-root .hb-step {
     margin-left: 3.1rem;
   }
-  .hbai-root .hb-step .hb-step-n {
+  .hb-root .hb-step .hb-step-n {
     position: absolute;
     left: -3.05rem;
     top: 1.35rem;
@@ -2030,10 +2028,10 @@ body {
     padding: 0.7rem 0.9rem;
   }
   /* keep the bar from covering the footer / close CTAs */
-  .hbai-root .hb-footer {
+  .hb-root .hb-footer {
     padding-bottom: 6.5rem;
   }
-  .hbai-root .hb-section--close {
+  .hb-root .hb-section--close {
     padding-bottom: 7.5rem;
   }
 }
