@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ClientflowGraphic from "./ClientflowGraphic";
@@ -120,6 +121,7 @@ export default function HoneyBookApp() {
           <nav className="hb-nav-links" aria-label="Sections">
             <a href="#about">About</a>
             <a href="#work">Work</a>
+            <Link href="/ai">HoneyBook × AI</Link>
             <button className="hb-btn hb-btn--primary hb-btn--sm hb-magnetic" onClick={open} tabIndex={navShown ? 0 : -1}>
               Let&apos;s talk
             </button>
@@ -260,6 +262,15 @@ export default function HoneyBookApp() {
           <div className="hb-wrap">
             <p className="hb-eyebrow hb-reveal">Proof I can build</p>
             <h2 className="hb-h2 hb-reveal">Shipped, mostly solo.</h2>
+            <p className="hb-lead hb-reveal">
+              And because homework beats talk: I researched HoneyBook&apos;s AI surface and
+              rebuilt it as live animated previews, on its own page.
+            </p>
+            <div className="hb-work-more hb-reveal">
+              <Link className="hb-btn hb-btn--ghost" href="/ai">
+                See HoneyBook × AI, previewed live →
+              </Link>
+            </div>
           </div>
           <div className="hb-grid hb-wrap">
             {PROJECTS.map((p) => (

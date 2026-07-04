@@ -1,0 +1,186 @@
+"use client";
+
+import type { AiFeature } from "@/lib/honeybookAi";
+
+/**
+ * Live animated previews of HoneyBook's real AI features, rebuilt by hand as
+ * looping product-UI scenes (pure CSS/SVG keyframes, no video, no WebGL).
+ * Each scene sits in a shared browser-chrome frame. Decorative: aria-hidden,
+ * and every loop dies under prefers-reduced-motion via the global kill rule.
+ */
+
+function Frame({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="hbai-frame" aria-hidden="true">
+      <div className="hbai-chrome">
+        <span className="hbai-chrome-dots">
+          <i />
+          <i />
+          <i />
+        </span>
+        <span className="hbai-chrome-title">{title}</span>
+      </div>
+      <div className="hbai-scene">{children}</div>
+    </div>
+  );
+}
+
+/* Priority leads: inbox rows, AI badges pulse onto the hot ones. */
+function LeadsScene() {
+  return (
+    <Frame title="honeybook.com · leads">
+      <div className="hbai-lead" style={{ "--d": "0s" } as React.CSSProperties}>
+        <span className="hbai-avatar hbai-avatar--a" />
+        <span className="hbai-lead-lines">
+          <i style={{ width: "72%" }} />
+          <i style={{ width: "46%" }} />
+        </span>
+        <span className="hbai-badge hbai-badge--hot">
+          <span className="hbai-badge-pulse" />
+          Likely to book
+        </span>
+      </div>
+      <div className="hbai-lead" style={{ "--d": "0.5s" } as React.CSSProperties}>
+        <span className="hbai-avatar hbai-avatar--b" />
+        <span className="hbai-lead-lines">
+          <i style={{ width: "60%" }} />
+          <i style={{ width: "38%" }} />
+        </span>
+        <span className="hbai-badge hbai-badge--budget">High budget</span>
+      </div>
+      <div className="hbai-lead hbai-lead--dim" style={{ "--d": "1s" } as React.CSSProperties}>
+        <span className="hbai-avatar hbai-avatar--c" />
+        <span className="hbai-lead-lines">
+          <i style={{ width: "52%" }} />
+          <i style={{ width: "30%" }} />
+        </span>
+      </div>
+    </Frame>
+  );
+}
+
+/* AI Notetaker: live mic + equalizer, notes typing themselves in. */
+function NotetakerScene() {
+  return (
+    <Frame title="honeybook.com · meeting">
+      <div className="hbai-rec">
+        <span className="hbai-rec-dot" />
+        Recording
+        <span className="hbai-eq">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <i key={i} style={{ "--d": `${i * 0.14}s` } as React.CSSProperties} />
+          ))}
+        </span>
+      </div>
+      <div className="hbai-notes">
+        <div className="hbai-note" style={{ "--d": "0s", "--w": "88%" } as React.CSSProperties} />
+        <div className="hbai-note" style={{ "--d": "1.1s", "--w": "72%" } as React.CSSProperties} />
+        <div className="hbai-note" style={{ "--d": "2.2s", "--w": "58%" } as React.CSSProperties} />
+      </div>
+      <span className="hbai-chip">✓ Next steps captured</span>
+    </Frame>
+  );
+}
+
+/* Automations builder: a typed prompt becomes a glowing workflow. */
+function BuilderScene() {
+  return (
+    <Frame title="honeybook.com · automations">
+      <div className="hbai-prompt">
+        <span className="hbai-prompt-text">When a lead books, send the contract, then the invoice…</span>
+        <span className="hbai-caret" />
+      </div>
+      <div className="hbai-flowrow">
+        <svg className="hbai-wire" viewBox="0 0 300 10" preserveAspectRatio="none">
+          <path d="M0,5 L300,5" stroke="currentColor" strokeWidth="2" strokeDasharray="4 7" strokeLinecap="round" />
+        </svg>
+        <div className="hbai-node" style={{ "--d": "0s" } as React.CSSProperties}>
+          Lead books
+        </div>
+        <div className="hbai-node" style={{ "--d": "1.5s" } as React.CSSProperties}>
+          Contract
+        </div>
+        <div className="hbai-node" style={{ "--d": "3s" } as React.CSSProperties}>
+          Invoice
+        </div>
+      </div>
+      <span className="hbai-chip hbai-chip--yellow">Workflow ready — activate</span>
+    </Frame>
+  );
+}
+
+/* Drafts & follow-ups: an email writing itself, send button warming up. */
+function EmailScene() {
+  return (
+    <Frame title="honeybook.com · compose">
+      <div className="hbai-mailhead">
+        <span className="hbai-mail-to">To: Dana · Wedding, Oct 12</span>
+        <span className="hbai-spark">✦ AI draft</span>
+      </div>
+      <div className="hbai-notes hbai-notes--mail">
+        <div className="hbai-note" style={{ "--d": "0s", "--w": "92%" } as React.CSSProperties} />
+        <div className="hbai-note" style={{ "--d": "0.9s", "--w": "80%" } as React.CSSProperties} />
+        <div className="hbai-note" style={{ "--d": "1.8s", "--w": "64%" } as React.CSSProperties} />
+        <div className="hbai-note" style={{ "--d": "2.7s", "--w": "40%" } as React.CSSProperties} />
+      </div>
+      <span className="hbai-send">Send follow-up</span>
+    </Frame>
+  );
+}
+
+/* Trends: a chart that keeps drawing itself, ticker climbing. */
+function TrendsScene() {
+  return (
+    <Frame title="honeybook.com · insights">
+      <div className="hbai-ticker">
+        Bookings <strong>▲ 23%</strong>
+      </div>
+      <svg className="hbai-chart" viewBox="0 0 300 120" preserveAspectRatio="none">
+        <path
+          className="hbai-chart-grid"
+          d="M0,30 H300 M0,60 H300 M0,90 H300"
+          stroke="currentColor"
+          strokeWidth="1"
+        />
+        <path
+          className="hbai-chart-line"
+          d="M8,100 C50,92 70,64 105,70 C140,76 160,40 200,44 C240,48 262,24 292,16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+        />
+        <circle className="hbai-chart-dot" r="6">
+          <animateMotion
+            dur="5s"
+            repeatCount="indefinite"
+            keyPoints="0;1;1"
+            keyTimes="0;0.7;1"
+            calcMode="linear"
+            path="M8,100 C50,92 70,64 105,70 C140,76 160,40 200,44 C240,48 262,24 292,16"
+          />
+        </circle>
+      </svg>
+      <span className="hbai-chip">Today: follow up with 3 warm leads</span>
+    </Frame>
+  );
+}
+
+const SCENES: Record<AiFeature["key"], () => React.ReactElement> = {
+  leads: LeadsScene,
+  notetaker: NotetakerScene,
+  builder: BuilderScene,
+  email: EmailScene,
+  trends: TrendsScene,
+};
+
+export default function AiPreview({ feature }: { feature: AiFeature["key"] }) {
+  const Scene = SCENES[feature];
+  return <Scene />;
+}
