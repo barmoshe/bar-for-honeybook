@@ -24,6 +24,14 @@ export const PROJECTS: Project[] = [
     span: 2,
   },
   {
+    name: "Entailer",
+    blurb:
+      "A logician's-pass linter for prose and specs — think markdownlint, but for logical validity. An LLM-in-the-loop translator formalizes the load-bearing claims, a deterministic core checks whether arguments follow and requirements are consistent, and every verdict ships with the formalization it judged. Open source, on npm.",
+    tag: "Open source · AI + formal logic",
+    href: "https://barmoshe.github.io/entailer/",
+    accent: "slate",
+  },
+  {
     name: "Catalogue Orchestrator",
     blurb:
       "A local-first AI video orchestrator: point it at a catalogue of clips and an intent, it indexes everything, retrieves the right moments with RAG, and plans an edit that a deterministic ffmpeg compiler renders into a finished cut. The AI only emits a validated edit list, never raw ffmpeg, so the output stays reproducible. Open source.",
