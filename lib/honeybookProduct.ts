@@ -1,14 +1,23 @@
 /**
  * Researched facts about HoneyBook's product and AI work (2026-07), feeding
  * the home page's "HoneyBook, studied up close" section. Not everything here
- * is AI — the referral engine is a growth feature. Sources: honeybook.com
+ * is AI — the referral engine is a growth feature, and invoices/payments and
+ * the meeting scheduler are core clientflow. Sources: honeybook.com
  * product + blog pages, BusinessWire (2025-03-25 AI acceleration release;
  * 2026-05-14 "$400K more" data study), Wikipedia, Times of Israel (unicorn
  * round). Kept as data so the copy stays honest.
  */
 
 export type ProductFeature = {
-  key: "leads" | "notetaker" | "builder" | "email" | "trends" | "referral";
+  key:
+    | "leads"
+    | "notetaker"
+    | "builder"
+    | "email"
+    | "trends"
+    | "payments"
+    | "scheduler"
+    | "referral";
   name: string;
   tag: string;
   blurb: string;
@@ -52,6 +61,20 @@ export const PRODUCT_FEATURES: ProductFeature[] = [
     tag: "Shipping in the product",
     blurb:
       "Every morning starts with an AI-built priority list, and the business trends view tracks shifts in leads and revenue without a spreadsheet.",
+  },
+  {
+    key: "payments",
+    name: "Invoices & payments",
+    tag: "Core clientflow",
+    blurb:
+      "Invoices clients can pay from any device — card, bank transfer, Apple Pay or Google Pay — while automatic payment reminders do the chasing. HoneyBook's own number: 90% of invoices get paid on time.",
+  },
+  {
+    key: "scheduler",
+    name: "Meeting scheduler",
+    tag: "Core clientflow",
+    blurb:
+      "Set availability once, share a link, and clients book themselves — synced calendars block double-bookings, and the booking page carries the member's own brand.",
   },
   {
     key: "referral",
@@ -98,6 +121,14 @@ export const PRODUCT_SOURCES = [
   {
     label: "BusinessWire — $400K AI study",
     href: "https://www.businesswire.com/news/home/20260514449052/en/HoneyBook-Data-Reveals-Small-Businesses-Using-AI-Earn-$400K-More-Per-Year-Than-Those-Who-Dont",
+  },
+  {
+    label: "honeybook.com/product/online-invoices",
+    href: "https://www.honeybook.com/product/online-invoices",
+  },
+  {
+    label: "honeybook.com/product/meeting-scheduler",
+    href: "https://www.honeybook.com/product/meeting-scheduler",
   },
   { label: "Wikipedia — HoneyBook", href: "https://en.wikipedia.org/wiki/HoneyBook" },
   {

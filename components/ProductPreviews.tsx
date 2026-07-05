@@ -185,6 +185,64 @@ function TrendsScene() {
   );
 }
 
+/* Invoices & payments: line items settle in, the paid stamp lands,
+   the auto-reminder takes the credit. */
+const INVOICE_ROWS = [
+  { w: 62, amount: "$1,200" },
+  { w: 46, amount: "$2,400" },
+];
+
+function PaymentsScene() {
+  return (
+    <Frame title="honeybook.com · payments">
+      <div className="hbai-invoice">
+        <div className="hbai-invoice-head">
+          <span>Invoice · Dana</span>
+          <strong>$3,600</strong>
+        </div>
+        {INVOICE_ROWS.map((row, i) => (
+          <div
+            key={row.amount}
+            className="hbai-invoice-row"
+            style={{ "--d": `${i * 0.6}s`, "--w": `${row.w}%` } as React.CSSProperties}
+          >
+            <i />
+            <em>{row.amount}</em>
+          </div>
+        ))}
+        <span className="hbai-paid">✓ Paid in full</span>
+      </div>
+      <span className="hbai-chip hbai-chip--yellow">Auto-reminder sent → paid on time</span>
+    </Frame>
+  );
+}
+
+/* Meeting scheduler: open slots fade in, the client picks one. */
+const SLOTS = ["9:00", "10:30", "12:00", "1:30", "3:00", "4:30"];
+
+function SchedulerScene() {
+  return (
+    <Frame title="honeybook.com · scheduler">
+      <div className="hbai-sched-head">
+        <span>Intro call · 30 min</span>
+        <span className="hbai-spark">Booking link</span>
+      </div>
+      <div className="hbai-slots">
+        {SLOTS.map((t, i) => (
+          <span
+            key={t}
+            className={`hbai-slot${t === "10:30" ? " hbai-slot--pick" : ""}`}
+            style={{ "--d": `${i * 0.12}s` } as React.CSSProperties}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+      <span className="hbai-chip">10:30 booked — confirmation sent</span>
+    </Frame>
+  );
+}
+
 /* Referral engine: a booked client's trackable link travels across and
    becomes a brand-new lead. */
 function ReferralScene() {
@@ -245,6 +303,8 @@ const SCENES: Record<ProductFeature["key"], () => React.ReactElement> = {
   builder: BuilderScene,
   email: EmailScene,
   trends: TrendsScene,
+  payments: PaymentsScene,
+  scheduler: SchedulerScene,
   referral: ReferralScene,
 };
 

@@ -1870,6 +1870,129 @@ body {
   stroke-width: 2;
 }
 
+/* ---- scene: invoices & payments ---- */
+.hbai-invoice {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: var(--hb-white);
+  border: 1px solid oklch(0.255 0.018 230 / 0.07);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+}
+.hbai-invoice-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--hb-ink);
+}
+.hbai-invoice-head strong {
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+.hbai-invoice-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.hbai-invoice-row i {
+  display: block;
+  height: 8px;
+  width: var(--w, 60%);
+  border-radius: 4px;
+  background: var(--hb-cool);
+  transform-origin: left;
+  animation: hbai-type 4.5s ease-out infinite;
+  animation-delay: var(--d, 0s);
+}
+.hbai-invoice-row em {
+  font-style: normal;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--hb-muted);
+}
+.hbai-paid {
+  align-self: flex-end;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--hb-ink);
+  background: var(--hb-mint);
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  animation: hbai-pop 5s ease-in-out infinite;
+  animation-delay: 1.4s;
+}
+
+/* ---- scene: meeting scheduler ---- */
+.hbai-sched-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--hb-ink);
+}
+.hbai-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.hbai-slot {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--hb-ink);
+  background: var(--hb-white);
+  border: 1.5px solid oklch(0.255 0.018 230 / 0.12);
+  border-radius: 10px;
+  padding: 0.5rem 0.4rem;
+  animation: hbai-slotin 5s ease-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes hbai-slotin {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  10%, 100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* the picked slot repeats the entrance, then fills in as the client's choice */
+.hbai-slot--pick {
+  animation-name: hbai-slotpick;
+}
+@keyframes hbai-slotpick {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  38% {
+    background: var(--hb-white);
+    border-color: oklch(0.255 0.018 230 / 0.12);
+    box-shadow: none;
+  }
+  46%, 100% {
+    opacity: 1;
+    transform: translateY(0);
+    background: var(--hb-yellow);
+    border-color: var(--hb-yellow-deep);
+    box-shadow: 0 10px 22px -12px oklch(0.7 0.16 100 / 0.9);
+  }
+}
+
 @media (max-width: 920px) {
   .hbai-grid {
     grid-template-columns: 1fr;
