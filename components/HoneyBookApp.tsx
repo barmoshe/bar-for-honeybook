@@ -328,7 +328,7 @@ export default function HoneyBookApp() {
             <p className="hb-eyebrow hb-reveal">I came prepared</p>
             <h2 className="hb-h2 hb-reveal">HoneyBook, studied up close.</h2>
             <p className="hb-lead hb-reveal">
-              Before asking for a seat, I learned the product. Eight real HoneyBook features —
+              Before asking for a seat, I learned the product. Ten real HoneyBook features —
               clientflow, growth, and the AI toolkit — each one an original, hand-coded
               animated scene inspired by the real thing. No screenshots, no video, all in
               your brand.

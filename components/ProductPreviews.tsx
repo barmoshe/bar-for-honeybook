@@ -185,6 +185,35 @@ function TrendsScene() {
   );
 }
 
+/* Smart files: one link walks the client from proposal to signature
+   to payment, each step checking off in turn. */
+const FILE_STEPS = [
+  { label: "Proposal", status: "Package picked", d: "0s" },
+  { label: "Contract", status: "Signed", d: "1.2s" },
+  { label: "Invoice", status: "Paid", d: "2.4s" },
+];
+
+function SmartFilesScene() {
+  return (
+    <Frame title="honeybook.com · smart file">
+      <div className="hbai-file">
+        <div className="hbai-file-head">
+          <span>Dana · Brand shoot</span>
+          <span className="hbai-spark">One link</span>
+        </div>
+        {FILE_STEPS.map((s) => (
+          <div key={s.label} className="hbai-step" style={{ "--d": s.d } as React.CSSProperties}>
+            <span className="hbai-step-check">✓</span>
+            <span className="hbai-step-label">{s.label}</span>
+            <em className="hbai-step-status">{s.status}</em>
+          </div>
+        ))}
+      </div>
+      <span className="hbai-chip hbai-chip--yellow">Viewed → signed → paid</span>
+    </Frame>
+  );
+}
+
 /* Invoices & payments: line items settle in, the paid stamp lands,
    the auto-reminder takes the credit. */
 const INVOICE_ROWS = [
@@ -239,6 +268,26 @@ function SchedulerScene() {
         ))}
       </div>
       <span className="hbai-chip">10:30 booked — confirmation sent</span>
+    </Frame>
+  );
+}
+
+/* Tap to Pay: the client's card taps the phone, payment rings out. */
+function TapToPayScene() {
+  return (
+    <Frame title="honeybook.com · tap to pay">
+      <div className="hbai-tap">
+        <div className="hbai-tap-amount">
+          <em>Mini session · today</em>
+          <strong>$450</strong>
+        </div>
+        <div className="hbai-tap-zone">
+          <span className="hbai-tap-ring" />
+          <span className="hbai-tap-ring" style={{ "--d": "0.6s" } as React.CSSProperties} />
+          <span className="hbai-tap-card" />
+        </div>
+      </div>
+      <span className="hbai-chip">✓ Paid on the spot — no card reader</span>
     </Frame>
   );
 }
@@ -303,8 +352,10 @@ const SCENES: Record<ProductFeature["key"], () => React.ReactElement> = {
   builder: BuilderScene,
   email: EmailScene,
   trends: TrendsScene,
+  smartfiles: SmartFilesScene,
   payments: PaymentsScene,
   scheduler: SchedulerScene,
+  tappay: TapToPayScene,
   referral: ReferralScene,
 };
 

@@ -1,8 +1,8 @@
 /**
  * Researched facts about HoneyBook's product and AI work (2026-07), feeding
  * the home page's "HoneyBook, studied up close" section. Not everything here
- * is AI — the referral engine is a growth feature, and invoices/payments and
- * the meeting scheduler are core clientflow. Sources: honeybook.com
+ * is AI — the referral engine is a growth feature; smart files, invoices,
+ * the scheduler, and Tap to Pay are core clientflow. Sources: honeybook.com
  * product + blog pages, BusinessWire (2025-03-25 AI acceleration release;
  * 2026-05-14 "$400K more" data study), Wikipedia, Times of Israel (unicorn
  * round). Kept as data so the copy stays honest.
@@ -15,8 +15,10 @@ export type ProductFeature = {
     | "builder"
     | "email"
     | "trends"
+    | "smartfiles"
     | "payments"
     | "scheduler"
+    | "tappay"
     | "referral";
   name: string;
   tag: string;
@@ -63,6 +65,13 @@ export const PRODUCT_FEATURES: ProductFeature[] = [
       "Every morning starts with an AI-built priority list, and the business trends view tracks shifts in leads and revenue without a spreadsheet.",
   },
   {
+    key: "smartfiles",
+    name: "Smart files",
+    tag: "Core clientflow",
+    blurb:
+      "HoneyBook's signature format: proposal, contract, and invoice combined into one interactive file. The client picks a package, signs, and pays from a single link — and the file tracks viewed, signed, and paid.",
+  },
+  {
     key: "payments",
     name: "Invoices & payments",
     tag: "Core clientflow",
@@ -75,6 +84,13 @@ export const PRODUCT_FEATURES: ProductFeature[] = [
     tag: "Core clientflow",
     blurb:
       "Set availability once, share a link, and clients book themselves — synced calendars block double-bookings, and the booking page carries the member's own brand.",
+  },
+  {
+    key: "tappay",
+    name: "Tap to Pay",
+    tag: "New in the product",
+    blurb:
+      "The newest way to get paid: at a shoot, a venue tour, or across the table, the client taps their phone, card, or watch and the payment is charged on the spot — no card reader, no leaving HoneyBook.",
   },
   {
     key: "referral",
@@ -123,12 +139,20 @@ export const PRODUCT_SOURCES = [
     href: "https://www.businesswire.com/news/home/20260514449052/en/HoneyBook-Data-Reveals-Small-Businesses-Using-AI-Earn-$400K-More-Per-Year-Than-Those-Who-Dont",
   },
   {
+    label: "honeybook.com/product/proposal-software",
+    href: "https://www.honeybook.com/product/proposal-software",
+  },
+  {
     label: "honeybook.com/product/online-invoices",
     href: "https://www.honeybook.com/product/online-invoices",
   },
   {
     label: "honeybook.com/product/meeting-scheduler",
     href: "https://www.honeybook.com/product/meeting-scheduler",
+  },
+  {
+    label: "Product updates, March 2026",
+    href: "https://www.honeybook.com/blog/product-updates-march-2026",
   },
   { label: "Wikipedia — HoneyBook", href: "https://en.wikipedia.org/wiki/HoneyBook" },
   {

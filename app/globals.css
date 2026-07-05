@@ -1870,6 +1870,68 @@ body {
   stroke-width: 2;
 }
 
+/* ---- scene: smart files ---- */
+.hbai-file {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  background: var(--hb-white);
+  border: 1px solid oklch(0.255 0.018 230 / 0.07);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+}
+.hbai-file-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--hb-ink);
+}
+.hbai-step {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  animation: hbai-steplight 5.5s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes hbai-steplight {
+  0% {
+    opacity: 0.4;
+  }
+  10%, 100% {
+    opacity: 1;
+  }
+}
+.hbai-step-check {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.62rem;
+  font-weight: 900;
+  color: var(--hb-ink);
+  background: var(--hb-mint);
+  animation: hbai-pop 5.5s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+.hbai-step-label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--hb-ink);
+}
+.hbai-step-status {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--hb-muted);
+}
+
 /* ---- scene: invoices & payments ---- */
 .hbai-invoice {
   position: relative;
@@ -1990,6 +2052,91 @@ body {
     background: var(--hb-yellow);
     border-color: var(--hb-yellow-deep);
     box-shadow: 0 10px 22px -12px oklch(0.7 0.16 100 / 0.9);
+  }
+}
+
+/* ---- scene: tap to pay ---- */
+.hbai-tap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--hb-white);
+  border: 1px solid oklch(0.255 0.018 230 / 0.07);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+}
+.hbai-tap-amount {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.hbai-tap-amount em {
+  font-style: normal;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--hb-muted);
+}
+.hbai-tap-amount strong {
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--hb-ink);
+}
+.hbai-tap-zone {
+  position: relative;
+  flex: none;
+  width: 84px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hbai-tap-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--hb-yellow-deep);
+  animation: hbai-tapring 2.4s ease-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes hbai-tapring {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.9;
+  }
+  70%, 100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+.hbai-tap-card {
+  position: relative;
+  z-index: 1;
+  width: 44px;
+  height: 30px;
+  border-radius: 6px;
+  background: var(--hb-ink);
+  box-shadow: 0 10px 20px -10px oklch(0.255 0.018 230 / 0.6);
+  /* synced to the rings: the card leans in as each pulse fires */
+  animation: hbai-tapcard 2.4s ease-in-out infinite;
+}
+.hbai-tap-card::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 14px;
+  top: 8px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--hb-yellow);
+}
+@keyframes hbai-tapcard {
+  0%, 100% {
+    transform: translateY(7px) rotate(-7deg);
+  }
+  40%, 60% {
+    transform: translateY(-2px) rotate(0deg);
   }
 }
 
