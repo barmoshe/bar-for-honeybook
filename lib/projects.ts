@@ -52,6 +52,14 @@ export const PROJECTS: Project[] = [
     accent: "sage",
   },
   {
+    name: "bar for companies",
+    blurb:
+      "A live gallery of every bespoke marketing page shipped this way: dozens of sites, each rebuilt in a different company's own brand language, from type and color to motion. One data-driven Next.js app, with automated logo fetching and screenshot capture keeping every entry current.",
+    tag: "Marketing sites · Brand systems",
+    href: "https://bar-for-companies.vercel.app",
+    accent: "slate",
+  },
+  {
     name: "Catalogue Orchestrator",
     blurb:
       "A local-first AI video orchestrator: point it at a catalogue of clips and an intent, it indexes everything, retrieves the right moments with RAG, and plans an edit that a deterministic ffmpeg compiler renders into a finished cut. The AI only emits a validated edit list, never raw ffmpeg, so the output stays reproducible.",
