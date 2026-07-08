@@ -7,6 +7,7 @@ import ClientflowGraphic from "./ClientflowGraphic";
 import ProductPreview from "./ProductPreviews";
 import { Sparkle, IdeaIcon } from "./Decor";
 import BriefModal from "./BriefModal";
+import McpCatalog from "./McpCatalog";
 import HoneyBookLogo from "./HoneyBookLogo";
 import { PROJECTS } from "@/lib/projects";
 import { PRODUCT_FEATURES, PRODUCT_FACTS, PRODUCT_IDEAS, PRODUCT_SOURCES } from "@/lib/honeybookProduct";
@@ -284,6 +285,7 @@ export default function HoneyBookApp() {
                   </li>
                 ))}
               </ul>
+              <McpCatalog />
             </div>
             <div className="hb-about-card hb-reveal">
               <div className="hb-about-monogram" aria-hidden="true">

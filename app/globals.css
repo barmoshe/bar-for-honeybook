@@ -1027,6 +1027,71 @@ body {
   border-radius: 999px;
   padding: 0.5rem 0.95rem;
 }
+.hb-catalog {
+  margin-top: 1.6rem;
+  background: var(--hb-cream);
+  border: 1px solid oklch(0.255 0.018 230 / 0.08);
+  border-radius: 16px;
+  padding: 1.1rem 1.25rem 0.9rem;
+  max-width: 42ch;
+}
+.hb-catalog-h {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--hb-muted);
+  margin-bottom: 0.5rem;
+}
+.hb-catalog-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.hb-catalog-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid oklch(0.255 0.018 230 / 0.08);
+  font-size: 0.85rem;
+}
+.hb-catalog-row:last-child {
+  border-bottom: none;
+}
+.hb-catalog-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+}
+.hb-catalog-name {
+  font-family: "SFMono-Regular", ui-monospace, Menlo, monospace;
+  font-weight: 700;
+  color: var(--hb-ink);
+  font-size: 0.82rem;
+}
+.hb-catalog-kind {
+  color: var(--hb-muted);
+  font-size: 0.78rem;
+}
+.hb-catalog-status {
+  margin-left: auto;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--hb-sage);
+  border: 1px solid oklch(0.63 0.085 150 / 0.35);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  white-space: nowrap;
+}
+.hb-catalog-cap {
+  margin: 0.55rem 0 0;
+  font-size: 0.76rem;
+  color: var(--hb-muted);
+}
 .hb-about-card {
   background: var(--hb-ink);
   border-radius: var(--hb-radius);
