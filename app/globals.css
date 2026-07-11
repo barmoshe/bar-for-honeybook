@@ -1,13 +1,17 @@
 /* ============================================================
-   HoneyBook-style pitch page — light, airy, bright-yellow, modular,
-   with flowing "clientflow" graphics + motion (no WebGL).
+   HoneyBook-style pitch page — serif display type, mono eyebrows,
+   rounded inset color sections floating on white, with flowing
+   "clientflow" graphics + motion (no WebGL).
    Palette verified off live honeybook.com (2026-06-27):
    rebel yellow #FFFA56, ink #142127, plus secondary tints.
+   Type + layout language follows the HoneyBook homepage:
+   Source Serif 4 display / Figtree UI / IBM Plex Mono labels.
    ============================================================ */
 
 :root {
-  /* Closest free match to HoneyBook's brand face, Aeonik (commercial) */
-  --font-hb: "DM Sans Variable", system-ui, -apple-system, sans-serif;
+  --font-hb: "Figtree Variable", system-ui, -apple-system, sans-serif;
+  --font-serif: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
 * {
@@ -39,10 +43,14 @@ body {
   --hb-mint: oklch(0.83 0.075 155); /* #99D3AC */
   --hb-teal: oklch(0.36 0.045 245); /* #27455C */
   --hb-muted: oklch(0.46 0.013 240); /* AA on white + cool */
+  --hb-beige: oklch(0.936 0.017 65); /* #F2E9E1 warm beige */
+  --hb-periwinkle: oklch(0.766 0.065 268); /* #9DB7E8 */
 
   --hb-maxw: 1140px;
   --hb-pad: clamp(1.25rem, 5vw, 3rem);
   --hb-radius: 24px;
+  --hb-inset-radius: 20px;
+  --hb-inset-gap: 24px; /* white gutter around inset color sections */
 
   color: var(--hb-ink);
   background: var(--hb-white);
@@ -65,33 +73,24 @@ body {
 .hb-eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8125rem;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--hb-muted);
 }
-.hb-eyebrow::before {
-  content: "";
-  width: 22px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--hb-yellow-deep);
-}
 .hb-eyebrow--onink {
   color: var(--hb-yellow);
 }
-.hb-eyebrow--onink::before {
-  background: var(--hb-yellow);
-}
 .hb-h2 {
-  font-size: clamp(2rem, 4.5vw, 3.25rem);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.025em;
-  margin-top: 0.7rem;
-  max-width: 20ch;
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 4.6vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-top: 0.9rem;
+  max-width: 24ch;
 }
 .hb-h2--invert {
   color: var(--hb-white);
@@ -133,35 +132,49 @@ body {
   padding: 1.05rem 2rem;
 }
 .hb-btn--primary {
+  background: var(--hb-ink);
+  color: var(--hb-white);
+  box-shadow: 0 10px 26px -14px oklch(0.255 0.018 230 / 0.6);
+}
+.hb-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px -16px oklch(0.255 0.018 230 / 0.7);
+}
+/* yellow fill — the CTA for dark (ink) surfaces */
+.hb-btn--yellow {
   background: var(--hb-yellow);
   color: var(--hb-ink);
   box-shadow: 0 10px 26px -12px oklch(0.7 0.16 100 / 0.7);
 }
-.hb-btn--primary:hover {
-  transform: translateY(-2px);
+.hb-btn--yellow:hover {
+  transform: translateY(-1px);
   box-shadow: 0 18px 40px -14px oklch(0.7 0.16 100 / 0.9);
 }
 .hb-btn--ghost {
   background: transparent;
   color: var(--hb-ink);
-  border-color: color-mix(in oklch, var(--hb-ink) 24%, transparent);
+  border-color: color-mix(in oklch, var(--hb-ink) 32%, transparent);
 }
 .hb-btn--ghost:hover {
   border-color: var(--hb-ink);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 .hb-btn--ghost-invert {
   background: transparent;
   color: var(--hb-white);
-  border-color: oklch(1 0 0 / 0.3);
+  border-color: oklch(1 0 0 / 0.35);
 }
 .hb-btn--ghost-invert:hover {
   border-color: var(--hb-white);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 .hb-btn:focus-visible {
   outline: 3px solid var(--hb-yellow);
   outline-offset: 3px;
+}
+/* yellow outline is invisible against the yellow hero inset */
+.hb-hero .hb-btn:focus-visible {
+  outline-color: var(--hb-ink);
 }
 
 /* ============================================================
@@ -361,12 +374,25 @@ body {
    ============================================================ */
 .hb-hero {
   position: relative;
-  min-height: 100svh;
+  min-height: calc(100svh - var(--hb-inset-gap));
   display: flex;
   align-items: center;
   overflow: hidden;
-  background: var(--hb-cream);
+  background: var(--hb-yellow);
   color: var(--hb-ink);
+  margin: var(--hb-inset-gap) var(--hb-inset-gap) 0;
+  border-radius: var(--hb-inset-radius);
+}
+/* grey --hb-muted eyebrow washes out on the yellow inset */
+.hb-hero .hb-eyebrow {
+  color: oklch(0.255 0.018 230 / 0.75);
+}
+/* white card lifting the clientflow graphic off the yellow, demo-style */
+.hb-hero-media {
+  background: var(--hb-white);
+  border-radius: var(--hb-inset-radius);
+  padding: clamp(1.1rem, 2.5vw, 1.9rem);
+  box-shadow: 0 30px 70px -32px oklch(0.255 0.018 230 / 0.45);
 }
 .hb-topbar {
   position: absolute;
@@ -430,11 +456,12 @@ body {
 }
 .hb-hero-title {
   margin-top: 1.1rem;
-  font-size: clamp(2.4rem, 5.4vw, 4.4rem);
-  font-weight: 900;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5.6vw, 4.6rem);
+  font-weight: 500;
   line-height: 1.06;
-  letter-spacing: -0.035em;
-  max-width: 13ch;
+  letter-spacing: -0.02em;
+  max-width: 14ch;
   color: var(--hb-ink);
 }
 /* word-rise reveal (no mask — avoids clipping descenders on wrapped lines);
@@ -448,8 +475,9 @@ body {
 .hb-hero-sub {
   margin-top: 1.9rem;
   font-size: clamp(1.05rem, 1.4vw, 1.22rem);
-  line-height: 1.6;
-  color: oklch(0.42 0.014 235);
+  font-weight: 500;
+  line-height: 1.55;
+  color: oklch(0.32 0.018 233);
   max-width: 42ch;
 }
 .hb-hero-cta {
@@ -699,6 +727,20 @@ body {
   padding-block: clamp(4.5rem, 11vw, 8.5rem);
   overflow: hidden;
 }
+/* rounded inset color blocks floating on the white page (the demo's
+   signature layout move); adjacent insets keep a white gutter between them */
+.hb-inset {
+  margin-inline: var(--hb-inset-gap);
+  border-radius: var(--hb-inset-radius);
+}
+.hb-inset + .hb-inset {
+  margin-top: var(--hb-inset-gap);
+}
+@media (max-width: 720px) {
+  .hb-root {
+    --hb-inset-gap: 12px;
+  }
+}
 .hb-section--fit {
   background: var(--hb-white);
 }
@@ -708,11 +750,13 @@ body {
 .hb-section--close {
   background: var(--hb-ink);
   text-align: center;
+  /* joins the footer below into one continuous dark block, demo-style */
+  border-radius: var(--hb-inset-radius) var(--hb-inset-radius) 0 0;
 }
 
 /* ---- pull quote / hybrid method ---- */
 .hb-section--quote {
-  background: var(--hb-cream);
+  background: var(--hb-white);
 }
 .hb-quote {
   position: relative;
@@ -731,9 +775,11 @@ body {
   margin: 0;
 }
 .hb-quote-body p {
-  font-size: clamp(1.1rem, 2.3vw, 1.65rem);
-  line-height: 1.5;
-  font-weight: 500;
+  font-family: var(--font-serif);
+  font-size: clamp(1.15rem, 2.4vw, 1.7rem);
+  line-height: 1.45;
+  font-weight: 450;
+  letter-spacing: -0.01em;
   color: var(--hb-ink);
   margin: 0 0 1.1rem;
 }
@@ -741,13 +787,14 @@ body {
   margin-bottom: 0;
 }
 .hb-quote-body strong {
-  font-weight: 800;
+  font-weight: 640;
 }
 .hb-quote-cite {
   margin-top: 1.6rem;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--hb-ink);
   opacity: 0.72;
@@ -792,10 +839,11 @@ body {
   margin-bottom: 0.9rem;
 }
 .hb-fit-card h3 {
-  font-size: 1.2rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
   margin-bottom: 0.55rem;
 }
 .hb-fit-card p {
@@ -838,15 +886,17 @@ body {
   grid-column: span 2;
 }
 .hb-tile-tag {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--hb-muted);
 }
 .hb-tile-name {
-  font-size: 1.55rem;
-  font-weight: 800;
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  font-weight: 500;
   letter-spacing: -0.015em;
 }
 .hb-tile-blurb {
@@ -920,32 +970,51 @@ body {
   justify-content: center;
 }
 
-/* ---- footer ---- */
+/* ---- footer — dark wrap continuing the close inset, white card inside ---- */
 .hb-footer {
   background: var(--hb-ink);
-  color: oklch(1 0 0 / 0.6);
+  margin: 0 var(--hb-inset-gap) var(--hb-inset-gap);
+  border-radius: 0 0 var(--hb-inset-radius) var(--hb-inset-radius);
+  padding: 0 clamp(1.25rem, 3vw, 2.5rem) 1.6rem;
+}
+.hb-footer-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  padding: 1.6rem var(--hb-pad);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  border-top: 1px solid oklch(1 0 0 / 0.08);
+  background: var(--hb-white);
+  color: var(--hb-ink);
+  border-radius: var(--hb-inset-radius);
+  padding: clamp(1.4rem, 3.5vw, 2.2rem) clamp(1.4rem, 3.5vw, 2.5rem);
 }
 .hb-footer-links {
   display: flex;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 .hb-footer-links a {
-  color: oklch(1 0 0 / 0.72);
+  color: var(--hb-ink);
+  font-size: 0.95rem;
+  font-weight: 700;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 .hb-footer-links a:hover {
-  color: var(--hb-yellow);
+  opacity: 0.6;
+}
+.hb-footer-legal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: oklch(1 0 0 / 0.62);
 }
 
 .hb-blobs--dim .hb-blob {
@@ -957,7 +1026,7 @@ body {
    Stats band
    ============================================================ */
 .hb-section--stats {
-  background: var(--hb-yellow);
+  background: var(--hb-beige);
   padding-block: clamp(3rem, 6vw, 4.5rem);
 }
 .hb-stats {
@@ -982,9 +1051,10 @@ body {
   color: oklch(0.255 0.018 230 / 0.72);
 }
 .hb-stat-num {
-  font-size: clamp(2.4rem, 5vw, 3.6rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5vw, 3.7rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
   line-height: 1;
   color: var(--hb-ink);
   font-variant-numeric: tabular-nums;
@@ -1003,7 +1073,10 @@ body {
   background: var(--hb-white);
 }
 .hb-section--ai {
-  background: var(--hb-cream);
+  background: var(--hb-ink);
+}
+.hb-section--ai .hb-ideas-note {
+  color: oklch(1 0 0 / 0.78);
 }
 .hb-about {
   display: grid;
@@ -1066,8 +1139,8 @@ body {
   flex: none;
 }
 .hb-catalog-name {
-  font-family: "SFMono-Regular", ui-monospace, Menlo, monospace;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-weight: 600;
   color: var(--hb-ink);
   font-size: 0.82rem;
 }
@@ -1127,8 +1200,9 @@ body {
   width: 100%;
 }
 .hb-about-name {
-  font-size: 1.35rem;
-  font-weight: 800;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 500;
 }
 .hb-about-role {
   color: var(--hb-mint);
@@ -1178,10 +1252,11 @@ body {
   position: absolute;
   top: 0.85rem;
   right: 1.1rem;
+  font-family: var(--font-serif);
   font-size: clamp(2.8rem, 4vw, 3.6rem);
-  font-weight: 800;
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
   color: var(--ac, var(--hb-yellow));
   user-select: none;
 }
@@ -1204,9 +1279,10 @@ body {
   height: 32px;
 }
 .hb-idea h3 {
-  font-size: 1.15rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
   margin-bottom: 0.4rem;
 }
 .hb-idea p {
@@ -1278,9 +1354,10 @@ body {
   outline-offset: 2px;
 }
 .hb-modal-title {
-  font-size: clamp(1.5rem, 4vw, 1.9rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
   line-height: 1.1;
   margin-top: 0.5rem;
 }
@@ -1404,7 +1481,14 @@ body {
    HoneyBook × AI block — live animated previews (home page)
    ============================================================ */
 .hbai-section-previews {
-  background: var(--hb-cool);
+  background: var(--hb-periwinkle);
+}
+/* periwinkle is mid-lightness: the section's own grey text needs to darken */
+.hbai-section-previews .hb-eyebrow {
+  color: oklch(0.255 0.018 230 / 0.78);
+}
+.hbai-section-previews .hb-lead {
+  color: oklch(0.255 0.018 230 / 0.88);
 }
 
 /* ---- preview card grid ---- */
@@ -1437,8 +1521,9 @@ body {
   padding: 1.3rem 1.6rem 1.6rem;
 }
 .hbai-card-name {
-  font-size: 1.35rem;
-  font-weight: 800;
+  font-family: var(--font-serif);
+  font-size: 1.55rem;
+  font-weight: 500;
   letter-spacing: -0.015em;
 }
 .hbai-card-blurb {
@@ -1453,7 +1538,8 @@ body {
   gap: 0.4rem 1.1rem;
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--hb-muted);
+  /* sits on the periwinkle inset — grey --hb-muted would fail AA there */
+  color: oklch(0.255 0.018 230 / 0.82);
 }
 .hbai-sources a {
   color: var(--hb-ink);
@@ -2454,6 +2540,22 @@ body {
   }
   .hb-root .hb-section--close {
     padding-bottom: 7.5rem;
+  }
+}
+
+/* ============================================================
+   Periwinkle previews inset — mobile carousel contrast overrides
+   (after the mobile block so they win the cascade)
+   ============================================================ */
+@media (max-width: 720px) {
+  .hbai-section-previews .hbai-dots button {
+    background: oklch(0.255 0.018 230 / 0.32);
+  }
+  .hbai-section-previews .hbai-dots button.is-active {
+    background: var(--hb-ink);
+  }
+  .hbai-section-previews .hbai-dots-count {
+    color: oklch(0.255 0.018 230 / 0.8);
   }
 }
 

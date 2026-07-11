@@ -185,8 +185,7 @@ export default function HoneyBookApp() {
 
       {/* ===== Hero ===== */}
       <header className="hb-hero">
-        <Blobs />
-        <Sparkle className="hb-deco hb-floaty2" style={{ top: "13%", left: "48%", color: "var(--hb-yellow-deep)", width: 30, height: 30 }} />
+        <Sparkle className="hb-deco hb-floaty2" style={{ top: "13%", left: "48%", color: "var(--hb-ink)", width: 30, height: 30 }} />
         <span className="hb-deco hb-deco--plus" style={{ top: "11%", left: "6%", color: "oklch(0.255 0.018 230 / 0.5)" }} />
         <div className="hb-topbar">
           <span className="hb-mark">
@@ -227,7 +226,9 @@ export default function HoneyBookApp() {
               </a>
             </div>
           </div>
-          <ClientflowGraphic />
+          <div className="hb-hero-media">
+            <ClientflowGraphic />
+          </div>
         </div>
         <div className="hb-scrollcue" aria-hidden="true">
           <span />
@@ -299,7 +300,7 @@ export default function HoneyBookApp() {
                 <span>Ships solo, fast</span>
                 <span>Current by default</span>
               </div>
-              <button className="hb-btn hb-btn--primary hb-about-cta hb-magnetic" onClick={open}>
+              <button className="hb-btn hb-btn--yellow hb-about-cta hb-magnetic" onClick={open}>
                 Let&apos;s talk
               </button>
             </div>
@@ -307,7 +308,7 @@ export default function HoneyBookApp() {
         </section>
 
         {/* ===== Researched HoneyBook facts ===== */}
-        <section className="hb-section hb-section--stats" aria-label="HoneyBook facts">
+        <section className="hb-section hb-section--stats hb-inset" aria-label="HoneyBook facts">
           <div className="hb-wrap">
             <div className="hb-stats">
               {PRODUCT_FACTS.map((f) => (
@@ -321,7 +322,7 @@ export default function HoneyBookApp() {
         </section>
 
         {/* ===== HoneyBook, studied up close ===== */}
-        <section className="hb-section hbai-section-previews" id="ai">
+        <section className="hb-section hbai-section-previews hb-inset" id="ai">
           <Sparkle
             className="hb-deco hb-floaty2"
             style={{ top: "6%", left: "4%", color: "var(--hb-yellow-deep)", width: 24, height: 24 }}
@@ -391,10 +392,10 @@ export default function HoneyBookApp() {
         </section>
 
         {/* ===== What I'd build on it ===== */}
-        <section className="hb-section hb-section--ai" aria-label="What I'd build on it">
+        <section className="hb-section hb-section--ai hb-inset" aria-label="What I'd build on it">
           <div className="hb-wrap">
-            <p className="hb-eyebrow hb-reveal">Where I&apos;d plug in</p>
-            <h2 className="hb-h2 hb-reveal">Three ideas, to start.</h2>
+            <p className="hb-eyebrow hb-eyebrow--onink hb-reveal">Where I&apos;d plug in</p>
+            <h2 className="hb-h2 hb-h2--invert hb-reveal">Three ideas, to start.</h2>
             <ol className="hb-ideas">
               {PRODUCT_IDEAS.map((idea, i) => (
                 <li
@@ -439,7 +440,7 @@ export default function HoneyBookApp() {
         </section>
 
         {/* ===== Work ===== */}
-        <section className="hb-section hb-section--work" id="work">
+        <section className="hb-section hb-section--work hb-inset" id="work">
           <Sparkle className="hb-deco hb-floaty2" style={{ bottom: "8%", left: "4%", color: "var(--hb-yellow-deep)", width: 26, height: 26 }} />
           <div className="hb-wrap">
             <p className="hb-eyebrow hb-reveal">Proof I can build</p>
@@ -466,7 +467,7 @@ export default function HoneyBookApp() {
         </section>
 
         {/* ===== Close ===== */}
-        <section className="hb-section hb-section--close" id="contact">
+        <section className="hb-section hb-section--close hb-inset" id="contact">
           <Blobs dim />
           <Sparkle className="hb-deco hb-floaty2" style={{ top: "18%", left: "16%", color: "var(--hb-yellow)", width: 28, height: 28 }} />
           <div className="hb-wrap hb-close-inner">
@@ -476,7 +477,7 @@ export default function HoneyBookApp() {
               This page took me an evening. Imagine what a quarter looks like.
             </p>
             <div className="hb-close-cta hb-reveal">
-              <button className="hb-btn hb-btn--primary hb-btn--lg hb-magnetic" onClick={open}>
+              <button className="hb-btn hb-btn--yellow hb-btn--lg hb-magnetic" onClick={open}>
                 Let&apos;s talk
               </button>
               <a className="hb-btn hb-btn--ghost-invert" href={whatsappHref} target="_blank" rel="noopener noreferrer">
@@ -494,17 +495,28 @@ export default function HoneyBookApp() {
       </main>
 
       <footer className="hb-footer">
-        <span>Bar Moshe · AI-native builder</span>
-        <span className="hb-footer-links">
-          <a href={mailtoHref}>Email</a>
-          <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
-            WhatsApp
-          </a>
-          <a href="https://github.com/barmoshe" target="_blank" rel="noopener noreferrer">
-            GitHub
-          </a>
-        </span>
-        <span>Made for HoneyBook</span>
+        <div className="hb-footer-card">
+          <span className="hb-mark">
+            Bar Moshe
+            <span className="hb-mark-for">
+              for <HoneyBookLogo />
+              <span className="hb-sr-only">HoneyBook</span>
+            </span>
+          </span>
+          <span className="hb-footer-links">
+            <a href={mailtoHref}>Email</a>
+            <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
+              WhatsApp
+            </a>
+            <a href="https://github.com/barmoshe" target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
+          </span>
+        </div>
+        <div className="hb-footer-legal">
+          <span>Bar Moshe · AI-native builder</span>
+          <span>Made for HoneyBook</span>
+        </div>
       </footer>
 
       {/* mobile-only: app-style bottom action bar */}

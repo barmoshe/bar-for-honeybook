@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@fontsource-variable/dm-sans": "^5.2.8",
+    "@fontsource-variable/figtree": "^5.2.10",
+    "@fontsource-variable/source-serif-4": "^5.2.9",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
     "gsap": "^3.13.0",
     "next": "16.2.7",
     "react": "19.2.4",
