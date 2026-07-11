@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import ScrollRestorer from "@/components/ScrollRestorer";
 import "@fontsource-variable/figtree";
+// opsz variant on purpose: optical sizing shapes the display letterforms at
+// heading sizes (costs ~70 KB over the wght-only file — a deliberate trade)
 import "@fontsource-variable/source-serif-4/opsz.css";
-import "@fontsource/ibm-plex-mono/500.css";
 import "@fontsource/ibm-plex-mono/600.css";
 import "./globals.css";
 

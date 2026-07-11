@@ -30,13 +30,25 @@ const FITS = [
   { n: "03", t: "Fluent in clientflow", d: "Async, identity, proposal to payment. I'm comfortable in the systems you run on and learn a codebase fast." },
 ];
 
-function Blobs({ dim = false }: { dim?: boolean }) {
+function Blobs() {
   return (
-    <div className={`hb-blobs${dim ? " hb-blobs--dim" : ""}`} aria-hidden="true">
+    <div className="hb-blobs" aria-hidden="true">
       <div className="hb-blob hb-blob--1" />
       <div className="hb-blob hb-blob--2" />
       <div className="hb-blob hb-blob--3" />
     </div>
+  );
+}
+
+function BrandMark() {
+  return (
+    <span className="hb-mark">
+      Bar Moshe
+      <span className="hb-mark-for">
+        for <HoneyBookLogo />
+        <span className="hb-sr-only">HoneyBook</span>
+      </span>
+    </span>
   );
 }
 
@@ -165,13 +177,7 @@ export default function HoneyBookApp() {
 
       <div className={`hb-nav${navShown ? " is-shown" : ""}`} aria-hidden={!navShown}>
         <div className="hb-nav-inner">
-          <span className="hb-mark">
-            Bar Moshe
-            <span className="hb-mark-for">
-              for <HoneyBookLogo />
-              <span className="hb-sr-only">HoneyBook</span>
-            </span>
-          </span>
+          <BrandMark />
           <nav className="hb-nav-links" aria-label="Sections">
             <a href="#about">About</a>
             <a href="#ai">HoneyBook</a>
@@ -184,17 +190,11 @@ export default function HoneyBookApp() {
       </div>
 
       {/* ===== Hero ===== */}
-      <header className="hb-hero">
+      <header className="hb-hero hb-inset">
         <Sparkle className="hb-deco hb-floaty2" style={{ top: "13%", left: "48%", color: "var(--hb-ink)", width: 30, height: 30 }} />
         <span className="hb-deco hb-deco--plus" style={{ top: "11%", left: "6%", color: "oklch(0.255 0.018 230 / 0.5)" }} />
         <div className="hb-topbar">
-          <span className="hb-mark">
-            Bar Moshe
-            <span className="hb-mark-for">
-              for <HoneyBookLogo />
-              <span className="hb-sr-only">HoneyBook</span>
-            </span>
-          </span>
+          <BrandMark />
         </div>
         <div className="hb-hero-grid">
           <div className="hb-hero-copy">
@@ -468,7 +468,7 @@ export default function HoneyBookApp() {
 
         {/* ===== Close ===== */}
         <section className="hb-section hb-section--close hb-inset" id="contact">
-          <Blobs dim />
+          <Blobs />
           <Sparkle className="hb-deco hb-floaty2" style={{ top: "18%", left: "16%", color: "var(--hb-yellow)", width: 28, height: 28 }} />
           <div className="hb-wrap hb-close-inner">
             <p className="hb-eyebrow hb-eyebrow--onink hb-reveal">The ask</p>
@@ -496,13 +496,7 @@ export default function HoneyBookApp() {
 
       <footer className="hb-footer">
         <div className="hb-footer-card">
-          <span className="hb-mark">
-            Bar Moshe
-            <span className="hb-mark-for">
-              for <HoneyBookLogo />
-              <span className="hb-sr-only">HoneyBook</span>
-            </span>
-          </span>
+          <BrandMark />
           <span className="hb-footer-links">
             <a href={mailtoHref}>Email</a>
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
