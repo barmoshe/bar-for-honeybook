@@ -10,10 +10,11 @@ export type Project = {
 };
 
 /**
- * Shipped proofs, ordered as four grid rows for an engineering audience:
- * flagship AI tooling + backend up top, then AI systems, then product apps,
- * then the craft demos. Two wide tiles (MDP, Apartment Hunter) keep the
- * 3-column grid filling exactly — reorder with the cell count in mind.
+ * Shipped proofs, ordered as five grid rows for an engineering audience:
+ * flagship AI tooling + backend up top, then the AgentX thesis + AI systems,
+ * then product apps, then the craft demos. Three wide tiles (MDP, AgentX essay,
+ * Apartment Hunter) keep the 3-column grid filling exactly at 15 cells / 5 rows
+ * — reorder with the cell count in mind.
  */
 export const PROJECTS: Project[] = [
   // Row 1 — the headline: AI tooling flagship + backend credibility
@@ -34,7 +35,17 @@ export const PROJECTS: Project[] = [
     href: "https://temporal.io/code-exchange/cross-language-data-processing-service-with-temporal",
     accent: "teal",
   },
-  // Row 2 — AI systems
+  // Row 2 — the AgentX thesis, the argument this whole application makes
+  {
+    name: "DevX Is Dead. Long Live AgentX.",
+    blurb:
+      "An essay: agents do the real building now, so I argue every project should be designed around the agent's access and flow, not the developer's. On the split between orchestrating and executing, and the accountability gap that comes with handing agents real power. Backed by a fan-out research pass with adversarially fact-checked claims.",
+    tag: "Essay · Agent experience",
+    href: "https://medium.com/@barmoshe/devx-is-dead-long-live-agentx-bbcff45228fd",
+    accent: "teal",
+    span: 2,
+  },
+  // AI systems
   {
     name: "Entailer",
     blurb:
