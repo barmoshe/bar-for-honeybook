@@ -27,10 +27,6 @@ WITH cfg AS (
     ARRAY['Dana and Ori','Maya Levin','Tom Aldridge','Noa Barak','The Feldman family',
           'Rin Watanabe','Sofia Marques','Adam Cohen','Priya Nair','Leon Fischer',
           'Hana Kim','Marco Ricci','Yara Haddad','Elise Dupont'] AS clients,
-    ARRAY['Wedding photography','Brand session','Engagement shoot','Studio portraits',
-          'Family session','Editorial day rate','Elopement coverage','Headshots',
-          'Product catalogue','Event coverage','Maternity session','Album design',
-          'Anniversary shoot','Launch day coverage'] AS titles,
     -- Five real service lines rather than one per file. The base option's id is
     -- derived from this, so /console can rank services against each other; with
     -- a per-file option id every service would be a group of one and the
@@ -48,9 +44,12 @@ gen AS (
     -- one workspace's token to another's.
     md5(current_setting('app.workspace_id') || ':' || i)                      AS token,
     c.clients[1 + (i - 1) % 14]              AS client,
-    c.titles[1 + (i - 1) % 14]               AS title,
     c.service_ids[1 + (i - 1) % 5]           AS service_id,
+    -- The file is named after what it sells. Drawing the title from its own
+    -- list produced files called "Elopement coverage" offering a brand session,
+    -- which is the kind of detail that quietly tells a reader the data is fake.
     c.service_names[1 + (i - 1) % 5]         AS service_name,
+    c.service_names[1 + (i - 1) % 5]         AS title,
     -- Prices land between 1,800 and 4,000 dollars, stepped so the reporting
     -- has a spread to rank rather than fourteen identical rows.
     (180000 + ((i * 37) % 11) * 22000)::bigint AS base_cents,

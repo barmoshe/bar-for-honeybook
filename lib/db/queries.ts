@@ -399,6 +399,25 @@ export function recordEvent(
   );
 }
 
+/**
+ * Records that a client opened the file, at most once.
+ *
+ * INSERT ... WHERE NOT EXISTS rather than a read followed by a write, so a page
+ * rendered twice in the same second does not put two "opened" rows on a
+ * timeline whose whole value is being a truthful account of what happened.
+ */
+export function recordFirstOpen(workspaceId: string, documentId: string) {
+  return query(
+    `INSERT INTO document_events (workspace_id, document_id, kind)
+     SELECT $1, $2, 'opened'
+      WHERE NOT EXISTS (
+        SELECT 1 FROM document_events
+         WHERE document_id = $2 AND kind = 'opened'
+      )`,
+    [workspaceId, documentId],
+  );
+}
+
 export type TimelineEntry = {
   id: string;
   kind: string;

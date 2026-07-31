@@ -1,0 +1,629 @@
+/* ============================================================
+   The working surfaces: /f, /studio, /console, /engineering.
+
+   Same brand as the pitch page, different register. That page is a
+   poster; these are a product, so the type is smaller, the rhythm is
+   tighter, and the yellow is used once per screen rather than as a
+   field. Everything is scoped under .hbapp, which shares the palette
+   block declared in globals.css.
+   ============================================================ */
+
+.hbapp {
+  --sf-line: color-mix(in oklab, var(--hb-ink) 12%, transparent);
+  --sf-line-soft: color-mix(in oklab, var(--hb-ink) 7%, transparent);
+  --sf-shadow: 0 1px 2px rgb(20 33 39 / 0.04), 0 12px 32px -18px rgb(20 33 39 / 0.28);
+
+  color: var(--hb-ink);
+  font-family: var(--font-hb);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.hbapp *,
+.hbapp *::before,
+.hbapp *::after {
+  box-sizing: border-box;
+}
+
+.hbapp button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 0;
+  background: none;
+}
+
+.hbapp button:disabled {
+  cursor: not-allowed;
+}
+
+.hbapp :focus-visible {
+  outline: 2px solid var(--hb-ink);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.sf-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- shell ---------- */
+
+.sf {
+  min-height: 100dvh;
+  background: var(--hb-cream);
+  padding-bottom: 6.5rem;
+}
+
+.sf-top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.9rem clamp(1rem, 5vw, 2.5rem);
+  background: color-mix(in oklab, var(--hb-white) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--sf-line-soft);
+}
+
+.sf-brand {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.sf-for {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--hb-muted);
+}
+
+.sf-main {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: clamp(2rem, 6vw, 3.5rem) clamp(1rem, 5vw, 2rem) 0;
+}
+
+.sf-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--hb-muted);
+}
+
+.sf-title {
+  margin: 0.4rem 0 1.75rem;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+/* ---------- progress ---------- */
+
+.sf-progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sf-pip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8125rem;
+  color: var(--hb-muted);
+}
+
+.sf-pip-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in oklab, var(--hb-ink) 25%, transparent);
+}
+
+.sf-pip[data-status="complete"] {
+  color: var(--hb-ink);
+}
+
+.sf-pip[data-status="complete"] .sf-pip-dot {
+  background: var(--hb-sage);
+  border-color: var(--hb-sage);
+}
+
+.sf-pip[data-status="open"] {
+  color: var(--hb-ink);
+  font-weight: 600;
+}
+
+.sf-pip[data-status="open"] .sf-pip-dot {
+  background: var(--hb-yellow);
+  border-color: var(--hb-yellow-deep);
+}
+
+.sf-progress-count {
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--hb-muted);
+}
+
+/* ---------- blocks ---------- */
+
+.sf-blocks {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.sf-block {
+  padding: clamp(1.1rem, 3.5vw, 1.75rem);
+  background: var(--hb-white);
+  border: 1px solid var(--sf-line);
+  border-radius: 22px;
+  box-shadow: var(--sf-shadow);
+}
+
+.sf-block[data-status="locked"] {
+  background: transparent;
+  border-style: dashed;
+  border-color: color-mix(in oklab, var(--hb-ink) 16%, transparent);
+  box-shadow: none;
+}
+
+.sf-block[data-status="complete"] {
+  box-shadow: none;
+  background: color-mix(in oklab, var(--hb-white) 70%, var(--hb-cream));
+}
+
+.sf-block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.sf-block-title {
+  font-family: var(--font-serif);
+  font-size: 1.3125rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.sf-badge {
+  flex: none;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--sf-line);
+  color: var(--hb-muted);
+}
+
+.sf-badge[data-status="open"] {
+  background: var(--hb-yellow);
+  border-color: var(--hb-yellow-deep);
+  color: var(--hb-ink);
+}
+
+.sf-badge[data-status="complete"] {
+  background: color-mix(in oklab, var(--hb-mint) 45%, var(--hb-white));
+  border-color: color-mix(in oklab, var(--hb-sage) 40%, transparent);
+  color: color-mix(in oklab, var(--hb-sage) 80%, var(--hb-ink));
+}
+
+.sf-locked {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  color: var(--hb-muted);
+  font-size: 0.9375rem;
+}
+
+.sf-locked::before {
+  content: "\2014";
+  color: color-mix(in oklab, var(--hb-ink) 30%, transparent);
+}
+
+/* ---------- services ---------- */
+
+.sf-options {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sf-option {
+  border: 1px solid var(--sf-line);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.sf-option[data-chosen] {
+  border-color: var(--hb-yellow-deep);
+  background: color-mix(in oklab, var(--hb-yellow) 12%, var(--hb-white));
+}
+
+.sf-option-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  text-align: left;
+}
+
+.sf-option-main:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--hb-ink) 3%, transparent);
+}
+
+.sf-check {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.15rem;
+  border: 1.5px solid color-mix(in oklab, var(--hb-ink) 30%, transparent);
+  border-radius: 6px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.sf-check[data-on] {
+  background: var(--hb-ink);
+  border-color: var(--hb-ink);
+  background-image: linear-gradient(45deg, transparent 45%, var(--hb-yellow) 45%);
+}
+
+.sf-option-text {
+  display: grid;
+  gap: 0.15rem;
+  flex: 1;
+}
+
+.sf-option-name {
+  font-weight: 600;
+}
+
+.sf-option-blurb {
+  font-size: 0.875rem;
+  color: var(--hb-muted);
+}
+
+.sf-option-price {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.sf-qty {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1rem 0.85rem 2.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+.sf-qty button {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--sf-line);
+  border-radius: 8px;
+  line-height: 1;
+}
+
+.sf-qty button:hover:not(:disabled) {
+  background: var(--hb-white);
+}
+
+.sf-qty button:disabled {
+  opacity: 0.35;
+}
+
+/* ---------- contract ---------- */
+
+.sf-para {
+  margin-bottom: 0.85rem;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: color-mix(in oklab, var(--hb-ink) 88%, transparent);
+}
+
+.sf-signed {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--sf-line-soft);
+  font-size: 0.9375rem;
+  color: var(--hb-muted);
+}
+
+.sf-signed strong {
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--hb-ink);
+}
+
+.sf-sign {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--sf-line-soft);
+}
+
+.sf-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--hb-muted);
+}
+
+.sf-req {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.sf-sign-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.sf-sign-input,
+.hbapp input[type="text"],
+.hbapp select {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.8rem;
+  font: inherit;
+  color: inherit;
+  background: var(--hb-white);
+  border: 1px solid var(--sf-line);
+  border-radius: 10px;
+}
+
+.sf-sign-input {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-style: italic;
+}
+
+.sf-sign-btn,
+.sf-pay {
+  flex: none;
+  padding: 0.6rem 1.25rem;
+  font-weight: 600;
+  background: var(--hb-yellow);
+  border: 1px solid var(--hb-yellow-deep);
+  border-radius: 10px;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.sf-sign-btn:hover:not(:disabled),
+.sf-pay:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.sf-sign-btn:active:not(:disabled),
+.sf-pay:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.sf-sign-btn:disabled,
+.sf-pay:disabled {
+  opacity: 0.45;
+}
+
+/* ---------- invoice ---------- */
+
+.sf-lines {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.sf-lines th,
+.sf-lines td {
+  padding: 0.5rem 0;
+  text-align: left;
+  font-weight: 400;
+}
+
+.sf-lines td {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.sf-lines tfoot th,
+.sf-lines tfoot td {
+  border-top: 1px solid var(--sf-line-soft);
+  color: var(--hb-muted);
+}
+
+.sf-lines-total th,
+.sf-lines-total td {
+  font-weight: 700;
+  color: var(--hb-ink);
+}
+
+.sf-x {
+  color: var(--hb-muted);
+}
+
+.sf-pay {
+  width: 100%;
+  margin-top: 1.1rem;
+  padding: 0.85rem;
+  font-size: 1.0625rem;
+  border-radius: 12px;
+}
+
+.sf-fineprint,
+.sf-note {
+  margin-top: 0.7rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--hb-muted);
+}
+
+.sf-note {
+  margin: 2rem 0 0;
+  padding: 1rem 0 2rem;
+  border-top: 1px solid var(--sf-line-soft);
+}
+
+.sf-paid {
+  margin-top: 1rem;
+  padding: 0.7rem 1rem;
+  background: color-mix(in oklab, var(--hb-mint) 40%, var(--hb-white));
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* ---------- questions and slots ---------- */
+
+.sf-questions,
+.sf-slots {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sf-slots {
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+}
+
+.sf-slot {
+  display: grid;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  border: 1px solid var(--sf-line);
+  border-radius: 12px;
+}
+
+.sf-slot[data-on] {
+  border-color: var(--hb-yellow-deep);
+  background: color-mix(in oklab, var(--hb-yellow) 14%, var(--hb-white));
+}
+
+.sf-slot-when {
+  font-weight: 600;
+}
+
+.sf-slot-len {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--hb-muted);
+}
+
+/* ---------- errors and the standing bar ---------- */
+
+.sf-error {
+  margin-top: 1rem;
+  padding: 0.65rem 0.9rem;
+  background: color-mix(in oklab, #d94545 10%, var(--hb-white));
+  border: 1px solid color-mix(in oklab, #d94545 30%, transparent);
+  border-radius: 10px;
+  font-size: 0.9375rem;
+}
+
+.sf-bar {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 44rem;
+  margin: 0 auto 1rem;
+  padding: 0.85rem 1.25rem;
+  background: var(--hb-ink);
+  color: var(--hb-white);
+  border-radius: 16px;
+  box-shadow: 0 18px 40px -20px rgb(20 33 39 / 0.6);
+}
+
+@media (max-width: 46rem) {
+  .sf-bar {
+    margin: 0;
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+.sf-bar-total {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.sf-bar-label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.65;
+}
+
+.sf-bar-amount {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.sf-bar-next {
+  font-size: 0.875rem;
+  text-align: right;
+  opacity: 0.9;
+}
+
+/* While a server action is in flight the whole surface goes quiet rather than
+   each control inventing its own spinner. The rules live on the server, so
+   there is a real moment where the page does not know the answer, and saying so
+   once is more honest than five little animations implying it does. */
+.sf[data-pending] .sf-blocks {
+  opacity: 0.55;
+  transition: opacity 0.2s ease 0.12s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hbapp *,
+  .hbapp *::before,
+  .hbapp *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

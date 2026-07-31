@@ -31,7 +31,12 @@ body {
   background: #ffffff;
 }
 
-.hb-root {
+/* The palette is shared with the working app surfaces (/f, /studio, /console,
+   /engineering), which live under .hbapp. Adding a second selector rather than
+   hoisting the block to :root keeps every value .hb-root resolves byte-identical
+   to what the pitch page has always had. */
+.hb-root,
+.hbapp {
   --hb-yellow: oklch(0.965 0.2 110); /* #FFFA56 */
   --hb-yellow-deep: oklch(0.86 0.17 96);
   --hb-ink: oklch(0.255 0.018 230); /* #142127 */
