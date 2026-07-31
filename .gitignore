@@ -27,3 +27,6 @@ yarn-error.log*
 # vercel
 .vercel
 .env*
+
+# go dev-server artifact from `vercel dev`
+vercel-dev-server-go

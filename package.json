@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/dev.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "dev:next": "next dev",
+    "engine": "go run ./cmd/engine",
+    "test:engine": "go test ./engine/... ./api/... ./httpx/... -count=1"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",

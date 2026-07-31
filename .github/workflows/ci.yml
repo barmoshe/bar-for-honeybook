@@ -27,11 +27,15 @@ jobs:
           go-version-file: go.mod
           cache: false
 
+      # Scoped to our own packages rather than ./... : node_modules ships a
+      # stray Go package (flatted) that Go's package matching happily walks
+      # into. It works today only because npm ci runs after these steps, which
+      # is a bad reason for anything to work.
       - name: Go vet
-        run: go vet ./...
+        run: go vet ./engine/... ./api/... ./httpx/... ./cmd/...
 
       - name: Go test
-        run: go test ./... -count=1
+        run: go test ./engine/... ./api/... ./httpx/... ./cmd/... -count=1
 
       - uses: actions/setup-node@v4
         with:
