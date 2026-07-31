@@ -30,3 +30,6 @@ yarn-error.log*
 
 # go dev-server artifact from `vercel dev`
 vercel-dev-server-go
+
+# embedded postgres data dir (local dev)
+.pglite
