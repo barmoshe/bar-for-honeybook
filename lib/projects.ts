@@ -1,3 +1,41 @@
+/**
+ * The four surfaces of the working smart-file demo that lives in this repo.
+ *
+ * Kept beside PROJECTS because it is the same kind of claim, with one
+ * difference worth a separate list: all of it runs on this domain, so the tiles
+ * go to the thing itself rather than to a write-up of it.
+ */
+export const DEMO_SURFACES = [
+  {
+    href: "/f",
+    name: "The client link",
+    proves:
+      "No login. Pick a package, watch the invoice recompute, read a contract built from those same numbers, sign, and only then reach payment.",
+    accent: "yellow" as const,
+  },
+  {
+    href: "/studio",
+    name: "The studio",
+    proves:
+      "Describe a file in a sentence and watch a parser assemble it, showing which phrase produced which block and admitting what it could not read.",
+    accent: "sage" as const,
+  },
+  {
+    href: "/console",
+    name: "The console",
+    proves:
+      "Revenue by month with a running total, what sells ranked by revenue, the funnel, time to sign. One hand-written SQL statement per number.",
+    accent: "teal" as const,
+  },
+  {
+    href: "/engineering",
+    name: "The receipts",
+    proves:
+      "The schema, each query beside its live EXPLAIN, the validator refusing two broken files, and a ledger you can try to double-charge.",
+    accent: "slate" as const,
+  },
+];
+
 export type Project = {
   name: string;
   blurb: string;

@@ -9,7 +9,7 @@ import { Sparkle, IdeaIcon } from "./Decor";
 import BriefModal from "./BriefModal";
 import McpCatalog from "./McpCatalog";
 import HoneyBookLogo from "./HoneyBookLogo";
-import { PROJECTS } from "@/lib/projects";
+import { DEMO_SURFACES, PROJECTS } from "@/lib/projects";
 import { PRODUCT_FEATURES, PRODUCT_FACTS, PRODUCT_IDEAS, PRODUCT_SOURCES } from "@/lib/honeybookProduct";
 import { whatsappHref, mailtoHref, cvHref } from "@/lib/contact";
 
@@ -111,9 +111,13 @@ export default function HoneyBookApp() {
           scrollTrigger: { trigger: el, start: "top 88%" },
         });
       });
-      // both card grids share one entrance treatment
+      // Every card grid shares one entrance treatment. The card selectors are
+      // scoped to their own grid on purpose: an unscoped ".hb-tile" matches the
+      // demo tiles too, and since the trigger is the Work grid far below, they
+      // would sit at opacity 0 until you scrolled past them.
       [
-        [".hb-tile", ".hb-grid"],
+        [".hb-grid .hb-tile", ".hb-grid"],
+        [".hb-demo-grid .hb-tile", ".hb-demo-grid"],
         [".hbai-card", ".hbai-grid"],
       ].forEach(([card, grid]) => {
         gsap.from(card, {
@@ -176,6 +180,7 @@ export default function HoneyBookApp() {
             <a href="#about">About</a>
             <a href="#ai">HoneyBook</a>
             <a href="#work">Work</a>
+            <a href="#demo">The demo</a>
             <button className="hb-btn hb-btn--primary hb-btn--sm hb-magnetic" onClick={open} tabIndex={navShown ? 0 : -1}>
               Let&apos;s talk
             </button>
@@ -223,6 +228,9 @@ export default function HoneyBookApp() {
               </a>
               <a className="hb-btn hb-btn--ghost" href="#ai">
                 I did my research →
+              </a>
+              <a className="hb-btn hb-btn--ghost" href="#demo">
+                And I built one →
               </a>
             </div>
           </div>
@@ -388,6 +396,46 @@ export default function HoneyBookApp() {
                 {s.label}
               </a>
             ))}
+          </div>
+        </section>
+
+        {/* ===== The working demo =====
+            Sits directly after "studied up close" on purpose: the narrative is
+            I read your product, then I built a working piece of it, and only
+            then here is where I would plug in. */}
+        <section className="hb-section hb-section--demo" id="demo">
+          <span className="hb-deco hb-deco--ring hb-spin-slow" style={{ width: 54, height: 54, top: "10%", left: "5%", color: "var(--hb-slate)" }} />
+          <div className="hb-wrap">
+            <p className="hb-eyebrow hb-reveal">Not a mockup</p>
+            <h2 className="hb-h2 hb-reveal">So I built a working one.</h2>
+            <p className="hb-demo-lede hb-reveal">
+              A smart file is a block graph with gating rules: choosing services
+              recomputes the invoice, the contract interpolates from both, and a
+              required signature makes the invoice genuinely unreachable until
+              it is signed. That last one is a real backend problem, so I built
+              it rather than drew it. The rules are a Go package with no I/O and
+              its own tests, the state is PostgreSQL with every query written by
+              hand, and all four surfaces below run on this domain.
+            </p>
+            <div className="hb-demo-grid">
+              {DEMO_SURFACES.map((s) => (
+                <a key={s.href} className={`hb-tile hb-tile--${s.accent}`} href={s.href}>
+                  <span className="hb-tile-tag">Live here</span>
+                  <span className="hb-tile-name">{s.name}</span>
+                  <span className="hb-tile-blurb">{s.proves}</span>
+                  <span className="hb-tile-go" aria-hidden="true">
+                    Open →
+                  </span>
+                </a>
+              ))}
+            </div>
+            <p className="hb-demo-note hb-reveal">
+              <Sparkle style={{ width: 14, height: 14, color: "var(--hb-yellow-deep)" }} />
+              Fictional inventory, no card taken, nothing charged. The database
+              is real Postgres compiled to WebAssembly and it resets when the
+              instance recycles, which the engineering page explains rather than
+              hides.
+            </p>
           </div>
         </section>
 
