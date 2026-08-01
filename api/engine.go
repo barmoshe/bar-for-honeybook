@@ -26,16 +26,25 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/barmoshe/bar-for-honeybook/engine"
 	"github.com/barmoshe/bar-for-honeybook/httpx"
 )
 
 type request struct {
-	// Op selects the operation: "resolve", "validate", or "health".
+	// Op selects the operation: "resolve", "validate", "advance", or "health".
 	Op       string          `json:"op"`
 	Document engine.Document `json:"document"`
 	State    engine.State    `json:"state"`
+
+	// advance
+	Automation engine.Automation `json:"automation"`
+	Cursor     int               `json:"cursor"`
+	Facts      engine.Facts      `json:"facts"`
+	// AsOf is the automation engine's clock, passed in rather than read, so a
+	// three-day wait can be a parameter instead of three days.
+	AsOf string `json:"asOf"`
 }
 
 // Engine answers one of three questions, all of them pure functions of the
@@ -43,9 +52,10 @@ type request struct {
 //
 //	resolve  - what is this client allowed to see and do right now
 //	validate - can this document be completed at all, and if not, why
+//	advance  - what does this automation run do next, as of a given moment
 //	health   - is the Go runtime up
 func Engine(w http.ResponseWriter, r *http.Request) {
-	if !httpx.RequirePost(w, r, `POST {"op":"resolve"|"validate"|"health", ...}.`) {
+	if !httpx.RequirePost(w, r, `POST {"op":"resolve"|"validate"|"advance"|"health", ...}.`) {
 		return
 	}
 
@@ -59,10 +69,17 @@ func Engine(w http.ResponseWriter, r *http.Request) {
 		httpx.WriteJSON(w, http.StatusOK, engine.Resolve(&req.Document, req.State))
 	case "validate":
 		httpx.WriteJSON(w, http.StatusOK, engine.Validate(&req.Document))
+	case "advance":
+		asOf, err := time.Parse(time.RFC3339, req.AsOf)
+		if err != nil {
+			httpx.WriteError(w, http.StatusBadRequest, "asOf must be an RFC3339 timestamp.")
+			return
+		}
+		httpx.WriteJSON(w, http.StatusOK, engine.Advance(&req.Automation, req.Cursor, req.Facts, asOf))
 	case "health":
 		httpx.WriteJSON(w, http.StatusOK, map[string]any{"ok": true, "engine": "go"})
 	default:
 		httpx.WriteError(w, http.StatusBadRequest,
-			`Unknown op. Use "resolve", "validate", or "health".`)
+			`Unknown op. Use "resolve", "validate", "advance", or "health".`)
 	}
 }

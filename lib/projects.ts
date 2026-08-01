@@ -24,7 +24,7 @@ export const DEMO_SURFACES = [
     href: "/console",
     name: "The console",
     proves:
-      "Revenue by month with a running total, what sells ranked by revenue, the funnel, time to sign. One hand-written SQL statement per number.",
+      "Revenue by month with a running total, what sells ranked by revenue, the funnel, time to sign. One hand-written SQL statement per number, plus automations that wait three days and chase only the clients who still have not paid.",
     accent: "teal" as const,
   },
   {

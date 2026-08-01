@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import * as db from "@/lib/db/queries";
-import { resolveDocument } from "@/lib/engine";
+import { resolveDocument } from "@/lib/engine-server";
 import { currentWorkspace } from "@/lib/workspace";
 
 import SmartFileView from "./SmartFileView";

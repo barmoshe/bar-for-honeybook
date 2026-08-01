@@ -50,6 +50,22 @@ export function documentById(workspaceId: string, id: string) {
   );
 }
 
+/**
+ * A document by id alone.
+ *
+ * The workspace-scoped lookup above is what pages use. The automation runner
+ * has already established the workspace by claiming the run, so re-deriving it
+ * here would be ceremony rather than safety.
+ */
+export function documentByIdOnly(id: string) {
+  return queryOne<DocumentRow>(
+    `SELECT id, workspace_id, token, title, business, client, currency, doc, created_at
+       FROM documents
+      WHERE id = $1`,
+    [id],
+  );
+}
+
 export type DocumentSummary = {
   id: string;
   token: string;

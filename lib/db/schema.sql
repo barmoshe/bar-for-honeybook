@@ -133,3 +133,85 @@ CREATE INDEX IF NOT EXISTS ix_events_document
 -- naming: writes here are one row per client action, so it is cheap.
 CREATE INDEX IF NOT EXISTS ix_events_workspace
   ON document_events (workspace_id, at DESC);
+
+-- --------------------------------------------------------------------------
+-- Automations: triggers, actions, waits and conditions.
+--
+-- The definition is a document, for the same reason a smart file's is: it is a
+-- sequence whose shape the Go engine owns, and shredding it into a step table
+-- would buy nothing and cost a migration every time a step kind is added.
+--
+-- What is relational is the part that gets queried and the part that must not
+-- be lost: which runs exist, where each one is, when it should wake, and what
+-- it did.
+-- --------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS automations (
+  id           text PRIMARY KEY,
+  workspace_id text NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  name         text NOT NULL,
+  -- The document event that starts a run. Every value already exists in
+  -- document_events, so automations needed no new event plumbing.
+  trigger_kind text NOT NULL,
+  enabled      boolean NOT NULL DEFAULT true,
+  definition   jsonb NOT NULL,
+  created_at   timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS ix_automations_trigger
+  ON automations (workspace_id, trigger_kind) WHERE enabled;
+
+CREATE TABLE IF NOT EXISTS automation_runs (
+  id            bigserial PRIMARY KEY,
+  workspace_id  text NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  automation_id text NOT NULL REFERENCES automations(id) ON DELETE CASCADE,
+  document_id   text NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+  status        text NOT NULL CHECK (status IN ('waiting', 'done', 'stopped')),
+  cursor        integer NOT NULL DEFAULT 0,
+  -- When this run should next be looked at. NULL once it is finished.
+  resume_at     timestamptz,
+  attempts      integer NOT NULL DEFAULT 0,
+  last_error    text,
+  started_at    timestamptz NOT NULL DEFAULT now(),
+  updated_at    timestamptz NOT NULL DEFAULT now(),
+  -- One automation starts one run per file. This is the whole guard against a
+  -- trigger that fires twice, and it is a constraint rather than a check in
+  -- application code for the same reason the ledger's key is.
+  UNIQUE (automation_id, document_id)
+);
+
+-- The queue's only access pattern: what is due. Partial, because finished runs
+-- are the overwhelming majority and none of them are ever due again.
+CREATE INDEX IF NOT EXISTS ix_runs_due
+  ON automation_runs (resume_at) WHERE status = 'waiting';
+
+CREATE INDEX IF NOT EXISTS ix_runs_workspace
+  ON automation_runs (workspace_id, started_at DESC);
+
+CREATE TABLE IF NOT EXISTS automation_log (
+  id          bigserial PRIMARY KEY,
+  run_id      bigint NOT NULL REFERENCES automation_runs(id) ON DELETE CASCADE,
+  step_index  integer,
+  kind        text NOT NULL,
+  detail      jsonb NOT NULL DEFAULT '{}'::jsonb,
+  at          timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS ix_automation_log_run
+  ON automation_log (run_id, id);
+
+-- Simulated sends. Nothing leaves the building: an outbox row is what "we
+-- emailed them" means here, and saying so is better than pretending otherwise.
+CREATE TABLE IF NOT EXISTS outbox (
+  id           bigserial PRIMARY KEY,
+  workspace_id text NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  document_id  text NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+  run_id       bigint REFERENCES automation_runs(id) ON DELETE CASCADE,
+  channel      text NOT NULL DEFAULT 'email',
+  subject      text NOT NULL,
+  body         text NOT NULL,
+  created_at   timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS ix_outbox_workspace
+  ON outbox (workspace_id, created_at DESC);

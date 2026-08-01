@@ -2081,3 +2081,208 @@
     animation: none !important;
   }
 }
+
+/* ============================================================
+   Automations
+   ============================================================ */
+
+.au .st-pane + .st-pane {
+  margin-top: 1rem;
+}
+
+.au-honest {
+  background: var(--hb-beige);
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.au-honest p {
+  max-width: 46rem;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.au-honest p + p {
+  margin-top: 0.7rem;
+}
+
+.au-clock-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.au-clock-note {
+  margin-top: 0.8rem;
+  font-size: 0.875rem;
+  color: var(--hb-muted);
+}
+
+.au-list,
+.au-outbox,
+.au-log {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.au-item {
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--sf-line);
+  border-radius: 14px;
+}
+
+.au-item-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.au-trigger {
+  margin-top: 0.3rem;
+  font-size: 0.875rem;
+  color: var(--hb-muted);
+}
+
+.au-steps {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0.7rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.875rem;
+}
+
+/* The step kinds read differently at a glance: a wait is the thing that makes
+   this a workflow rather than a script, and a condition is the thing that can
+   stop it, so both get a mark the eye can find. */
+.au-steps li[data-kind="wait"] {
+  color: color-mix(in oklab, var(--hb-teal) 85%, var(--hb-ink));
+  font-variant-numeric: tabular-nums;
+}
+
+.au-steps li[data-kind="condition"] {
+  color: color-mix(in oklab, var(--hb-sage) 85%, var(--hb-ink));
+  font-style: italic;
+}
+
+.au-log li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr auto;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--sf-line-soft);
+  font-size: 0.875rem;
+}
+
+.au-log li:last-child {
+  border-bottom: 0;
+}
+
+.au-log-kind {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hb-muted);
+}
+
+.au-log li[data-kind="stopped"] .au-log-kind,
+.au-log li[data-kind="error"] .au-log-kind {
+  color: color-mix(in oklab, #b23b3b 80%, var(--hb-ink));
+}
+
+.au-outbox li {
+  padding: 0.85rem 1rem;
+  background: var(--hb-cream);
+  border-radius: 12px;
+  font-size: 0.9375rem;
+}
+
+.au-mail-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.35rem;
+}
+
+@media (max-width: 40rem) {
+  .au-log li {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+}
+
+/* ---------- the shared header ---------- */
+
+/* The brand is a link back to /smart-files on every working surface. Before
+   this, the surfaces linked sideways to each other and nowhere out: you could
+   walk console to studio to engineering and never reach the page that explains
+   them, or the site they belong to. */
+.au-home {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.au-home:hover {
+  border-bottom-color: var(--hb-yellow-deep);
+}
+
+.au-home span[aria-hidden] {
+  color: var(--hb-muted);
+}
+
+/* The site itself is always last, set apart, because it is a different place
+   rather than another surface of the same app. */
+.au-nav-site {
+  padding-left: 1.1rem;
+  border-left: 1px solid var(--sf-line);
+}
+
+.st-nav a[aria-current="page"] {
+  color: var(--hb-ink);
+  border-bottom-color: var(--hb-yellow-deep);
+}
+
+.sf-out {
+  color: inherit;
+  border-bottom: 1px solid var(--hb-yellow-deep);
+  text-decoration: none;
+}
+
+/* ---------- the console's automations strip ---------- */
+
+.cn-autos .st-h2 a {
+  margin-left: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--hb-muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hb-yellow-deep);
+}
+
+.cn-runs {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+}
+
+.cn-runs li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+}

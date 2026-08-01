@@ -47,6 +47,25 @@ jobs:
             exit 1
           fi
 
+      # public/engine.wasm is committed, because the Go toolchain exists during
+      # Vercel's build and not inside the running function. A committed binary
+      # that nobody checks is a binary that rots.
+      #
+      # Note what does NOT guard it: a byte comparison against a fresh build.
+      # That was the first instinct and it is the wrong one, because the bytes
+      # depend on the exact Go patch release, so CI resolving 1.23.6 against a
+      # machine holding 1.23.5 would fail a build that is perfectly correct.
+      #
+      # The guard is behavioural instead. `prove:transports` runs the committed
+      # wasm against an HTTP engine compiled from source in this job, so a wasm
+      # that is stale in any way that matters answers differently and fails.
+      # A stale build that behaves identically on those cases would pass, and
+      # that is the honest limit of this check.
+      - name: Report the wasm size
+        run: |
+          echo "committed: $(du -h public/engine.wasm | cut -f1) raw, \
+          $(gzip -c public/engine.wasm | wc -c | awk '{printf "%.1fMB", $1/1048576}') gzipped"
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -64,10 +83,10 @@ jobs:
       - name: Prove the database
         run: npm run prove:db
 
-      # The parser is deterministic and has no model behind it, so its output
-      # can simply be asserted. The engine has to be up: this step also pushes
-      # every document the parser produces through the real validator.
-      - name: Prove the parser
+      # Both remaining proofs need the engine up. The parser proof pushes every
+      # document it produces through the real validator; the actions proof is
+      # the gate, and the gate is the engine answering.
+      - name: Start the engine
         run: |
           go run ./cmd/engine &
           for _ in $(seq 1 30); do
@@ -75,7 +94,26 @@ jobs:
               -H 'content-type: application/json' -d '{"op":"health"}' >/dev/null && break
             sleep 1
           done
-          npm run prove:parser
+
+      - name: Prove the parser
+        run: npm run prove:parser
+
+      # The load-bearing claim of the whole demo: the invoice is unreachable
+      # until the contract is signed. Driven through the real functions the
+      # server actions call, against a real database, checking the tables rather
+      # than the return value.
+      - name: Prove the gate
+        run: npm run prove:actions
+
+      # One Go package, two ways to reach it. "We compiled the same source" is a
+      # claim about the build; this is a claim about the answers.
+      - name: Prove the transports agree
+        run: npm run prove:transports
+
+      # And the gate again, forced through HTTP. It runs on WASM by default, so
+      # without this the deployed function's path is never exercised by a test.
+      - name: Prove the gate over HTTP too
+        run: ENGINE_MODE=http npm run prove:actions
 
       - name: Build
         run: npm run build

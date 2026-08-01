@@ -98,7 +98,15 @@ export default function SmartFileView({
           This file is a working demo. Nothing is charged, no card is taken, and
           the payment step writes to a ledger rather than to a gateway. The
           database is embedded in the running instance, so a signature survives
-          until that instance recycles and no longer.
+          until that instance recycles and no longer.{" "}
+          {/* The only way out of a client link, and deliberately a sentence
+              rather than the member navigation the other surfaces carry: a real
+              client holding a share link has no console, and should see no sign
+              that one exists. */}
+          <a className="sf-out" href="/smart-files">
+            See how it is built
+          </a>
+          .
         </p>
       </main>
 

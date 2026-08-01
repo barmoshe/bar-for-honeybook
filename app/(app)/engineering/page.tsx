@@ -2,11 +2,13 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import type { Metadata } from "next";
-import Link from "next/link";
+
+import AppNav from "@/app/(app)/AppNav";
 
 import { explain } from "@/lib/db/client";
 import * as db from "@/lib/db/queries";
-import { money, resolveDocument, validateDocument, type SmartFileDoc } from "@/lib/engine";
+import { money, type SmartFileDoc } from "@/lib/engine";
+import { resolveDocument, validateDocument } from "@/lib/engine-server";
 import { currentWorkspace } from "@/lib/workspace";
 
 import ReplayProof from "./ReplayProof";
@@ -125,13 +127,7 @@ export default async function Page() {
 
   return (
     <div className="hbapp st eg">
-      <header className="st-top">
-        <span className="sf-brand">Engineering</span>
-        <nav className="st-nav">
-          <Link href="/studio">Studio</Link>
-          <Link href="/console">Console</Link>
-        </nav>
-      </header>
+      <AppNav title="Engineering" current="/engineering" />
 
       <main className="st-main eg-main" id="main">
         <p className="sf-eyebrow">How it is built</p>
@@ -298,6 +294,49 @@ export default async function Page() {
         ) : (
           <p className="eg-dim">No paid file in this workspace to replay against.</p>
         )}
+
+        {/* ---------------------------------------------------------------- */}
+
+        <h2 className="eg-h1">The queue, and why it is not a cron</h2>
+        <p className="eg-p">
+          An automation run parks on a <code>resume_at</code> and is claimed by
+          whoever asks next. The claim uses the standard Postgres pattern rather
+          than a scan, so two workers pull disjoint batches without blocking each
+          other. Nothing here actually contends, because the embedded database
+          holds one connection, but writing the toy version would teach the wrong
+          thing.
+        </p>
+        <pre className="eg-pre">{`SELECT id, automation_id, document_id, cursor
+  FROM automation_runs
+ WHERE workspace_id = $1
+   AND status = 'waiting'
+   AND resume_at <= $2::timestamptz
+ ORDER BY resume_at
+   FOR UPDATE SKIP LOCKED
+ LIMIT $3`}</pre>
+        <p className="eg-p">
+          The index behind it is partial:{" "}
+          <code>(resume_at) WHERE status = &apos;waiting&apos;</code>. Finished
+          runs are the overwhelming majority and none of them will ever be due
+          again, so there is no reason to carry them in the index the queue reads.
+        </p>
+        <p className="eg-p">
+          A cron asks &quot;what time is it&quot; on a schedule somebody else
+          owns. <code>resume_at</code> lets the row say when it wants to be
+          looked at, which makes the wait a property of the work rather than of
+          the poller. And because that moment is a parameter all the way into the
+          Go function, a three-day wait is a button on{" "}
+          <a href="/console/automations">the automations page</a> and a
+          millisecond in the test suite, by the same mechanism rather than by one
+          simulating the other.
+        </p>
+        <p className="eg-p">
+          What it is not is durable execution: no retry with backoff, no
+          heartbeat, no cancellation, no versioning of a definition while runs
+          are in flight against it. Those are most of the reasons Temporal
+          exists. A run that throws is parked with its error rather than retried,
+          and saying so is better than implying otherwise.
+        </p>
 
         {/* ---------------------------------------------------------------- */}
 

@@ -48,6 +48,11 @@ const SURFACES = {
     // sits on a different left edge than the content that replaces it.
     extraMain: "eg-main",
   },
+  automations: {
+    brand: "Automations",
+    eyebrow: "Triggers, waits, conditions",
+    title: "What happens on its own.",
+  },
   file: {
     brand: "Smart file",
     eyebrow: "Smart file",
