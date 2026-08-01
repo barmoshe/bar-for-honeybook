@@ -3,7 +3,8 @@
 import { redirect } from "next/navigation";
 
 import * as db from "@/lib/db/queries";
-import { validateDocument, type SmartFileDoc, type Validation } from "@/lib/engine";
+import type { SmartFileDoc, Validation } from "@/lib/engine";
+import { validateDocument } from "@/lib/engine-server";
 import { parseBrief } from "@/lib/parser";
 import { currentWorkspace } from "@/lib/workspace";
 

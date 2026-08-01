@@ -12,8 +12,10 @@
     "test:engine": "go test ./engine/... ./api/... ./httpx/... -count=1",
     "prove:db": "node --conditions=react-server scripts/prove-db.mjs",
     "prove:parser": "node scripts/prove-parser.mjs",
-    "prove": "npm run prove:db && npm run prove:parser && npm run prove:actions",
-    "prove:actions": "node --conditions=react-server scripts/prove-actions.mjs"
+    "prove": "npm run prove:db && npm run prove:parser && npm run prove:actions && npm run prove:transports",
+    "prove:actions": "node --conditions=react-server scripts/prove-actions.mjs",
+    "build:wasm": "GOOS=js GOARCH=wasm go build -trimpath -ldflags='-s -w' -o public/engine.wasm ./cmd/enginewasm",
+    "prove:transports": "node --conditions=react-server scripts/prove-transports.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",

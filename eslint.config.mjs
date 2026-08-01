@@ -12,7 +12,16 @@ const eslintConfig = defineConfig([
       "react-hooks/set-state-in-effect": "warn",
     },
   },
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  globalIgnores([
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+    // Vendored from the Go toolchain, not ours to style. It is a plain script
+    // that assigns globalThis.Go, and linting it only produces noise about a
+    // file we must not edit anyway.
+    "lib/wasm/**",
+  ]),
 ]);
 
 export default eslintConfig;

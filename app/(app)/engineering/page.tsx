@@ -6,7 +6,8 @@ import Link from "next/link";
 
 import { explain } from "@/lib/db/client";
 import * as db from "@/lib/db/queries";
-import { money, resolveDocument, validateDocument, type SmartFileDoc } from "@/lib/engine";
+import { money, type SmartFileDoc } from "@/lib/engine";
+import { resolveDocument, validateDocument } from "@/lib/engine-server";
 import { currentWorkspace } from "@/lib/workspace";
 
 import ReplayProof from "./ReplayProof";

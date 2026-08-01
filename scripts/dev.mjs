@@ -1,6 +1,10 @@
-// Runs the Next dev server and the Go rules engine side by side, because the
-// app is genuinely two processes in development and remembering to start the
-// second one in another terminal is a tax nobody should pay twice.
+// Runs the Next dev server and the Go rules engine side by side.
+//
+// The app no longer needs the second process: the engine is called in-process
+// as WebAssembly, so `next dev` alone serves every route. It is still started
+// here for two reasons. `prove:parser` and `prove:transports` need the HTTP
+// engine up, and the HTTP transport is a real deployed surface that should not
+// rot from never being run.
 //
 // Zero dependencies on purpose: this repo should stay `npm install && npm run
 // dev` for anyone who clones it.

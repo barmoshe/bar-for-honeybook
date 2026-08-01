@@ -1,7 +1,7 @@
 import "server-only";
 
 import * as db from "./db/queries.ts";
-import { resolveDocument } from "./engine.ts";
+import { resolveDocument } from "./engine-server.ts";
 
 /**
  * Everything a client can do to a smart file, and the gate that decides whether
