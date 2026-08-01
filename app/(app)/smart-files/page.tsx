@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   },
 };
 
-/** The four working surfaces, in the order a visitor should meet them. */
+/** The working surfaces, in the order a visitor should meet them. */
 const SURFACES = [
   {
     href: "/f",
@@ -59,6 +59,13 @@ const SURFACES = [
     title: "The business side",
     body: "Revenue by month, which services sell, where files stall, median time from sent to signed. Each number is one hand-written SQL query.",
     cta: "Open console",
+  },
+  {
+    href: "/console/automations",
+    label: "Automations",
+    title: "What happens on its own",
+    body: "Thank them, wait three days, and chase only the ones who still have not paid. Runs park on a queue until their next step is due, and the clock is a button rather than a three-day wait.",
+    cta: "Open automations",
   },
   {
     href: "/engineering",
@@ -116,14 +123,21 @@ export default function Page() {
             Payment is unreachable until the signature exists. Not a disabled
             button: the server will not produce it.
           </p>
+          <p className="sfl-note">
+            The same file also drives what happens afterwards. Signing starts an
+            automation that thanks the client, waits three days, and chases only
+            the ones who still have not paid. Waits are measured against a moment
+            passed into the engine rather than a system clock, so a three-day
+            wait is a button here and a millisecond in the test suite.
+          </p>
         </section>
 
         <section className="sfl-section" aria-labelledby="try">
           <h2 className="st-h2" id="try">
-            Four surfaces
+            The surfaces
           </h2>
           <p className="st-lede">
-            All four are live. Start with the first.
+            Every one of them is live. Start with the first.
           </p>
           <ul className="sfl-surfaces">
             {SURFACES.map((s) => (
@@ -151,6 +165,11 @@ export default function Page() {
               survives until that instance recycles and no longer.
             </li>
             <li>Every business, client and price is invented.</li>
+            <li>
+              Automations are the shape of durable execution, not the real
+              thing: no retry with backoff, no heartbeat, no cancellation. Emails
+              are rows in an outbox and nothing leaves the building.
+            </li>
           </ul>
           <p className="sfl-note">
             A trade, not an oversight. A demo that resets beats a link that

@@ -297,6 +297,49 @@ export default async function Page() {
 
         {/* ---------------------------------------------------------------- */}
 
+        <h2 className="eg-h1">The queue, and why it is not a cron</h2>
+        <p className="eg-p">
+          An automation run parks on a <code>resume_at</code> and is claimed by
+          whoever asks next. The claim uses the standard Postgres pattern rather
+          than a scan, so two workers pull disjoint batches without blocking each
+          other. Nothing here actually contends, because the embedded database
+          holds one connection, but writing the toy version would teach the wrong
+          thing.
+        </p>
+        <pre className="eg-pre">{`SELECT id, automation_id, document_id, cursor
+  FROM automation_runs
+ WHERE workspace_id = $1
+   AND status = 'waiting'
+   AND resume_at <= $2::timestamptz
+ ORDER BY resume_at
+   FOR UPDATE SKIP LOCKED
+ LIMIT $3`}</pre>
+        <p className="eg-p">
+          The index behind it is partial:{" "}
+          <code>(resume_at) WHERE status = &apos;waiting&apos;</code>. Finished
+          runs are the overwhelming majority and none of them will ever be due
+          again, so there is no reason to carry them in the index the queue reads.
+        </p>
+        <p className="eg-p">
+          A cron asks &quot;what time is it&quot; on a schedule somebody else
+          owns. <code>resume_at</code> lets the row say when it wants to be
+          looked at, which makes the wait a property of the work rather than of
+          the poller. And because that moment is a parameter all the way into the
+          Go function, a three-day wait is a button on{" "}
+          <a href="/console/automations">the automations page</a> and a
+          millisecond in the test suite, by the same mechanism rather than by one
+          simulating the other.
+        </p>
+        <p className="eg-p">
+          What it is not is durable execution: no retry with backoff, no
+          heartbeat, no cancellation, no versioning of a definition while runs
+          are in flight against it. Those are most of the reasons Temporal
+          exists. A run that throws is parked with its error rather than retried,
+          and saying so is better than implying otherwise.
+        </p>
+
+        {/* ---------------------------------------------------------------- */}
+
         <h2 className="eg-h1">The queries, and what Postgres does with them</h2>
         <p className="eg-p">
           No ORM and no query builder. The interesting parts of this schema are
