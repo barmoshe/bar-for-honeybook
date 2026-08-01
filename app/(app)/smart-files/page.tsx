@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import { buildMailtoHref } from "@/lib/contact";
 
+import { DocumentDiagram, SystemDiagram } from "./Diagrams";
+
 /**
  * A standalone, shareable landing for the smart-file demo.
  *
@@ -65,34 +67,6 @@ const SURFACES = [
   },
 ] as const;
 
-/** The load-bearing engineering claims, each one checkable on /engineering. */
-const BUILD = [
-  {
-    title: "The rules are a pure function",
-    body: "A Go package with no database, no clock and no network. Inputs arrive as arguments, decisions come back as values, so the same code serves production and runs under go test with nothing stubbed.",
-  },
-  {
-    title: "Gating is a graph, not an if statement",
-    body: "Each block names the blocks it waits for, so “the invoice is locked until the contract is signed” comes out of the graph. The validator reports a cycle by naming the loop, and a wrong order by giving the right one.",
-  },
-  {
-    title: "A locked block sends no data",
-    body: "An unsigned client never receives the invoice lines or the contract text. The server action that takes payment asks the engine first, because hiding a block in the page does not stop anything else calling that action.",
-  },
-  {
-    title: "The database is real Postgres",
-    body: "Compiled to WebAssembly, running in process. The window functions, LATERAL joins and EXPLAIN output on the engineering page are Postgres doing the work. Every query is hand-written: no ORM, and no value is ever put into SQL text.",
-  },
-  {
-    title: "The ledger is append-only",
-    body: "A unique index on (workspace_id, idempotency_key) is the whole idempotency guarantee, so two deliveries of one webhook cannot both count. Balances are a SUM rather than a stored column, so an event that arrives late still lands on the right total.",
-  },
-  {
-    title: "The parser uses no model",
-    body: "Studio turns a sentence into a document with rules, and shows which phrase produced which block and what it could not read. No API key behind it, so it runs in CI, offline.",
-  },
-] as const;
-
 const CONTACT = buildMailtoHref(
   "Smart files",
   "Hi Bar,\n\nI had a look at the smart-file demo.\n\n",
@@ -136,46 +110,17 @@ export default function Page() {
           </p>
         </section>
 
-        <section className="sfl-band" aria-labelledby="what">
-          <h2 className="st-h2" id="what">
-            What happens in the file
+        <section className="sfl-section" id="how" aria-labelledby="how-h">
+          <h2 className="st-h2" id="how-h">
+            How it works
           </h2>
-          <ol className="sfl-steps">
-            <li className="sfl-step">
-              <span className="sfl-step-n" aria-hidden="true">
-                1
-              </span>
-              <h3 className="sfl-step-t">A link arrives</h3>
-              <p>Nothing to install, nothing to sign up for.</p>
-            </li>
-            <li className="sfl-step">
-              <span className="sfl-step-n" aria-hidden="true">
-                2
-              </span>
-              <h3 className="sfl-step-t">You choose</h3>
-              <p>The total updates as you add options, tax and deposit included.</p>
-            </li>
-            <li className="sfl-step">
-              <span className="sfl-step-n" aria-hidden="true">
-                3
-              </span>
-              <h3 className="sfl-step-t">You sign</h3>
-              <p>
-                The agreement quotes the figures you just built, so the text
-                cannot disagree with the amount.
-              </p>
-            </li>
-            <li className="sfl-step">
-              <span className="sfl-step-n" aria-hidden="true">
-                4
-              </span>
-              <h3 className="sfl-step-t">Then you can pay</h3>
-              <p>Not before.</p>
-            </li>
-          </ol>
+          <div className="sfd-pair">
+            <DocumentDiagram />
+            <SystemDiagram />
+          </div>
           <p className="sfl-note">
-            The payment block is unreachable until the signature exists. Not a
-            disabled button: the server will not produce it.
+            Payment is unreachable until the signature exists. Not a disabled
+            button: the server will not produce it.
           </p>
         </section>
 
@@ -201,53 +146,21 @@ export default function Page() {
           </ul>
         </section>
 
-        <section className="sfl-section" id="how" aria-labelledby="how-h">
-          <h2 className="st-h2" id="how-h">
-            How it is built
-          </h2>
-          <p className="st-lede">
-            A rules engine in Go, real Postgres, and a payment step that checks
-            the engine before it does anything. The engineering page runs each
-            of these claims live.
-          </p>
-          <ul className="sfl-build">
-            {BUILD.map((b) => (
-              <li className="sfl-build-item" key={b.title}>
-                <h3 className="sfl-build-t">{b.title}</h3>
-                <p className="sfl-build-b">{b.body}</p>
-              </li>
-            ))}
-          </ul>
-          <p className="sfl-note">
-            Every push runs go vet, the Go tests, a format check, eslint, both
-            proof scripts and the production build before deploying. The
-            database proof imports the app&rsquo;s own queries instead of
-            restating the SQL, so it cannot pass while the app fails.
-          </p>
-        </section>
-
         <section className="sfl-band sfl-honest" aria-labelledby="honest">
           <h2 className="st-h2" id="honest">
             What is not real
           </h2>
           <ul className="sfl-honest-list">
+            <li>Payment writes to a ledger, not a gateway. Nothing is charged.</li>
             <li>
-              The payment step writes to a ledger rather than to a gateway. No
-              card is taken and nothing is charged.
+              The database lives in the running instance, so a signature
+              survives until that instance recycles and no longer.
             </li>
-            <li>
-              The database lives inside the running instance, so a cold start
-              begins empty and seeds itself on the spot. Within a warm instance
-              a signature stays signed; across a cold start it does not.
-            </li>
-            <li>
-              All of the businesses, clients, services and prices are made up.
-            </li>
+            <li>Every business, client and price is invented.</li>
           </ul>
           <p className="sfl-note">
-            A trade, not an oversight. A hosted database means a connection
-            string in a public repository and a free tier that deletes it after
-            thirty days. A demo that resets beats a link that returns 500.
+            A trade, not an oversight. A demo that resets beats a link that
+            returns 500.
           </p>
         </section>
 
