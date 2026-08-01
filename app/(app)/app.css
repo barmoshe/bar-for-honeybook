@@ -1460,6 +1460,315 @@
   color: color-mix(in oklab, var(--hb-ink) 80%, transparent);
 }
 
+/* ============================================================
+   The smart-files landing (/smart-files)
+
+   A shareable explainer sitting in front of the four surfaces, so it
+   borrows their shell (.st-top, .st-main, .st-h2) and adds only the
+   pieces a landing needs: a hero, a numbered walkthrough for readers
+   who will never open /engineering, and two card grids. Wider measure
+   than the product pages, because here the prose is the product.
+   ============================================================ */
+
+.sfl {
+  background: var(--hb-cream);
+}
+
+.sfl .st-main {
+  max-width: 64rem;
+  padding-bottom: 3rem;
+}
+
+/* The shared header packs a brand and four links onto one row, which is fine
+   on the product pages and one link too many here. Let it stack instead. */
+.sfl .st-top {
+  flex-wrap: wrap;
+  row-gap: 0.4rem;
+}
+
+.sfl .st-nav {
+  flex-wrap: wrap;
+  row-gap: 0.35rem;
+}
+
+/* A landing carries more sections than the product pages, so its headings
+   have to outrank body copy by more than theirs do. */
+.sfl .st-h2 {
+  font-size: clamp(1.25rem, 2.6vw, 1.5rem);
+}
+
+/* ---------- hero ---------- */
+
+.sfl-hero {
+  padding: clamp(1rem, 4vw, 2.5rem) 0 clamp(2rem, 5vw, 3.5rem);
+}
+
+.sfl-hero .sf-title {
+  max-width: 20ch;
+  margin-bottom: 1.25rem;
+}
+
+.sfl-lede {
+  max-width: 46rem;
+  font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
+  color: color-mix(in oklab, var(--hb-ink) 82%, transparent);
+}
+
+.sfl-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.sfl-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.7rem 1.4rem;
+  font-weight: 600;
+  color: var(--hb-ink);
+  text-decoration: none;
+  background: var(--hb-yellow);
+  border: 1px solid var(--hb-ink);
+  border-radius: 999px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sfl-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--sf-shadow);
+}
+
+.sfl-btn-quiet {
+  background: transparent;
+  border-color: var(--sf-line);
+}
+
+.sfl-btn-quiet:hover {
+  border-color: var(--hb-ink);
+}
+
+.sfl-caveat {
+  max-width: 42rem;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--hb-muted);
+}
+
+/* ---------- bands and sections ---------- */
+
+.sfl-section {
+  padding: clamp(2rem, 5vw, 3rem) 0;
+  border-top: 1px solid var(--sf-line-soft);
+}
+
+.sfl-band {
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  margin: clamp(1.5rem, 4vw, 2.5rem) 0;
+  background: var(--hb-white);
+  border: 1px solid var(--sf-line);
+  border-radius: 24px;
+  box-shadow: var(--sf-shadow);
+}
+
+.sfl-band > .st-h2:first-child {
+  margin-top: 0;
+}
+
+.sfl-note {
+  max-width: 46rem;
+  margin-top: 1.25rem;
+  font-size: 0.9375rem;
+  color: color-mix(in oklab, var(--hb-ink) 76%, transparent);
+}
+
+/* ---------- the four steps ---------- */
+
+.sfl-steps {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.sfl-step {
+  padding: 1.1rem;
+  background: var(--hb-cool);
+  border-radius: 18px;
+}
+
+.sfl-step-n {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: var(--hb-yellow);
+  border-radius: 999px;
+}
+
+.sfl-step-t {
+  margin: 0.6rem 0 0.3rem;
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.sfl-step p {
+  font-size: 0.9375rem;
+  color: color-mix(in oklab, var(--hb-ink) 78%, transparent);
+}
+
+/* ---------- the surfaces ---------- */
+
+/* Two by two rather than auto-fit: there are exactly four surfaces, and
+   auto-fit lands on three columns at this measure, orphaning the fourth. */
+.sfl-surfaces {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 46rem) {
+  .sfl-surfaces {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.sfl-surface {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+  background: var(--hb-white);
+  border: 1px solid var(--sf-line);
+  border-radius: 22px;
+  box-shadow: var(--sf-shadow);
+}
+
+.sfl-surface .st-h3 {
+  margin-top: 0;
+}
+
+.sfl-surface-t {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-serif);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.sfl-surface-b {
+  flex: 1;
+  font-size: 0.9375rem;
+  color: color-mix(in oklab, var(--hb-ink) 78%, transparent);
+}
+
+.sfl-surface-cta {
+  align-self: flex-start;
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--hb-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hb-yellow-deep);
+}
+
+.sfl-surface-cta:hover {
+  border-bottom-color: var(--hb-ink);
+}
+
+/* ---------- how it is built ---------- */
+
+.sfl-build {
+  display: grid;
+  gap: 1.5rem 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sfl-build-item {
+  padding-top: 1rem;
+  border-top: 2px solid var(--hb-yellow);
+}
+
+.sfl-build-t {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.sfl-build-b {
+  font-size: 0.9375rem;
+  color: color-mix(in oklab, var(--hb-ink) 78%, transparent);
+}
+
+/* ---------- what is not real ---------- */
+
+.sfl-honest {
+  background: var(--hb-cool);
+  box-shadow: none;
+}
+
+.sfl-honest-list {
+  display: grid;
+  gap: 0.6rem;
+  max-width: 46rem;
+  margin: 1rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.9375rem;
+  color: color-mix(in oklab, var(--hb-ink) 80%, transparent);
+}
+
+/* ---------- foot ---------- */
+
+.sfl-foot {
+  padding-top: clamp(1.5rem, 4vw, 2rem);
+  border-top: 1px solid var(--sf-line-soft);
+}
+
+.sfl-foot-lead {
+  max-width: 42rem;
+  font-size: 0.9375rem;
+  color: color-mix(in oklab, var(--hb-ink) 78%, transparent);
+}
+
+.sfl-foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.sfl-foot-links a {
+  color: var(--hb-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hb-yellow-deep);
+}
+
+.sfl-foot-links a:hover {
+  border-bottom-color: var(--hb-ink);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hbapp *,
   .hbapp *::before,
