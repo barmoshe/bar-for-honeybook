@@ -64,20 +64,7 @@ export type DocumentSummary = {
   stage: string;
 };
 
-/**
- * The console's file list.
- *
- * One statement rather than a list query plus a per-row lookup. The two LEFT
- * JOIN LATERAL subqueries are aggregates over different tables, so folding them
- * into a single GROUP BY would multiply rows against each other and inflate the
- * money. Keeping them lateral means each aggregate sees only its own table.
- *
- * Index used: ix_documents_workspace (workspace_id, created_at DESC), which
- * covers both the filter and the sort, so there is no sort node in the plan.
- */
-export function documentSummaries(workspaceId: string, limit = 50) {
-  return query<DocumentSummary>(
-    `SELECT
+export const SQL_DOCUMENT_SUMMARIES = `SELECT
        d.id,
        d.token,
        d.title,
@@ -115,7 +102,22 @@ export function documentSummaries(workspaceId: string, limit = 50) {
      ) ev ON true
      WHERE d.workspace_id = $1
      ORDER BY d.created_at DESC
-     LIMIT $2`,
+     LIMIT $2`;
+
+/**
+ * The console's file list.
+ *
+ * One statement rather than a list query plus a per-row lookup. The two LEFT
+ * JOIN LATERAL subqueries are aggregates over different tables, so folding them
+ * into a single GROUP BY would multiply rows against each other and inflate the
+ * money. Keeping them lateral means each aggregate sees only its own table.
+ *
+ * Index used: ix_documents_workspace (workspace_id, created_at DESC), which
+ * covers both the filter and the sort, so there is no sort node in the plan.
+ */
+export function documentSummaries(workspaceId: string, limit = 50) {
+  return query<DocumentSummary>(
+    SQL_DOCUMENT_SUMMARIES,
     [workspaceId, limit],
   );
 }
@@ -151,6 +153,23 @@ export function insertDocument(
 // Client state
 // ---------------------------------------------------------------------------
 
+export const SQL_CLIENT_STATE = `  SELECT 'selection' AS source, block_id AS a, option_id AS b, NULL::text AS c, qty::text AS n
+         FROM selections   WHERE document_id = $1
+   UNION ALL
+       SELECT 'signature',          block_id,      signed_name,     NULL,          NULL
+         FROM signatures   WHERE document_id = $1
+   UNION ALL
+       SELECT 'answer',             block_id,      question_id,     answer,        NULL
+         FROM answers      WHERE document_id = $1
+   UNION ALL
+       SELECT 'booking',            block_id,      slot_id,         NULL,          NULL
+         FROM bookings     WHERE document_id = $1
+   UNION ALL
+       SELECT 'paid',               NULL,          NULL,            NULL,
+              COALESCE(SUM(amount_cents), 0)::text
+         FROM payment_events
+        WHERE document_id = $1 AND kind = 'captured'`;
+
 /**
  * Rebuilds the engine's ClientState for one document.
  *
@@ -168,22 +187,7 @@ export async function clientState(documentId: string): Promise<ClientState> {
     c: string | null;
     n: string | null;
   }>(
-    `  SELECT 'selection' AS source, block_id AS a, option_id AS b, NULL::text AS c, qty::text AS n
-         FROM selections   WHERE document_id = $1
-   UNION ALL
-       SELECT 'signature',          block_id,      signed_name,     NULL,          NULL
-         FROM signatures   WHERE document_id = $1
-   UNION ALL
-       SELECT 'answer',             block_id,      question_id,     answer,        NULL
-         FROM answers      WHERE document_id = $1
-   UNION ALL
-       SELECT 'booking',            block_id,      slot_id,         NULL,          NULL
-         FROM bookings     WHERE document_id = $1
-   UNION ALL
-       SELECT 'paid',               NULL,          NULL,            NULL,
-              COALESCE(SUM(amount_cents), 0)::text
-         FROM payment_events
-        WHERE document_id = $1 AND kind = 'captured'`,
+    SQL_CLIENT_STATE,
     [documentId],
   );
 
@@ -352,18 +356,7 @@ export type LedgerEntry = {
   out_of_order: boolean;
 };
 
-/**
- * The ledger for one document, with a running balance.
- *
- * The running total is a window function over occurred_at, not over id, which
- * is the point: an event that happened earlier but arrived later sorts into the
- * position it belongs in, and the balance is right either way. out_of_order
- * flags exactly those rows, so /engineering can show the case rather than
- * describe it.
- */
-export function ledger(documentId: string) {
-  return query<LedgerEntry>(
-    `SELECT
+export const SQL_LEDGER = `SELECT
        id::text,
        idempotency_key,
        kind,
@@ -376,7 +369,20 @@ export function ledger(documentId: string) {
        received_at - occurred_at > interval '1 minute' AS out_of_order
      FROM payment_events
      WHERE document_id = $1
-     ORDER BY occurred_at, id`,
+     ORDER BY occurred_at, id`;
+
+/**
+ * The ledger for one document, with a running balance.
+ *
+ * The running total is a window function over occurred_at, not over id, which
+ * is the point: an event that happened earlier but arrived later sorts into the
+ * position it belongs in, and the balance is right either way. out_of_order
+ * flags exactly those rows, so /engineering can show the case rather than
+ * describe it.
+ */
+export function ledger(documentId: string) {
+  return query<LedgerEntry>(
+    SQL_LEDGER,
     [documentId],
   );
 }
@@ -427,15 +433,7 @@ export type TimelineEntry = {
   gap_seconds: string | null;
 };
 
-/**
- * One document's timeline, with the gap since the previous event.
- *
- * LAG over the same window is cheaper and more honest than computing gaps in
- * TypeScript, where a missing row silently becomes a wrong duration.
- */
-export function timeline(documentId: string, limit = 200) {
-  return query<TimelineEntry>(
-    `SELECT
+export const SQL_TIMELINE = `SELECT
        id::text,
        kind,
        block_id,
@@ -445,7 +443,17 @@ export function timeline(documentId: string, limit = 200) {
      FROM document_events
      WHERE document_id = $1
      ORDER BY at, id
-     LIMIT $2`,
+     LIMIT $2`;
+
+/**
+ * One document's timeline, with the gap since the previous event.
+ *
+ * LAG over the same window is cheaper and more honest than computing gaps in
+ * TypeScript, where a missing row silently becomes a wrong duration.
+ */
+export function timeline(documentId: string, limit = 200) {
+  return query<TimelineEntry>(
+    SQL_TIMELINE,
     [documentId, limit],
   );
 }
@@ -462,18 +470,7 @@ export type MonthlyRevenue = {
   change_bps: string | null;
 };
 
-/**
- * Revenue by month, with a running total and the change on the month before.
- *
- * Three window functions over one scan. Doing this in application code would
- * mean either three passes or a pile of index arithmetic, and the
- * period-over-period column is where that arithmetic usually goes wrong: the
- * first month has no previous month, and NULLIF keeps that as an absent value
- * rather than a division by zero.
- */
-export function monthlyRevenue(workspaceId: string) {
-  return query<MonthlyRevenue>(
-    `WITH by_month AS (
+export const SQL_MONTHLY_REVENUE = `WITH by_month AS (
        SELECT date_trunc('month', occurred_at) AS m,
               SUM(amount_cents)::bigint        AS revenue_cents
          FROM payment_events
@@ -490,7 +487,20 @@ export function monthlyRevenue(workspaceId: string) {
          / NULLIF(LAG(revenue_cents) OVER (ORDER BY m), 0)
        )::text AS change_bps
      FROM by_month
-     ORDER BY m`,
+     ORDER BY m`;
+
+/**
+ * Revenue by month, with a running total and the change on the month before.
+ *
+ * Three window functions over one scan. Doing this in application code would
+ * mean either three passes or a pile of index arithmetic, and the
+ * period-over-period column is where that arithmetic usually goes wrong: the
+ * first month has no previous month, and NULLIF keeps that as an absent value
+ * rather than a division by zero.
+ */
+export function monthlyRevenue(workspaceId: string) {
+  return query<MonthlyRevenue>(
+    SQL_MONTHLY_REVENUE,
     [workspaceId],
   );
 }
@@ -504,18 +514,7 @@ export type ServiceRanking = {
   share_bps: string;
 };
 
-/**
- * Which services actually sell, ranked by the revenue they represent.
- *
- * The join is the interesting part: the price of an option lives inside the
- * document's jsonb block tree, so this cross-references a relational selection
- * against a document-shaped catalogue with jsonb_array_elements in a LATERAL
- * join. It is exactly the case for keeping the definition as a document and the
- * behaviour as rows, and it is still one query.
- */
-export function serviceRanking(workspaceId: string) {
-  return query<ServiceRanking>(
-    `WITH chosen AS (
+export const SQL_SERVICE_RANKING = `WITH chosen AS (
        SELECT
          s.option_id,
          opt->>'name'                                   AS name,
@@ -545,24 +544,27 @@ export function serviceRanking(workspaceId: string) {
        RANK() OVER (ORDER BY revenue_cents DESC)::text AS rank,
        (revenue_cents * 10000 / NULLIF(SUM(revenue_cents) OVER (), 0))::text AS share_bps
      FROM totals
-     ORDER BY revenue_cents DESC`,
+     ORDER BY revenue_cents DESC`;
+
+/**
+ * Which services actually sell, ranked by the revenue they represent.
+ *
+ * The join is the interesting part: the price of an option lives inside the
+ * document's jsonb block tree, so this cross-references a relational selection
+ * against a document-shaped catalogue with jsonb_array_elements in a LATERAL
+ * join. It is exactly the case for keeping the definition as a document and the
+ * behaviour as rows, and it is still one query.
+ */
+export function serviceRanking(workspaceId: string) {
+  return query<ServiceRanking>(
+    SQL_SERVICE_RANKING,
     [workspaceId],
   );
 }
 
 export type FunnelStep = { step: string; n: string; of_sent_bps: string };
 
-/**
- * The funnel: sent, opened, selected, signed, paid.
- *
- * Counted with FILTER rather than five separate queries, so every step is
- * measured against the same snapshot. Five queries against a live table can
- * report more signatures than files, which is the kind of number that destroys
- * trust in a dashboard.
- */
-export function funnel(workspaceId: string) {
-  return query<FunnelStep>(
-    `WITH per_doc AS (
+export const SQL_FUNNEL = `WITH per_doc AS (
        SELECT
          d.id,
          EXISTS (SELECT 1 FROM document_events e WHERE e.document_id = d.id AND e.kind = 'opened') AS opened,
@@ -585,7 +587,19 @@ export function funnel(workspaceId: string) {
      FROM counted, LATERAL (VALUES
        ('sent', sent), ('opened', opened), ('selected', selected),
        ('signed', signed), ('paid', paid)
-     ) AS t(step, n)`,
+     ) AS t(step, n)`;
+
+/**
+ * The funnel: sent, opened, selected, signed, paid.
+ *
+ * Counted with FILTER rather than five separate queries, so every step is
+ * measured against the same snapshot. Five queries against a live table can
+ * report more signatures than files, which is the kind of number that destroys
+ * trust in a dashboard.
+ */
+export function funnel(workspaceId: string) {
+  return query<FunnelStep>(
+    SQL_FUNNEL,
     [workspaceId],
   );
 }

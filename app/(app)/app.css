@@ -1190,6 +1190,276 @@
   }
 }
 
+/* ============================================================
+   Engineering
+   ============================================================ */
+
+.eg-main {
+  max-width: 60rem;
+}
+
+.eg-h1 {
+  margin: 3rem 0 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--sf-line);
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.eg-h2 {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-serif);
+  font-size: 1.1875rem;
+  font-weight: 600;
+}
+
+.eg-p {
+  max-width: 44rem;
+  margin-bottom: 0.9rem;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: color-mix(in oklab, var(--hb-ink) 85%, transparent);
+}
+
+.eg-p code,
+.eg-mono {
+  font-family: var(--font-mono);
+  font-size: 0.8125em;
+}
+
+.eg-p code {
+  padding: 0.1rem 0.3rem;
+  background: var(--hb-cool);
+  border-radius: 4px;
+}
+
+.eg-dim {
+  font-size: 0.8125rem;
+  color: var(--hb-muted);
+}
+
+.eg-wrap {
+  overflow-wrap: anywhere;
+}
+
+.eg-honest {
+  padding: 1.15rem 1.35rem;
+  margin-top: 1.5rem;
+  background: var(--hb-beige);
+  border-radius: 18px;
+}
+
+.eg-honest p {
+  max-width: 46rem;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.eg-honest p + p {
+  margin-top: 0.75rem;
+}
+
+.eg-table-wrap {
+  overflow-x: auto;
+  padding: 1rem 1.15rem;
+  background: var(--hb-white);
+  border: 1px solid var(--sf-line);
+  border-radius: 18px;
+}
+
+.eg-states caption {
+  padding-bottom: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hb-muted);
+  text-align: left;
+}
+
+.eg-status {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  border: 1px solid var(--sf-line);
+  color: var(--hb-muted);
+}
+
+.eg-status[data-status="open"] {
+  background: var(--hb-yellow);
+  border-color: var(--hb-yellow-deep);
+  color: var(--hb-ink);
+}
+
+.eg-status[data-status="complete"] {
+  background: color-mix(in oklab, var(--hb-mint) 45%, var(--hb-white));
+  border-color: color-mix(in oklab, var(--hb-sage) 40%, transparent);
+  color: color-mix(in oklab, var(--hb-sage) 85%, var(--hb-ink));
+}
+
+.eg-details {
+  margin: 1rem 0 0;
+}
+
+.eg-details summary {
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hb-muted);
+}
+
+.eg-details summary:hover {
+  color: var(--hb-ink);
+}
+
+.eg-pre {
+  margin-top: 0.6rem;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.65;
+  color: var(--hb-cream);
+  background: var(--hb-ink);
+  border-radius: 14px;
+  tab-size: 2;
+}
+
+.eg-plan {
+  color: color-mix(in oklab, var(--hb-mint) 70%, var(--hb-white));
+  background: var(--hb-teal);
+}
+
+.eg-schema {
+  max-height: 32rem;
+  overflow: auto;
+}
+
+.eg-two {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  align-items: start;
+}
+
+.eg-two--code {
+  grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+}
+
+.eg-case {
+  margin: 0;
+  padding: 1rem 1.15rem;
+  background: var(--hb-white);
+  border: 1px solid var(--sf-line);
+  border-radius: 18px;
+}
+
+.eg-case figcaption {
+  margin-bottom: 0.5rem;
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.eg-verdict {
+  margin: 0.5rem 0;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  border-radius: 10px;
+  background: color-mix(in oklab, #d94545 9%, var(--hb-white));
+  border: 1px solid color-mix(in oklab, #d94545 25%, transparent);
+}
+
+.eg-verdict[data-severity="warning"] {
+  background: color-mix(in oklab, var(--hb-yellow) 22%, var(--hb-white));
+  border-color: var(--hb-yellow-deep);
+}
+
+.eg-verdict code {
+  display: inline-block;
+  margin-right: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--hb-muted);
+}
+
+.eg-query {
+  margin-top: 1.75rem;
+}
+
+/* ---------- the ledger proof ---------- */
+
+.eg-proof {
+  padding: 1.15rem 1.35rem;
+  background: var(--hb-white);
+  border: 1px solid var(--sf-line);
+  border-radius: 18px;
+}
+
+.eg-proof-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.eg-btn {
+  padding: 0.55rem 1rem;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  background: var(--hb-yellow);
+  border: 1px solid var(--hb-yellow-deep);
+  border-radius: 10px;
+}
+
+.eg-btn:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.eg-btn:disabled {
+  opacity: 0.45;
+}
+
+.eg-proof-out {
+  display: grid;
+  gap: 0.5rem 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  margin: 1rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--sf-line-soft);
+  font-size: 0.875rem;
+}
+
+.eg-proof-out dt {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--hb-muted);
+}
+
+.eg-proof-out dd {
+  margin: 0.15rem 0 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.eg-proof-note {
+  grid-column: 1 / -1;
+}
+
+.eg-proof-note dd {
+  font-size: 0.9375rem;
+  color: color-mix(in oklab, var(--hb-ink) 80%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hbapp *,
   .hbapp *::before,
