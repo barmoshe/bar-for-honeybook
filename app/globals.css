@@ -31,7 +31,12 @@ body {
   background: #ffffff;
 }
 
-.hb-root {
+/* The palette is shared with the working app surfaces (/f, /studio, /console,
+   /engineering), which live under .hbapp. Adding a second selector rather than
+   hoisting the block to :root keeps every value .hb-root resolves byte-identical
+   to what the pitch page has always had. */
+.hb-root,
+.hbapp {
   --hb-yellow: oklch(0.965 0.2 110); /* #FFFA56 */
   --hb-yellow-deep: oklch(0.86 0.17 96);
   --hb-ink: oklch(0.255 0.018 230); /* #142127 */
@@ -746,6 +751,46 @@ body {
 }
 .hb-section--work {
   background: var(--hb-cool);
+}
+
+/* ---- the working demo ---- */
+.hb-section--demo {
+  background: var(--hb-white);
+}
+.hb-demo-lede {
+  max-width: 46rem;
+  margin-top: 1.25rem;
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.7;
+  color: oklch(0.255 0.018 230 / 0.82);
+}
+/* Two columns rather than the Work section's three. There are four surfaces,
+   so three per row leaves one stranded, and each of these carries a full
+   sentence about what it proves rather than a blurb. */
+.hb-demo-grid {
+  margin-top: clamp(2rem, 4vw, 2.75rem);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 720px) {
+  .hb-demo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.hb-demo-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  max-width: 44rem;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--hb-muted);
+}
+.hb-demo-note svg {
+  flex: none;
+  margin-top: 0.25rem;
 }
 .hb-section--close {
   background: var(--hb-ink);

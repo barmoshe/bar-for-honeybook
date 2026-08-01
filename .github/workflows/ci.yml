@@ -1,7 +1,10 @@
 name: CI
 
 # Quality gate in front of Vercel's auto-deploy: every push and PR must
-# pass eslint (incl. jsx-a11y) and a production build before it lands.
+# pass eslint (incl. jsx-a11y), the Go engine's tests, and a production build
+# before it lands. The engine is a pure package with no I/O, so its tests are
+# the fastest and most load-bearing check in here: run them first and fail
+# early rather than after a full Next build.
 on:
   push:
     branches: [main, "claude/**"]
@@ -16,6 +19,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Pin to the same toolchain Vercel resolves from the `go` directive in
+      # go.mod, so a green CI means the deployed function compiles too.
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+
+      # Scoped to our own packages rather than ./... : node_modules ships a
+      # stray Go package (flatted) that Go's package matching happily walks
+      # into. It works today only because npm ci runs after these steps, which
+      # is a bad reason for anything to work.
+      - name: Go vet
+        run: go vet ./engine/... ./api/... ./httpx/... ./cmd/...
+
+      - name: Go test
+        run: go test ./engine/... ./api/... ./httpx/... ./cmd/... -count=1
 
       - uses: actions/setup-node@v4
         with:
