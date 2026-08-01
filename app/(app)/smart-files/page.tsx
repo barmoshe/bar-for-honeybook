@@ -38,30 +38,30 @@ const SURFACES = [
   {
     href: "/f",
     label: "The file",
-    title: "What a client receives",
-    body: "One link, no account. Pick your services, watch the total move, sign the agreement, then pay. Start here.",
+    title: "What a client sees",
+    body: "One link, no account. Pick services, sign the agreement, pay. Start here.",
     cta: "Open a file",
   },
   {
     href: "/studio",
     label: "Studio",
-    title: "Describe one in a sentence",
-    body: "Type something like “photography package, two tiers, contract before payment, 50% deposit” and watch a parser build the file, showing which words produced which block.",
-    cta: "Write a brief",
+    title: "Build one from a sentence",
+    body: "Type a brief like “photography package, two tiers, contract before payment, 50% deposit”. A parser builds the file and marks which words produced which block.",
+    cta: "Open studio",
   },
   {
     href: "/console",
     label: "Console",
     title: "The business side",
-    body: "Revenue by month, which services actually sell, where files stall, and the median time from sent to signed. Every number is one hand-written SQL statement.",
-    cta: "See the numbers",
+    body: "Revenue by month, which services sell, where files stall, median time from sent to signed. Each number is one hand-written SQL query.",
+    cta: "Open console",
   },
   {
     href: "/engineering",
     label: "Engineering",
-    title: "The receipts",
-    body: "The schema, live query plans, the validator refusing two impossible files, and a ledger with buttons that invite you to double-charge it.",
-    cta: "Look under it",
+    title: "What is underneath",
+    body: "The schema, live query plans, the validator rejecting two invalid files, and a ledger you can try to double-charge.",
+    cta: "Open engineering",
   },
 ] as const;
 
@@ -69,27 +69,27 @@ const SURFACES = [
 const BUILD = [
   {
     title: "The rules are a pure function",
-    body: "The engine is a Go package with no database, no clock, no network and no environment. Everything it needs arrives as an argument and everything it decides comes back as a value, which is why the same code answers a request in production and runs under go test with nothing stubbed.",
+    body: "A Go package with no database, no clock and no network. Inputs arrive as arguments, decisions come back as values, so the same code serves production and runs under go test with nothing stubbed.",
   },
   {
     title: "Gating is a graph, not an if statement",
-    body: "A block waits for the blocks it names, so “the invoice is unreachable until the contract is signed” falls out of the graph instead of being special-cased. A cycle cannot be fixed by reordering, so the validator finds it and names the ring; a forward dependency can be, so it suggests the order.",
+    body: "Each block names the blocks it waits for, so “the invoice is locked until the contract is signed” comes out of the graph. The validator reports a cycle by naming the loop, and a wrong order by giving the right one.",
   },
   {
-    title: "A locked block carries no payload",
-    body: "An unsigned client receives no invoice lines and no contract prose over the wire, and the server action that takes payment refuses by asking the engine. Withholding it from the page is necessary and not sufficient, because a page is not the only thing that can call a server action.",
+    title: "A locked block sends no data",
+    body: "An unsigned client never receives the invoice lines or the contract text. The server action that takes payment asks the engine first, because hiding a block in the page does not stop anything else calling that action.",
   },
   {
     title: "The database is real Postgres",
-    body: "Compiled to WebAssembly and running in process. Not a Postgres-flavoured layer over something else: the window functions, the LATERAL joins and the EXPLAIN output on the engineering page are Postgres doing the work. Every query is written by hand, there is no ORM, and no value is ever interpolated into SQL text.",
+    body: "Compiled to WebAssembly, running in process. The window functions, LATERAL joins and EXPLAIN output on the engineering page are Postgres doing the work. Every query is hand-written: no ORM, and no value is ever put into SQL text.",
   },
   {
     title: "The ledger is append-only",
-    body: "A unique index on (workspace_id, idempotency_key) is the whole idempotency guarantee, so there is no window in which two deliveries of one webhook both decide they are first. Balances are a SUM rather than a column somebody updates, which is why an event that arrives late still lands on the right total.",
+    body: "A unique index on (workspace_id, idempotency_key) is the whole idempotency guarantee, so two deliveries of one webhook cannot both count. Balances are a SUM rather than a stored column, so an event that arrives late still lands on the right total.",
   },
   {
-    title: "The parser has no model behind it",
-    body: "Studio turns a sentence into a document with rules, and renders the derivation: which phrase produced which block, and what it could not read. It is a public unauthenticated URL, so a key behind it would be an open wallet, and this way it runs in CI, offline, with no spinner.",
+    title: "The parser uses no model",
+    body: "Studio turns a sentence into a document with rules, and shows which phrase produced which block and what it could not read. No API key behind it, so it runs in CI, offline.",
   },
 ] as const;
 
@@ -119,13 +119,12 @@ export default function Page() {
           </h1>
           <p className="sfl-lede">
             That is a smart file. The client opens the link, picks what they
-            want, signs the agreement, and pays. No account, no PDF going back
-            and forth. This one works end to end: the rules, the database, and
-            the money.
+            want, signs, and pays. No account, no PDF back and forth. This one
+            runs end to end: the rules, the database and the payment step.
           </p>
           <div className="sfl-ctas">
             <Link className="sfl-btn" href="/f">
-              Open a working file
+              Open a file
             </Link>
             <a className="sfl-btn sfl-btn-quiet" href="#how">
               How it works
@@ -154,7 +153,7 @@ export default function Page() {
                 2
               </span>
               <h3 className="sfl-step-t">You choose</h3>
-              <p>Add options and the total moves with you, tax and deposit included.</p>
+              <p>The total updates as you add options, tax and deposit included.</p>
             </li>
             <li className="sfl-step">
               <span className="sfl-step-n" aria-hidden="true">
@@ -162,8 +161,8 @@ export default function Page() {
               </span>
               <h3 className="sfl-step-t">You sign</h3>
               <p>
-                The agreement quotes the exact figures you just built, so the
-                prose cannot drift from the amount.
+                The agreement quotes the figures you just built, so the text
+                cannot disagree with the amount.
               </p>
             </li>
             <li className="sfl-step">
@@ -171,23 +170,21 @@ export default function Page() {
                 4
               </span>
               <h3 className="sfl-step-t">Then you can pay</h3>
-              <p>Not before. That is the interesting part.</p>
+              <p>Not before.</p>
             </li>
           </ol>
           <p className="sfl-note">
-            Step four is the whole trick. The payment block is genuinely
-            unreachable until the signature exists: it is not a greyed-out
-            button, it is a server that has no answer for you yet.
+            The payment block is unreachable until the signature exists. Not a
+            disabled button: the server will not produce it.
           </p>
         </section>
 
         <section className="sfl-section" aria-labelledby="try">
           <h2 className="st-h2" id="try">
-            Four ways in
+            Four surfaces
           </h2>
           <p className="st-lede">
-            Every one of these is live. The first is the one to try if you only
-            open one.
+            All four are live. Start with the first.
           </p>
           <ul className="sfl-surfaces">
             {SURFACES.map((s) => (
@@ -209,9 +206,9 @@ export default function Page() {
             How it is built
           </h2>
           <p className="st-lede">
-            The short version: a pure rules engine in Go, real Postgres, and a
-            payment step that refuses to be talked into anything. The long
-            version runs itself on the engineering page.
+            A rules engine in Go, real Postgres, and a payment step that checks
+            the engine before it does anything. The engineering page runs each
+            of these claims live.
           </p>
           <ul className="sfl-build">
             {BUILD.map((b) => (
@@ -222,11 +219,10 @@ export default function Page() {
             ))}
           </ul>
           <p className="sfl-note">
-            Every push runs go vet, the Go tests, a formatting check, eslint,
-            both proof scripts and the production build before anything
-            deploys. The database proof imports the app&rsquo;s own queries
-            rather than restating their SQL, so it cannot pass while the app
-            fails.
+            Every push runs go vet, the Go tests, a format check, eslint, both
+            proof scripts and the production build before deploying. The
+            database proof imports the app&rsquo;s own queries instead of
+            restating the SQL, so it cannot pass while the app fails.
           </p>
         </section>
 
@@ -249,17 +245,16 @@ export default function Page() {
             </li>
           </ul>
           <p className="sfl-note">
-            That is a trade rather than an oversight. A hosted database means a
-            connection string in a repository and a free tier that deletes it
-            after thirty days, and a demo that resets is a smaller lie than a
-            link that returns 500.
+            A trade, not an oversight. A hosted database means a connection
+            string in a public repository and a free tier that deletes it after
+            thirty days. A demo that resets beats a link that returns 500.
           </p>
         </section>
 
         <footer className="sfl-foot">
           <p className="sfl-foot-lead">
-            Built by Bar Moshe. The engine, the schema, the queries and the
-            parser are all mine to explain.
+            Built by Bar Moshe. I wrote the engine, the schema, the queries and
+            the parser.
           </p>
           <p className="sfl-foot-links">
             <Link href="/f">Open a file</Link>

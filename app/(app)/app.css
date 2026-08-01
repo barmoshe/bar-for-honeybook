@@ -1776,11 +1776,11 @@
    moves. The rail is the gating sequence the engine enforces:
    choose, sign, pay, lit in that order by a travelling dot.
 
-   Every animation below ends on the frame it should hold still,
-   because the reduced-motion rule underneath collapses duration
-   to nothing and leaves whatever the last keyframe says. Here
-   that is the dot resting on Pay with all three nodes lit, which
-   is a finished picture rather than a frozen shimmer.
+   The resting frame is written once, as the base rules: dot on
+   Pay, every node filled. The keyframes fill backwards from a
+   0% that undoes it, so that state only ever renders when the
+   animation is off — which is all the reduced-motion block at
+   the bottom of this file has to do here.
    ============================================================ */
 
 .ld-wrap {
@@ -1808,7 +1808,8 @@
   height: 1.25rem;
 }
 
-.ld-rail-line {
+.ld-rail::before {
+  content: "";
   position: absolute;
   top: 50%;
   left: 0;
@@ -1824,8 +1825,9 @@
   left: calc(var(--i) * 50%);
   width: 0.6875rem;
   height: 0.6875rem;
-  background: var(--hb-cream);
-  border: 2px solid color-mix(in oklab, var(--hb-ink) 30%, transparent);
+  /* Filled: the resting frame. The animation's 0% undoes it. */
+  background: var(--hb-ink);
+  border: 2px solid var(--hb-ink);
   border-radius: 999px;
   transform: translate(-50%, -50%);
   /* Staggered to meet the dot: it reaches the second node halfway through the
@@ -1836,7 +1838,8 @@
 .ld-dot {
   position: absolute;
   top: 50%;
-  left: 0;
+  /* Arrived: the resting frame. ld-travel starts it back at 0. */
+  left: 100%;
   width: 0.875rem;
   height: 0.875rem;
   background: var(--hb-yellow);
@@ -1875,9 +1878,10 @@
   text-wrap: balance;
   color: var(--hb-muted);
   /* Held back so a warm instance renders the real page before anybody reads an
-     explanation of a wait they did not have. The rule below overrides
-     animation-duration but not animation-delay, so this still waits. */
-  animation: ld-appear 0.4s ease 0.6s both;
+     explanation of a wait they did not have. hb-fade is the shared fade from
+     globals.css. The reduced-motion rule below leaves this one alone, so the
+     delay survives; that delay is timing, not motion. */
+  animation: hb-fade 0.4s ease 0.6s both;
 }
 
 @keyframes ld-travel {
@@ -1906,15 +1910,6 @@
   }
 }
 
-@keyframes ld-appear {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .hbapp *,
   .hbapp *::before,
@@ -1923,24 +1918,17 @@
     animation-duration: 0.01ms !important;
   }
 
-  /* The rule above is not enough for the loader on its own. Collapsing the
-     duration of an *infinite* animation does not stop it: it runs the cycle
-     every hundredth of a millisecond instead, which is motion the visitor
-     asked not to have, and it leaves the dot wherever a frame happened to
-     sample it rather than anywhere chosen. So state the resting frame here
-     instead of hoping the duration collapse lands on it. It is the picture the
-     run would have ended on: every step complete, the dot arrived at the last.
+  /* The rule above collapses duration, which is not the same as stopping an
+     animation: what it leaves on screen is whatever the fill mode and the
+     base rules resolve to, not a frame anybody chose. So switch the motif off
+     outright and let its base rules show — they are already the finished
+     picture, every step filled and the dot arrived.
 
-     The note keeps its animation, because that delay is not motion — it is
-     there so a load that resolves quickly never explains itself. */
-  .hbapp .ld-dot {
+     Scoped to .ld-flow so it misses .ld-note, a sibling rather than a child.
+     That one keeps its animation on purpose: the 0.6s delay in front of it is
+     timing, not motion, and it is why a load that resolves quickly never
+     explains itself. */
+  .hbapp .ld-flow * {
     animation: none !important;
-    left: 100%;
-  }
-
-  .hbapp .ld-node {
-    animation: none !important;
-    background: var(--hb-ink);
-    border-color: var(--hb-ink);
   }
 }

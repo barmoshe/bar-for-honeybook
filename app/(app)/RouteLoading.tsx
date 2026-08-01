@@ -18,31 +18,27 @@ import Link from "next/link";
  * passed in per route: one place to keep honest, next to this warning.
  * **If you rename a heading or reorder a nav on one of these pages, change it
  * here too**, or the loading state will visibly rewrite itself on arrival.
- *
- * All the motion is CSS, deliberately. The reduced-motion rule at the bottom of
- * app.css flattens animation under .hbapp, which catches this and would not
- * catch SVG animateMotion.
  */
 
 /** The three blocks a smart file gates, in the order the engine unlocks them. */
 const STEPS = ["Choose", "Sign", "Pay"] as const;
 
 /**
- * Verbatim from each page's own header and title:
- * console/page.tsx, studio/Studio.tsx, engineering/page.tsx, f/[token]/SmartFileView.tsx.
+ * Verbatim from each page's own header and title — console/page.tsx,
+ * studio/Studio.tsx, engineering/page.tsx — except the `file` row, whose real
+ * brand and title are fields of the document still being fetched, so both are
+ * stand-ins.
  */
 const SURFACES = {
   studio: {
     brand: "Studio",
     eyebrow: "Build a smart file",
     title: "Describe it in a sentence.",
-    main: "st-main",
   },
   console: {
     brand: "Console",
     eyebrow: "Your side of the file",
     title: "What the clients did.",
-    main: "st-main",
   },
   engineering: {
     brand: "Engineering",
@@ -50,51 +46,47 @@ const SURFACES = {
     title: "The receipts.",
     // The engineering page narrows its measure; without this the loading block
     // sits on a different left edge than the content that replaces it.
-    main: "st-main eg-main",
+    extraMain: "eg-main",
   },
   file: {
-    // The real header brands with the business name, which is in the document
-    // we are still fetching. This is the honest stand-in for it.
     brand: "Smart file",
     eyebrow: "Smart file",
     title: "Opening your file.",
-    main: "sf-main",
   },
 } as const;
 
-export type Surface = keyof typeof SURFACES;
+type Surface = keyof typeof SURFACES;
 
 /** Each page links to the other two working surfaces, in this order, never to /f. */
-const NAV: { key: Surface; href: string }[] = [
-  { key: "studio", href: "/studio" },
-  { key: "console", href: "/console" },
-  { key: "engineering", href: "/engineering" },
-];
+const NAV = ["studio", "console", "engineering"] as const;
 
 export default function RouteLoading({ surface }: { surface: Surface }) {
   const page = SURFACES[surface];
   const isFile = surface === "file";
+  // The client surface has its own header and a narrower measure than the
+  // three operator-facing ones. Both facts follow from this one.
+  const shell = isFile ? "sf" : "st";
+  const extraMain = "extraMain" in page ? ` ${page.extraMain}` : "";
 
   return (
-    <div className={`hbapp ld ${isFile ? "sf" : "st"}`}>
-      {isFile ? (
-        <header className="sf-top">
-          <span className="sf-brand">{page.brand}</span>
-        </header>
-      ) : (
-        <header className="st-top">
-          <span className="sf-brand">{page.brand}</span>
+    <div className={`hbapp ${shell}`}>
+      <header className={`${shell}-top`}>
+        <span className="sf-brand">{page.brand}</span>
+        {!isFile && (
           <nav className="st-nav">
-            {NAV.filter((n) => n.key !== surface).map((n) => (
-              <Link key={n.key} href={n.href}>
-                {SURFACES[n.key].brand}
+            {NAV.filter((key) => key !== surface).map((key) => (
+              // Nothing is clicked from a loading screen, and an in-viewport
+              // Link prefetches by default: two more invocations of the very
+              // function this visitor is already waiting on to cold-start.
+              <Link key={key} href={`/${key}`} prefetch={false}>
+                {SURFACES[key].brand}
               </Link>
             ))}
           </nav>
-        </header>
-      )}
+        )}
+      </header>
 
-      <main className={page.main} id="main">
+      <main className={`${shell}-main${extraMain}`} id="main">
         <p className="sf-eyebrow">{page.eyebrow}</p>
         <h1 className="sf-title">{page.title}</h1>
 
@@ -105,7 +97,6 @@ export default function RouteLoading({ surface }: { surface: Surface }) {
 
           <div className="ld-flow" aria-hidden="true">
             <div className="ld-rail">
-              <span className="ld-rail-line" />
               {STEPS.map((step, i) => (
                 <span
                   key={step}
