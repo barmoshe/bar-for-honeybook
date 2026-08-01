@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+
+import AppNav from "@/app/(app)/AppNav";
 import { useEffect, useMemo, useState, useTransition } from "react";
 
 import { money, type Validation } from "@/lib/engine";
@@ -72,13 +73,7 @@ export default function Studio() {
 
   return (
     <div className="hbapp st">
-      <header className="st-top">
-        <span className="sf-brand">Studio</span>
-        <nav className="st-nav">
-          <Link href="/console">Console</Link>
-          <Link href="/engineering">Engineering</Link>
-        </nav>
-      </header>
+      <AppNav title="Studio" current="/studio" />
 
       <main className="st-main" id="main">
         <p className="sf-eyebrow">Build a smart file</p>

@@ -27,6 +27,7 @@ package main
 import (
 	"encoding/json"
 	"syscall/js"
+	"time"
 
 	"github.com/barmoshe/bar-for-honeybook/engine"
 )
@@ -58,6 +59,11 @@ func call(_ js.Value, args []js.Value) any {
 		Op       string          `json:"op"`
 		Document engine.Document `json:"document"`
 		State    engine.State    `json:"state"`
+
+		Automation engine.Automation `json:"automation"`
+		Cursor     int               `json:"cursor"`
+		Facts      engine.Facts      `json:"facts"`
+		AsOf       string            `json:"asOf"`
 	}
 	if err := json.Unmarshal([]byte(args[0].String()), &req); err != nil {
 		return errorJSON("That is not a document this engine understands.")
@@ -69,10 +75,16 @@ func call(_ js.Value, args []js.Value) any {
 		payload = engine.Resolve(&req.Document, req.State)
 	case "validate":
 		payload = engine.Validate(&req.Document)
+	case "advance":
+		asOf, err := time.Parse(time.RFC3339, req.AsOf)
+		if err != nil {
+			return errorJSON("asOf must be an RFC3339 timestamp.")
+		}
+		payload = engine.Advance(&req.Automation, req.Cursor, req.Facts, asOf)
 	case "health":
 		payload = map[string]any{"ok": true, "engine": "go", "transport": "wasm"}
 	default:
-		return errorJSON(`Unknown op. Use "resolve", "validate", or "health".`)
+		return errorJSON(`Unknown op. Use "resolve", "validate", "advance", or "health".`)
 	}
 
 	out, err := json.Marshal(payload)

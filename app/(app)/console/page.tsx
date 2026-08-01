@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import AppNav from "@/app/(app)/AppNav";
+
+import { listRuns } from "@/lib/automations";
 import * as db from "@/lib/db/queries";
 import { money } from "@/lib/engine";
 import { currentWorkspace } from "@/lib/workspace";
@@ -20,12 +23,13 @@ export default async function Page() {
   // Six independent reads, issued together. PGlite holds one connection so they
   // queue behind each other anyway, but writing it as a waterfall would bake in
   // a shape that gets slower the moment this points at a real Postgres.
-  const [files, revenue, ranking, steps, tts] = await Promise.all([
+  const [files, revenue, ranking, steps, tts, runs] = await Promise.all([
     db.documentSummaries(workspace),
     db.monthlyRevenue(workspace),
     db.serviceRanking(workspace),
     db.funnel(workspace),
     db.timeToSign(workspace),
+    listRuns(workspace, 5),
   ]);
 
   const currency = files.rows[0]?.currency ?? "USD";
@@ -35,13 +39,7 @@ export default async function Page() {
 
   return (
     <div className="hbapp st cn">
-      <header className="st-top">
-        <span className="sf-brand">Console</span>
-        <nav className="st-nav">
-          <Link href="/studio">Studio</Link>
-          <Link href="/engineering">Engineering</Link>
-        </nav>
-      </header>
+      <AppNav title="Console" current="/console" />
 
       <main className="st-main" id="main">
         <p className="sf-eyebrow">Your side of the file</p>
@@ -61,6 +59,32 @@ export default async function Page() {
             value={tts?.median_hours ? `${tts.median_hours}h` : "n/a"}
             note={tts?.p90_hours ? `90th percentile ${tts.p90_hours}h` : ""}
           />
+        </section>
+
+        <section className="st-pane cn-autos">
+          <h2 className="st-h2">
+            Automations <Link href="/console/automations">open</Link>
+          </h2>
+          <p className="cn-note">
+            Runs listening to the same event stream this page reports on. They
+            park on a queue until their next step is due.
+          </p>
+          <ul className="cn-runs">
+            {runs.rows.map((r) => (
+              <li key={r.id}>
+                <span className="cn-stage" data-stage={r.status === "done" ? "paid" : undefined}>
+                  {r.status}
+                </span>
+                <span>{r.automation_name}</span>
+                <span className="cn-dim">
+                  {r.document_title}, step {r.cursor} of {r.steps}
+                </span>
+              </li>
+            ))}
+            {runs.rows.length === 0 && (
+              <li className="cn-dim">Nothing triggered yet. Sign a file and one appears.</li>
+            )}
+          </ul>
         </section>
 
         <div className="st-grid">

@@ -1,6 +1,14 @@
 import "server-only";
 
-import type { ClientState, Resolved, SmartFileDoc, Validation } from "./engine.ts";
+import type {
+  Advanced,
+  Automation,
+  ClientState,
+  Facts,
+  Resolved,
+  SmartFileDoc,
+  Validation,
+} from "./engine.ts";
 
 /**
  * Calling the rules engine.
@@ -128,4 +136,20 @@ export function resolveDocument(
 /** Whether this document can be completed at all, and if not, why. */
 export function validateDocument(document: SmartFileDoc): Promise<Validation> {
   return call<Validation>({ op: "validate", document });
+}
+
+/**
+ * What an automation run does next, as of a given moment.
+ *
+ * `asOf` is a parameter rather than a clock read inside the engine, which is
+ * what lets a three-day wait be tested in a millisecond and demonstrated with a
+ * button instead of a three-day pause.
+ */
+export function advanceRun(
+  automation: Automation,
+  cursor: number,
+  facts: Facts,
+  asOf: string,
+): Promise<Advanced> {
+  return call<Advanced>({ op: "advance", automation, cursor, facts, asOf });
 }

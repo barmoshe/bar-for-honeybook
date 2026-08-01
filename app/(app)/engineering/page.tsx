@@ -2,7 +2,8 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import type { Metadata } from "next";
-import Link from "next/link";
+
+import AppNav from "@/app/(app)/AppNav";
 
 import { explain } from "@/lib/db/client";
 import * as db from "@/lib/db/queries";
@@ -126,13 +127,7 @@ export default async function Page() {
 
   return (
     <div className="hbapp st eg">
-      <header className="st-top">
-        <span className="sf-brand">Engineering</span>
-        <nav className="st-nav">
-          <Link href="/studio">Studio</Link>
-          <Link href="/console">Console</Link>
-        </nav>
-      </header>
+      <AppNav title="Engineering" current="/engineering" />
 
       <main className="st-main eg-main" id="main">
         <p className="sf-eyebrow">How it is built</p>

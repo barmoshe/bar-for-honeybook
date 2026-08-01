@@ -143,7 +143,85 @@ export type Problem = {
 
 export type Validation = { ok: boolean; problems: Problem[]; order?: string[] };
 
-/** Formats integer cents the same way the engine does in contract prose. */
+// ---------------------------------------------------------------------------
+// Automations. Mirrors engine/automation.go the same way the types above mirror
+// the rest of that package.
+// ---------------------------------------------------------------------------
+
+export type TriggerKind = "opened" | "selected" | "signed" | "paid";
+export type StepKind = "wait" | "email" | "task" | "stage" | "condition";
+
+export type Condition = {
+  fact: "signed" | "paid" | "complete" | "total" | "balance";
+  op: "is" | "not" | "gt" | "lt";
+  value: string;
+};
+
+export type Step = {
+  kind: StepKind;
+  waitHours?: number;
+  subject?: string;
+  body?: string;
+  title?: string;
+  stage?: string;
+  if?: Condition;
+};
+
+export type Automation = {
+  id: string;
+  name: string;
+  trigger: TriggerKind;
+  steps: Step[];
+};
+
+export type Facts = {
+  signed: boolean;
+  paid: boolean;
+  complete: boolean;
+  totalCents: number;
+  balanceCents: number;
+  client: string;
+  business: string;
+  title: string;
+  currency: string;
+};
+
+export type RunStatus = "waiting" | "done" | "stopped";
+
+export type AutomationAction = {
+  stepIndex: number;
+  kind: StepKind;
+  subject?: string;
+  body?: string;
+  title?: string;
+  stage?: string;
+};
+
+export type Advanced = {
+  cursor: number;
+  status: RunStatus;
+  resumeAt?: string;
+  actions: AutomationAction[];
+  note?: string;
+};
+
+/**
+ * What one pass of the runner did.
+ *
+ * Declared here rather than beside the runner because a client component shows
+ * it, and importing even a *type* from a `server-only` module into the client
+ * bundle stops that component hydrating: the buttons render, nothing is bound
+ * to them, and there is no error to read. Types are cheap to move and that
+ * failure is expensive to find.
+ */
+export type TickResult = {
+  claimed: number;
+  advanced: number;
+  actions: number;
+  asOf: string;
+};
+
+/** Formats integer cents the same way the engine does in signable prose. */
 export function money(cents: number, currency = "USD"): string {
   const symbols: Record<string, string> = {
     USD: "$",

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import AppNav from "@/app/(app)/AppNav";
+
 import { buildMailtoHref } from "@/lib/contact";
 
 import { DocumentDiagram, SystemDiagram } from "./Diagrams";
@@ -75,15 +77,7 @@ const CONTACT = buildMailtoHref(
 export default function Page() {
   return (
     <div className="hbapp st sfl">
-      <header className="st-top">
-        <span className="sf-brand">Smart files</span>
-        <nav className="st-nav" aria-label="The working surfaces">
-          <Link href="/f">The file</Link>
-          <Link href="/studio">Studio</Link>
-          <Link href="/console">Console</Link>
-          <Link href="/engineering">Engineering</Link>
-        </nav>
-      </header>
+      <AppNav title="Smart files" />
 
       <main className="st-main" id="main">
         <section className="sfl-hero">

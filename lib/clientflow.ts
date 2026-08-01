@@ -1,5 +1,6 @@
 import "server-only";
 
+import { enqueue } from "./automations.ts";
 import * as db from "./db/queries.ts";
 import { resolveDocument } from "./engine-server.ts";
 
@@ -97,6 +98,8 @@ export async function toggleService(
     qty,
   });
 
+  if (qty > 0) await enqueue(doc.workspace_id, doc.id, "selected");
+
   return OK;
 }
 
@@ -118,6 +121,11 @@ export async function signContract(
   // one that is loudly broken.
   const { applied } = await db.signAndRecord(doc.workspace_id, doc.id, blockId, trimmed);
   if (!applied) return deny("This has already been signed.");
+
+  // Automations listen to the same event stream the console reads, so a trigger
+  // needed no new plumbing: signing already wrote the fact, this just tells the
+  // runner a fact worth waking up for has landed.
+  await enqueue(doc.workspace_id, doc.id, "signed");
 
   return OK;
 }
@@ -154,6 +162,9 @@ export async function payNow(token: string, blockId: string): Promise<Result> {
       amountCents: due,
       idempotencyKey: key,
     });
+    // Only on a genuine capture. A replayed webhook must not start an
+    // automation any more than it moves the balance.
+    await enqueue(doc.workspace_id, doc.id, "paid");
   }
 
   // A replay is not an error from the client's point of view. They pressed the

@@ -232,6 +232,40 @@ SELECT p.workspace_id, p.document_id, 'invoice', 'paid',
        jsonb_build_object('amountCents', p.amount_cents), p.occurred_at
 FROM payment_events p WHERE p.workspace_id = current_setting('app.workspace_id') AND p.kind = 'captured';
 
+-- --------------------------------------------------------------------------
+-- One starter automation, so a workspace arrives with something to look at
+-- rather than an empty page and an invitation to imagine.
+--
+-- It is the shape worth showing: an action, a wait, a condition that can stop
+-- the run, and then the steps that only happen to the clients who did not pay.
+-- --------------------------------------------------------------------------
+INSERT INTO automations (id, workspace_id, name, trigger_kind, enabled, definition)
+VALUES (
+  current_setting('app.workspace_id') || '-auto-chase',
+  current_setting('app.workspace_id'),
+  'Chase an unpaid deposit',
+  'signed',
+  true,
+  jsonb_build_object(
+    'id', current_setting('app.workspace_id') || '-auto-chase',
+    'name', 'Chase an unpaid deposit',
+    'trigger', 'signed',
+    'steps', jsonb_build_array(
+      jsonb_build_object('kind', 'email',
+        'subject', 'Thank you, {{client}}',
+        'body', 'We have your signature on {{title}}. {{balance}} is due to reserve the date.'),
+      jsonb_build_object('kind', 'wait', 'waitHours', 72),
+      jsonb_build_object('kind', 'condition',
+        'if', jsonb_build_object('fact', 'paid', 'op', 'is', 'value', 'false')),
+      jsonb_build_object('kind', 'email',
+        'subject', 'A gentle nudge about {{title}}',
+        'body', '{{balance}} is still outstanding. Reply here if anything has changed.'),
+      jsonb_build_object('kind', 'task', 'title', 'Call {{client}} about {{title}}'),
+      jsonb_build_object('kind', 'stage', 'stage', 'chasing')
+    )
+  )
+);
+
 -- Statistics matter. Without ANALYZE the planner works from defaults, and every
 -- EXPLAIN shown on /engineering would be describing a table it never measured.
 ANALYZE;
