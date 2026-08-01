@@ -1582,50 +1582,6 @@
   color: color-mix(in oklab, var(--hb-ink) 76%, transparent);
 }
 
-/* ---------- the four steps ---------- */
-
-.sfl-steps {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-  margin: 1.25rem 0 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: none;
-}
-
-.sfl-step {
-  padding: 1.1rem;
-  background: var(--hb-cool);
-  border-radius: 18px;
-}
-
-.sfl-step-n {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  background: var(--hb-yellow);
-  border-radius: 999px;
-}
-
-.sfl-step-t {
-  margin: 0.6rem 0 0.3rem;
-  font-family: var(--font-serif);
-  font-size: 1.0625rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.sfl-step p {
-  font-size: 0.9375rem;
-  color: color-mix(in oklab, var(--hb-ink) 78%, transparent);
-}
-
 /* ---------- the surfaces ---------- */
 
 /* Two by two rather than auto-fit: there are exactly four surfaces, and
@@ -1690,33 +1646,6 @@
   border-bottom-color: var(--hb-ink);
 }
 
-/* ---------- how it is built ---------- */
-
-.sfl-build {
-  display: grid;
-  gap: 1.5rem 2.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
-  margin: 1.5rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.sfl-build-item {
-  padding-top: 1rem;
-  border-top: 2px solid var(--hb-yellow);
-}
-
-.sfl-build-t {
-  margin: 0 0 0.4rem;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.sfl-build-b {
-  font-size: 0.9375rem;
-  color: color-mix(in oklab, var(--hb-ink) 78%, transparent);
-}
 
 /* ---------- what is not real ---------- */
 
@@ -1767,6 +1696,224 @@
 
 .sfl-foot-links a:hover {
   border-bottom-color: var(--hb-ink);
+}
+
+/* ============================================================
+   The two diagrams on /smart-files
+
+   Boxes and connectors in plain HTML so the labels stay real
+   text and the whole thing turns to one column on a phone
+   without a second coordinate system.
+
+   Both animate the same way the loading motif does: the base
+   rules are the finished picture, and each keyframe set opens
+   at a 0% that undoes it. So the reduced-motion rule at the
+   bottom of this file only has to switch the animation off —
+   what is left is a completed file and a settled request.
+   ============================================================ */
+
+.sfd {
+  margin: 0;
+}
+
+/* Stacked, not side by side: they are read in order — what a file is, then
+   what serves it — and each one wants the full measure for its three columns. */
+.sfd-pair {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3rem);
+  margin-top: 1.75rem;
+}
+
+.sfd-cap {
+  max-width: 34rem;
+  margin-top: 1.1rem;
+  font-size: 0.9375rem;
+  color: color-mix(in oklab, var(--hb-ink) 76%, transparent);
+}
+
+/* ---------- the document as a graph ---------- */
+
+.sfd-doc {
+  display: grid;
+  gap: 1.5rem 2.25rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 34rem) {
+  .sfd-doc {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.sfd-block {
+  position: relative;
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.9rem 1rem;
+  background: var(--hb-white);
+  border: 1px solid var(--sf-line);
+  border-radius: 16px;
+  /* Complete: the resting frame. The 0% of sfd-resolve undoes it. */
+  animation: sfd-resolve 5.4s ease-in-out calc(var(--i) * 1.2s) infinite both;
+}
+
+/* The connector into this block from the one before it. Vertical while the
+   blocks are stacked, horizontal once they sit in a row. */
+.sfd-edge {
+  position: absolute;
+  background: color-mix(in oklab, var(--hb-ink) 22%, transparent);
+}
+
+.sfd-edge {
+  top: -1.1rem;
+  left: 1.75rem;
+  width: 2px;
+  height: 1.1rem;
+}
+
+@media (min-width: 34rem) {
+  .sfd-edge {
+    top: 50%;
+    left: -2.25rem;
+    width: 2.25rem;
+    height: 2px;
+  }
+}
+
+.sfd-kind {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--hb-muted);
+}
+
+.sfd-title {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* The status pip, using the product's own vocabulary: sage once complete. */
+.sfd-state {
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-top: 0.2rem;
+  border-radius: 50%;
+  background: var(--hb-sage);
+  border: 1.5px solid var(--hb-sage);
+  animation: sfd-pip 5.4s ease-in-out calc(var(--i) * 1.2s) infinite both;
+}
+
+/* ---------- the request path ---------- */
+
+.sfd-sys {
+  display: grid;
+  gap: 1.5rem 2.25rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 34rem) {
+  .sfd-sys {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.sfd-stage {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem 0.9rem 1.6rem;
+  border-left: 2px solid var(--sf-line);
+}
+
+/* The connector rides at the height of the pulse rather than the middle of the
+   box, so the request reads as one line running through all three. */
+.sfd-stage .sfd-edge {
+  top: 1.35rem;
+  left: -2.25rem;
+  width: 2.25rem;
+  height: 2px;
+}
+
+@media (max-width: 33.999rem) {
+  .sfd-stage .sfd-edge {
+    top: -1.1rem;
+    left: 0;
+    width: 2px;
+    height: 1.1rem;
+  }
+}
+
+.sfd-pulse {
+  position: absolute;
+  top: 1.15rem;
+  left: -0.3rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  /* Arrived: the resting frame. */
+  background: var(--hb-yellow);
+  border: 1.5px solid var(--hb-ink);
+  animation: sfd-pulse 3.6s ease-in-out calc(var(--i) * 0.5s) infinite both;
+}
+
+.sfd-stage-n {
+  font-weight: 600;
+}
+
+.sfd-stage-note {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--hb-muted);
+}
+
+@keyframes sfd-resolve {
+  0%,
+  8% {
+    background: transparent;
+    border-style: dashed;
+    border-color: color-mix(in oklab, var(--hb-ink) 16%, transparent);
+  }
+  22%,
+  100% {
+    background: var(--hb-white);
+    border-style: solid;
+    border-color: var(--sf-line);
+  }
+}
+
+@keyframes sfd-pip {
+  0%,
+  8% {
+    background: transparent;
+    border-color: color-mix(in oklab, var(--hb-ink) 25%, transparent);
+  }
+  14% {
+    background: var(--hb-yellow);
+    border-color: var(--hb-yellow-deep);
+  }
+  22%,
+  100% {
+    background: var(--hb-sage);
+    border-color: var(--hb-sage);
+  }
+}
+
+@keyframes sfd-pulse {
+  0%,
+  10% {
+    background: var(--hb-cream);
+    border-color: color-mix(in oklab, var(--hb-ink) 25%, transparent);
+  }
+  25%,
+  100% {
+    background: var(--hb-yellow);
+    border-color: var(--hb-ink);
+  }
 }
 
 /* ============================================================
@@ -1928,7 +2075,9 @@
      That one keeps its animation on purpose: the 0.6s delay in front of it is
      timing, not motion, and it is why a load that resolves quickly never
      explains itself. */
-  .hbapp .ld-flow * {
+  .hbapp .ld-flow *,
+  .hbapp .sfd-doc *,
+  .hbapp .sfd-sys * {
     animation: none !important;
   }
 }
