@@ -1,53 +1,132 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code working in this repository.
 
 ## What this is
 
-A private, single-page landing site: a creative job application from Bar Moshe to HoneyBook, styled in HoneyBook's rebrand identity (rebel yellow `#FFFA56` + ink `#142127`). The page is intentionally `robots: { index: false, follow: false }` — a shareable link, not a public launch. Keep it that way.
+A job application to HoneyBook that is also a working piece of software. The
+page at `/` argues that Bar Moshe can build; the rest of the repo is that
+argument made rather than stated.
+
+**Public repo.** `robots: noindex` on every route: a shareable link, not a
+launch. Keep both facts true.
+
+| Surface | What it is |
+|---|---|
+| `/` | The pitch page. Hero, the demo, HoneyBook studied up close, work, close |
+| `/smart-files` | A company-agnostic landing for the demo, safe to send to anyone |
+| `/f`, `/f/[token]` | The client link. No login. Choose, sign, pay |
+| `/studio` | A brief in one sentence becomes a smart file, with its derivation shown |
+| `/console` | Revenue, ranking, funnel, time to sign |
+| `/console/automations` | Triggers, waits, conditions, and a clock you can advance |
+| `/engineering` | Schema, live query plans, the validator refusing broken files, a ledger you can try to double-charge |
+
+## The one rule
+
+**Deciding is a pure Go function. State is Postgres.**
+
+`engine/` has no database, no clock, no network and no environment. It owns
+*what is allowed* and *what happens next*; everything else owns *what happened*.
+If you are about to write a rule in TypeScript, it belongs in Go, where it has
+tests.
+
+The gate this all exists for: an invoice is unreachable until its contract is
+signed. It is enforced in `lib/clientflow.ts`, which asks the engine before
+writing, and that is why the file is separate from the server actions, which
+call `revalidatePath` and therefore only run inside a request.
 
 ## Commands
 
 ```bash
 npm install
-npm run dev      # dev server at http://localhost:3000 (Turbopack)
-npm run build    # production build — CI gate, must pass
-npm run lint     # eslint (next/core-web-vitals + typescript, incl. jsx-a11y)
+npm run dev            # Next + the Go engine
+npm run build          # production build, a CI gate
+npm run lint           # eslint incl. jsx-a11y
+npm run test:engine    # go test over engine, api, httpx, cmd
+npm run prove          # every prove script
+npm run build:wasm     # rebuild public/engine.wasm, then commit it
 ```
 
-There is no test suite. CI (`.github/workflows/ci.yml`) runs `npm run lint` and `npm run build` on every push to `main` and `claude/**` branches and on PRs; Vercel auto-deploys behind that gate, so both must pass before pushing.
+The prove scripts answer questions only their own runtime can:
+
+| Script | What it proves |
+|---|---|
+| `prove:db` | Postgres accepts every hand-written query. Imports the real `queries.ts`, not a copy of its SQL |
+| `prove:parser` | Eight briefs, two of which must be refused, each validated by the live engine |
+| `prove:actions` | The gate. Real functions, real database, asserting on tables rather than return values |
+| `prove:transports` | WASM and HTTP answer byte for byte identically |
+| `prove:automations` | Triggers fire once, waits are real, conditions stop |
+
+`prove:parser`, `prove:transports` and `prove:automations` need the HTTP engine
+up (`npm run engine`). CI starts it.
 
 ## Stack
 
-- Next.js 16 (App Router) + React 19 + TypeScript, Turbopack (`turbopack.root` is pinned in `next.config.ts` — don't remove it; a stray lockfile above the repo would break root inference)
-- GSAP + ScrollTrigger for scroll entrances and parallax (only in `HoneyBookApp.tsx`)
-- Hand-written CSS design system in `app/globals.css` — **no Tailwind, no CSS modules**
-- Pure CSS/SVG animation for the product scenes (no WebGL, no video)
+- Next.js 16 (App Router) + React 19 + TypeScript, Turbopack
+- **Go** for the rules and automation engine, reached two ways (below)
+- **PGlite**: real PostgreSQL compiled to WebAssembly, in-process. Every query
+  hand-written, no ORM, nothing interpolated into SQL text
+- GSAP + ScrollTrigger, only in `components/HoneyBookApp.tsx`
+- Hand-written CSS design system. **No Tailwind, no CSS modules.**
+  `app/globals.css` for the pitch page, `app/(app)/app.css` for the surfaces,
+  palette shared by selector (`.hb-root, .hbapp`)
 - Path alias `@/*` maps to the repo root
 
-## Architecture
+## Layout
 
-The entire page is one client-component tree. `app/page.tsx` renders `components/HoneyBookApp.tsx` (a `"use client"` component that owns all sections, nav, modal state, and every GSAP animation). `app/ai/page.tsx` is only a redirect to `/#ai` kept for old shared links.
+```
+engine/               the Go engine, pure, with its tests
+api/engine.go         one Vercel Function, dispatching on an op
+cmd/enginewasm/       the same package built for GOOS=js
+cmd/engine/           the same handler, served locally for development
+httpx/                JSON plumbing shared by /api
+lib/engine.ts         types + money. CLIENT SAFE, keep it that way
+lib/engine-server.ts  calling the engine. server-only
+lib/clientflow.ts     the gate
+lib/automations.ts    the runner
+lib/db/               schema, seed, client, every query
+lib/parser.ts         plain language to a smart file, with its derivation
+app/(app)/            the working surfaces, sharing AppNav and app.css
+components/           the pitch page
+```
 
-**Copy and content live in `lib/`, not in components.** This is the key separation:
+## Things that will cost you an afternoon
 
-- `lib/projects.ts` — portfolio tiles for the "Work" grid
-- `lib/honeybookProduct.ts` — researched HoneyBook facts, product features, ideas, and source links that feed the "HoneyBook, studied up close" section. The file header documents the sources; claims are kept as data so the copy stays honest — do not invent or inflate facts here, and keep source links alongside any new claim.
-- `lib/contact.ts` — email/WhatsApp/CV links and href builders (the brief modal composes prefilled messages through `buildWhatsAppHref`/`buildMailtoHref`)
+1. **`lib/engine.ts` must stay free of anything Node-only.** Client components
+   import it. A bundler traces a dynamic import as eagerly as a static one, so
+   `node:fs` reachable from there lands in the browser bundle and fails the
+   build. Calling the engine lives in `lib/engine-server.ts`.
+2. **Never import a type from a `server-only` module into a client component.**
+   It does not fail the build. The component silently stops hydrating: buttons
+   render, nothing is bound, no error appears anywhere. Shared types belong in
+   `lib/engine.ts`.
+3. **Vercel compiles each `.go` file under `/api` in isolation**, alongside a
+   generated entrypoint, so files there cannot see each other even in the same
+   package. Anything shared goes in `httpx/`.
+4. **`vercel dev`'s Go builder is broken**, even with one function: it generates
+   its entrypoint and its dev-server main into one directory and then fails to
+   build them. That is why `cmd/engine` exists, serving the same handler.
+5. **The dev engine reads `ENGINE_PORT`, not `PORT`.** Next reads `PORT`, so any
+   harness that injects one hands the same socket to both processes. It presents
+   as pages returning Go's plain `404 page not found`.
+6. **Reach the engine at `VERCEL_PROJECT_PRODUCTION_URL`, never `VERCEL_URL`.**
+   The deployment-specific host sits behind Vercel's SSO wall, so a server
+   component fetching its own function 401s. This only breaks in production.
+7. **`public/engine.wasm` is committed.** The Go toolchain exists during
+   Vercel's build, not inside the function. Rebuild with `npm run build:wasm`
+   after touching `engine/`. `prove:transports` catches a stale one
+   behaviourally; a byte diff would fail on a different Go patch release.
+8. **PGlite returns `Date` objects, not ISO strings.** Slicing `String(value)`
+   and replacing the "T" turns "Tue Aug 04" into "ue Aug 04".
+9. **Concurrent sessions have worked in this repo.** `git fetch` before pushing.
 
-Components:
+## House rules for copy
 
-- `HoneyBookApp.tsx` — the page itself: hero, quote, about, stats, product-preview grid (desktop grid / mobile snap carousel with chip + dot navigation), ideas, fit, work, close, footer, mobile tab bar
-- `ProductPreviews.tsx` — six looping product-UI vignettes (one per `ProductFeature.key`), each an original hand-coded CSS/SVG scene inside a shared browser-chrome `Frame`. All decorative (`aria-hidden`).
-- `ClientflowGraphic.tsx` — the hero's animated clientflow graphic (SVG path + `animateMotion` dot + floating cards)
-- `BriefModal.tsx` — the "Let's talk" dialog: focus trap, Escape to close, body scroll lock, composes prefilled WhatsApp/email messages
-- `Decor.tsx` — small decorative SVGs
+First person, plain, matter-of-fact. **No em dashes.** No years-of-experience
+number, no seniority claims, no marketing voice. Never present `bar_builds`
+itself as portfolio work; "Creative Harness" is the acceptable framing.
 
-## Conventions
-
-- **CSS**: everything is in `app/globals.css`, prefixed `hb-` (page) or `hbai-` (product-preview scenes). Design tokens are oklch custom properties scoped to `.hb-root`. New styles follow the existing section-banner comment structure. Per-instance animation values are passed as CSS custom properties inline (`style={{ "--d": "0.5s" } as React.CSSProperties}`).
-- **Reduced motion is non-negotiable.** `globals.css` ends with a `prefers-reduced-motion` kill rule that flattens all CSS animation; JS-driven motion (GSAP entrances, magnetic buttons) is additionally guarded with `matchMedia` checks in `HoneyBookApp.tsx`. Any new animation must die cleanly under both.
-- **Accessibility**: decorative elements are `aria-hidden`; interactive things are real buttons/links; the lint gate includes jsx-a11y. The hero title splits words into spans but keeps real spaces between them so screen readers and copy-paste see separate words — preserve patterns like this.
-- **Copy voice**: first-person, plain, confident, no hype. Git history shows deliberate copy discipline (claims like "live" or "rebuilt" were removed on purpose). Don't reintroduce unverifiable claims; anything factual about HoneyBook belongs in `lib/honeybookProduct.ts` with a source.
-- `react-hooks/set-state-in-effect` is deliberately downgraded to a warning in `eslint.config.mjs` (effects legitimately read media-query state and start rAF loops); other lint errors are hard failures.
-- Mobile matters: the product previews become a horizontal snap carousel with rAF-throttled scroll syncing, and there's a mobile-only bottom tab bar. Check both desktop and narrow viewports when touching layout.
+State the limits where they apply rather than hiding them: payments are
+simulated, the database resets on cold start, the automation queue is the shape
+of durable execution and not the thing itself. Every one of those sentences is
+load-bearing, and removing one would make the page dishonest rather than tidy.

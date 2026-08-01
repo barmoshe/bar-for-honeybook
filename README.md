@@ -12,9 +12,11 @@ everything it claims.
 | Surface | What it is |
 |---|---|
 | `/` | The pitch, and the way into the demo |
+| `/smart-files` | A landing for the demo that names no company, safe to send to anyone |
 | `/f` | The client link. No login. Choose, sign, pay |
 | `/studio` | Describe a file in a sentence and watch a parser build it |
 | `/console` | Revenue, ranking, funnel, time to sign |
+| `/console/automations` | Triggers, waits and conditions on a Postgres queue |
 | `/engineering` | The schema, live query plans, and a ledger you can try to double-charge |
 
 ## The problem it models
@@ -66,6 +68,15 @@ they are first. Balances are a `SUM` over `occurred_at` rather than a column
 somebody updates, which is why an event that arrives late still lands on the
 right total. There are buttons on `/engineering` that try to break both.
 
+**Automations are a queue, not a cron.** Signing a file starts a run that thanks
+the client, waits three days, and chases only the ones who still have not paid.
+Runs park on a `resume_at` and are claimed with `FOR UPDATE SKIP LOCKED` behind
+a partial index. Deciding the next step is the same pure Go function discipline
+as the gating rules, with the current moment passed in rather than read, which is
+why a three-day wait is a button on the page and a millisecond in the tests. It
+is the shape of durable execution and not the thing: no retry with backoff, no
+heartbeat, no cancellation. Those are most of the reasons Temporal exists.
+
 **The parser has no model behind it.** `/studio` turns a sentence into a
 document with rules, and renders the derivation: which phrase produced which
 block, and what it could not read. That is deliberate. It is a public
@@ -94,8 +105,10 @@ a link that returns 500.
 npm install && npm run dev
 ```
 
-`npm run dev` starts **two** processes: Next, and the Go rules engine on
-`127.0.0.1:4310`. Next alone will not work, and says so.
+`npm run dev` starts **two** processes: Next, and the Go engine on
+`127.0.0.1:4310`. The app itself no longer needs the second one, because the
+engine is also compiled to WebAssembly and called in-process; it is started so
+the HTTP transport stays exercised and the prove scripts can run against it.
 
 | Script | What it does |
 |---|---|
@@ -105,7 +118,10 @@ npm install && npm run dev
 | `npm run test:engine` | `go test` over the engine, api and httpx |
 | `npm run prove:db` | Every hand-written query against a throwaway in-memory database |
 | `npm run prove:parser` | Eight briefs, two of which must be refused, each validated by the engine |
-| `npm run prove` | Both prove scripts |
+| `npm run prove:actions` | The gate, against a real database, asserting on tables not return values |
+| `npm run prove:transports` | WASM and HTTP answer byte for byte identically |
+| `npm run prove:automations` | Triggers fire once, waits are real, conditions stop |
+| `npm run prove` | All of them |
 
 `prove:db` imports `lib/db/queries.ts` directly rather than restating its SQL,
 so it cannot pass while the app fails.
@@ -113,20 +129,30 @@ so it cannot pass while the app fails.
 ## Layout
 
 ```
-engine/           the Go rules engine, pure, with its tests
-api/engine.go     one Vercel Function, dispatching on an op
-httpx/            JSON plumbing shared by /api
-cmd/engine/       the same handler, served locally for development
-lib/db/           schema, seed, client, and every query
-lib/parser.ts     plain language to a smart file, with its derivation
-lib/engine.ts     the TypeScript side of the Go boundary
-app/(app)/        /f, /studio, /console, /engineering
-components/       the pitch page
+engine/               the Go engine, pure, with its tests
+api/engine.go         one Vercel Function, dispatching on an op
+cmd/enginewasm/       the same package built for GOOS=js
+cmd/engine/           the same handler, served locally for development
+httpx/                JSON plumbing shared by /api
+lib/engine.ts         types + money. client safe, keep it that way
+lib/engine-server.ts  calling the engine. server-only
+lib/clientflow.ts     the gate
+lib/automations.ts    the runner
+lib/db/               schema, seed, client, every query
+lib/parser.ts         plain language to a smart file, with its derivation
+app/(app)/            the working surfaces, sharing AppNav and app.css
+components/           the pitch page
 ```
 
 ## Notes
 
-Three things cost real time and are worth knowing before touching this.
+Several things cost real time here and are worth knowing before touching it.
+
+`lib/engine.ts` must stay free of anything Node-only, because client components
+import it and a bundler traces a dynamic import as eagerly as a static one.
+Relatedly and worse: importing even a *type* from a `server-only` module into a
+client component does not fail the build, it silently stops that component
+hydrating. Buttons render, nothing is bound to them, and no error appears.
 
 Vercel compiles each `.go` file under `/api` in isolation alongside a generated
 entrypoint, so files there cannot see each other even in the same package.
@@ -141,6 +167,16 @@ The dev engine reads `ENGINE_PORT`, not `PORT`. Next reads `PORT`, and any
 harness that injects one would otherwise hand the same socket to both processes
 and leave whichever bound first serving everything, which presents as a routing
 bug in the app rather than as a port collision.
+
+`public/engine.wasm` is committed, because the Go toolchain exists during
+Vercel's build and not inside the running function. Rebuild it with
+`npm run build:wasm` after touching `engine/`. The staleness guard is
+behavioural rather than a byte diff, since the bytes depend on the exact Go
+patch release.
+
+Reach the engine at `VERCEL_PROJECT_PRODUCTION_URL`, never `VERCEL_URL`: the
+deployment-specific host sits behind Vercel's SSO wall, so a server component
+fetching its own function 401s. That one only breaks in production.
 
 The site is `robots: noindex` on every route. It is a shareable link, not a
 public launch.
