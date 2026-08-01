@@ -10,7 +10,9 @@
     "dev:next": "next dev",
     "engine": "go run ./cmd/engine",
     "test:engine": "go test ./engine/... ./api/... ./httpx/... -count=1",
-    "prove:db": "node --conditions=react-server scripts/prove-db.mjs"
+    "prove:db": "node --conditions=react-server scripts/prove-db.mjs",
+    "prove:parser": "node scripts/prove-parser.mjs",
+    "prove": "npm run prove:db && npm run prove:parser"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
