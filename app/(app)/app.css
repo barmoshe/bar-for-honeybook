@@ -1769,11 +1769,175 @@
   border-bottom-color: var(--hb-ink);
 }
 
+/* ============================================================
+   Route loading
+
+   The only motion in this file, and the only place the yellow
+   moves. The rail is the gating sequence the engine enforces:
+   choose, sign, pay, lit in that order by a travelling dot.
+
+   Every animation below ends on the frame it should hold still,
+   because the reduced-motion rule underneath collapses duration
+   to nothing and leaves whatever the last keyframe says. Here
+   that is the dot resting on Pay with all three nodes lit, which
+   is a finished picture rather than a frozen shimmer.
+   ============================================================ */
+
+.ld-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  /* Sits in the space the content will fill rather than clinging to the title,
+     so the wait looks composed instead of stranded at the top of an empty page. */
+  min-height: min(46vh, 20rem);
+  padding: clamp(1.5rem, 6vh, 3rem) 0;
+}
+
+.ld-flow {
+  width: min(20rem, 100%);
+}
+
+.ld-rail {
+  position: relative;
+  height: 1.25rem;
+}
+
+.ld-rail-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 0;
+  border-top: 2px dashed color-mix(in oklab, var(--hb-ink) 20%, transparent);
+  transform: translateY(-50%);
+}
+
+.ld-node {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--i) * 50%);
+  width: 0.6875rem;
+  height: 0.6875rem;
+  background: var(--hb-cream);
+  border: 2px solid color-mix(in oklab, var(--hb-ink) 30%, transparent);
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  /* Staggered to meet the dot: it reaches the second node halfway through the
+     cycle and the third at the end, so the fills land as it arrives. */
+  animation: ld-lit 2.4s ease-in-out calc(var(--i) * 1.2s) infinite both;
+}
+
+.ld-dot {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 0.875rem;
+  height: 0.875rem;
+  background: var(--hb-yellow);
+  border: 2px solid var(--hb-ink);
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  animation: ld-travel 2.4s ease-in-out infinite;
+}
+
+.ld-steps {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--hb-muted);
+}
+
+/* First and last labels sit under nodes that are flush with the rail ends, so
+   they get pulled back inside rather than hanging off the edge. */
+.ld-steps li:first-child {
+  margin-left: -0.25rem;
+}
+
+.ld-steps li:last-child {
+  margin-right: -0.25rem;
+}
+
+.ld-note {
+  max-width: 26rem;
+  font-size: 0.875rem;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--hb-muted);
+  /* Held back so a warm instance renders the real page before anybody reads an
+     explanation of a wait they did not have. The rule below overrides
+     animation-duration but not animation-delay, so this still waits. */
+  animation: ld-appear 0.4s ease 0.6s both;
+}
+
+@keyframes ld-travel {
+  from {
+    left: 0;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+/* Ink rather than yellow. A yellow node under a yellow dot reads as one smudge
+   at both ends of the rail, and the yellow is worth more kept to the one thing
+   that moves. */
+@keyframes ld-lit {
+  0% {
+    background: var(--hb-cream);
+    border-color: color-mix(in oklab, var(--hb-ink) 30%, transparent);
+  }
+  /* Filled the moment the dot arrives, and still filled at the end, so the
+     still frame shows a completed run. */
+  20%,
+  100% {
+    background: var(--hb-ink);
+    border-color: var(--hb-ink);
+  }
+}
+
+@keyframes ld-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hbapp *,
   .hbapp *::before,
   .hbapp *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+
+  /* The rule above is not enough for the loader on its own. Collapsing the
+     duration of an *infinite* animation does not stop it: it runs the cycle
+     every hundredth of a millisecond instead, which is motion the visitor
+     asked not to have, and it leaves the dot wherever a frame happened to
+     sample it rather than anywhere chosen. So state the resting frame here
+     instead of hoping the duration collapse lands on it. It is the picture the
+     run would have ended on: every step complete, the dot arrived at the last.
+
+     The note keeps its animation, because that delay is not motion — it is
+     there so a load that resolves quickly never explains itself. */
+  .hbapp .ld-dot {
+    animation: none !important;
+    left: 100%;
+  }
+
+  .hbapp .ld-node {
+    animation: none !important;
+    background: var(--hb-ink);
+    border-color: var(--hb-ink);
   }
 }
