@@ -16,12 +16,12 @@ import { buildMailtoHref } from "@/lib/contact";
 export const metadata: Metadata = {
   title: "Smart files, built for real",
   description:
-    "A proposal, a contract and an invoice in one link, with a rules engine behind it. Choose, sign, pay. Built in two days with Claude Code.",
+    "A proposal, a contract and an invoice in one link, with a rules engine behind it. Choose, sign, pay.",
   robots: { index: false, follow: false },
   openGraph: {
     title: "Smart files, built for real",
     description:
-      "A proposal, a contract and an invoice in one link, with a rules engine behind it. Built in two days with Claude Code.",
+      "A proposal, a contract and an invoice in one link, with a rules engine behind it. Choose, sign, pay.",
     type: "website",
     siteName: "Smart files",
   },
@@ -113,15 +113,15 @@ export default function Page() {
 
       <main className="st-main" id="main">
         <section className="sfl-hero">
-          <p className="sf-eyebrow">A two-day side project</p>
+          <p className="sf-eyebrow">A working demo</p>
           <h1 className="sf-title">
-            I was messing around with Claude, and this came out.
+            A proposal, a contract and an invoice, in one link.
           </h1>
           <p className="sfl-lede">
-            A smart file is a proposal, a contract and an invoice living in one
-            link. The client opens it, picks what they want, signs, and pays.
-            No account, no PDF going back and forth. I built a working one:
-            the rules, the database, and the money.
+            That is a smart file. The client opens the link, picks what they
+            want, signs the agreement, and pays. No account, no PDF going back
+            and forth. This one works end to end: the rules, the database, and
+            the money.
           </p>
           <div className="sfl-ctas">
             <Link className="sfl-btn" href="/f">
@@ -258,8 +258,8 @@ export default function Page() {
 
         <footer className="sfl-foot">
           <p className="sfl-foot-lead">
-            Built by Bar Moshe over two days, with Claude Code. The engine, the
-            schema, the queries and the parser are all mine to explain.
+            Built by Bar Moshe. The engine, the schema, the queries and the
+            parser are all mine to explain.
           </p>
           <p className="sfl-foot-links">
             <Link href="/f">Open a file</Link>

@@ -69,7 +69,7 @@ export default function OgImage() {
               border: "3px solid #142127",
             }}
           />
-          Choose, sign, pay &middot; built in two days with Claude Code
+          Choose, sign, pay &middot; a rules engine behind every step
         </div>
       </div>
     ),
