@@ -152,8 +152,31 @@ export type Validation = { ok: boolean; problems: Problem[]; order?: string[] };
  */
 function engineUrl(): string {
   if (process.env.ENGINE_URL) return process.env.ENGINE_URL;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}/api/engine`;
+
+  // VERCEL_PROJECT_PRODUCTION_URL, not VERCEL_URL. VERCEL_URL is the
+  // deployment-specific host, and deployment protection puts an SSO wall in
+  // front of it, so a server component fetching its own function there gets a
+  // 401 and the page 500s. The production alias is public.
+  //
+  // This is the sharpest edge of a function calling another function over HTTP,
+  // and it only appears in production: locally and on the alias it works, on a
+  // protected preview it does not.
+  const host = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+  if (host) return `https://${host}/api/engine`;
+
   return "http://127.0.0.1:4310/api/engine";
+}
+
+/**
+ * Lets a protected preview deployment call its own engine.
+ *
+ * Vercel injects this secret into protected deployments precisely so automated
+ * traffic can get past the SSO wall. Without it a preview would have to borrow
+ * production's engine, which is wrong the moment the engine is what changed.
+ */
+function bypassHeaders(): Record<string, string> {
+  const secret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+  return secret ? { "x-vercel-protection-bypass": secret } : {};
 }
 
 export class EngineError extends Error {}
@@ -163,7 +186,7 @@ async function call<T>(body: unknown): Promise<T> {
   try {
     res = await fetch(engineUrl(), {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...bypassHeaders() },
       body: JSON.stringify(body),
       cache: "no-store",
     });
