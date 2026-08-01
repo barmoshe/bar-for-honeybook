@@ -975,6 +975,221 @@
   margin-top: 1rem;
 }
 
+/* ============================================================
+   Console
+   ============================================================ */
+
+.cn .st-grid {
+  margin-bottom: 1rem;
+}
+
+.cn .st-pane + .st-pane,
+.cn .st-grid + .st-pane {
+  margin-top: 1rem;
+}
+
+.cn-stats {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  margin-bottom: 1.5rem;
+}
+
+.cn-stat {
+  display: grid;
+  gap: 0.15rem;
+  padding: 1rem 1.15rem;
+  background: var(--hb-ink);
+  color: var(--hb-white);
+  border-radius: 18px;
+}
+
+.cn-stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.65;
+}
+
+.cn-stat-value {
+  font-family: var(--font-serif);
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cn-stat-note {
+  font-size: 0.8125rem;
+  opacity: 0.7;
+}
+
+.cn-note {
+  margin-bottom: 0.9rem;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: var(--hb-muted);
+}
+
+.cn-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.cn-table th,
+.cn-table td {
+  padding: 0.5rem 0.4rem;
+  text-align: right;
+  font-weight: 400;
+  border-bottom: 1px solid var(--sf-line-soft);
+}
+
+.cn-table thead th {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hb-muted);
+}
+
+.cn-table th:first-child,
+.cn-table td:first-child,
+.cn-table thead th:first-child {
+  text-align: left;
+}
+
+.cn-table tbody th {
+  font-weight: 600;
+}
+
+.cn-table td {
+  font-variant-numeric: tabular-nums;
+}
+
+.cn-table tbody tr:last-child th,
+.cn-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.cn-table a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--hb-yellow-deep);
+}
+
+.cn-table a:hover {
+  background: color-mix(in oklab, var(--hb-yellow) 30%, transparent);
+}
+
+/* A bar behind the number rather than beside it: the figure stays readable and
+   the shape is still comparable down the column. */
+.cn-bar {
+  position: absolute;
+  right: 0.4rem;
+  z-index: -1;
+  display: block;
+  width: var(--w);
+  height: 1.15em;
+  background: color-mix(in oklab, var(--hb-yellow) 55%, transparent);
+  border-radius: 3px;
+}
+
+.cn-table tbody td {
+  position: relative;
+  isolation: isolate;
+}
+
+.cn-table td[data-dir="up"] {
+  color: color-mix(in oklab, var(--hb-sage) 85%, var(--hb-ink));
+}
+
+.cn-table td[data-dir="down"] {
+  color: color-mix(in oklab, #b23b3b 80%, var(--hb-ink));
+}
+
+.cn-dim {
+  color: var(--hb-muted);
+}
+
+.cn-stage {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  border: 1px solid var(--sf-line);
+  color: var(--hb-muted);
+}
+
+.cn-stage[data-stage="paid"] {
+  background: color-mix(in oklab, var(--hb-mint) 45%, var(--hb-white));
+  border-color: color-mix(in oklab, var(--hb-sage) 40%, transparent);
+  color: color-mix(in oklab, var(--hb-sage) 85%, var(--hb-ink));
+}
+
+.cn-stage[data-stage="signed"] {
+  background: color-mix(in oklab, var(--hb-yellow) 30%, var(--hb-white));
+  border-color: var(--hb-yellow-deep);
+  color: var(--hb-ink);
+}
+
+.cn-funnel {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cn-funnel li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr 5rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cn-funnel-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hb-muted);
+}
+
+.cn-funnel-track {
+  height: 1.4rem;
+  background: var(--hb-cool);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cn-funnel-fill {
+  display: block;
+  width: var(--w);
+  height: 100%;
+  background: var(--hb-yellow);
+  border-right: 2px solid var(--hb-yellow-deep);
+}
+
+.cn-funnel-n {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+@media (max-width: 40rem) {
+  .cn-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hbapp *,
   .hbapp *::before,
