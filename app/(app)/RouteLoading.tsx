@@ -10,53 +10,93 @@ import Link from "next/link";
  * with no sign that anything is happening.
  *
  * The motif is the demo's own gating sequence rather than a spinner: choose,
- * sign, pay, with the dot travelling the same order the engine enforces. The
- * header and the title are the route's real ones, so when the content lands
- * nothing above it moves.
+ * sign, pay, with the dot travelling the same order the engine enforces.
+ *
+ * Everything above the motif is the destination page's own chrome, copied from
+ * it exactly, so the swap to real content changes nothing a visitor can see
+ * move. That is why the strings live in the table below rather than being
+ * passed in per route: one place to keep honest, next to this warning.
+ * **If you rename a heading or reorder a nav on one of these pages, change it
+ * here too**, or the loading state will visibly rewrite itself on arrival.
  *
  * All the motion is CSS, deliberately. The reduced-motion rule at the bottom of
- * app.css flattens animation-duration under .hbapp, which catches this and
- * would not catch SVG animateMotion. Every animation here is written so its
- * final keyframe is a sensible still frame: the dot resting on the last node
- * with all three lit.
+ * app.css flattens animation under .hbapp, which catches this and would not
+ * catch SVG animateMotion.
  */
 
 /** The three blocks a smart file gates, in the order the engine unlocks them. */
 const STEPS = ["Choose", "Sign", "Pay"] as const;
 
-export default function RouteLoading({
-  eyebrow,
-  title,
-  chrome = "app",
-}: {
-  eyebrow: string;
-  title: string;
-  /** "file" matches the client surface, which has its own header and measure. */
-  chrome?: "app" | "file";
-}) {
-  const isFile = chrome === "file";
+/**
+ * Verbatim from each page's own header and title:
+ * console/page.tsx, studio/Studio.tsx, engineering/page.tsx, f/[token]/SmartFileView.tsx.
+ */
+const SURFACES = {
+  studio: {
+    brand: "Studio",
+    eyebrow: "Build a smart file",
+    title: "Describe it in a sentence.",
+    main: "st-main",
+  },
+  console: {
+    brand: "Console",
+    eyebrow: "Your side of the file",
+    title: "What the clients did.",
+    main: "st-main",
+  },
+  engineering: {
+    brand: "Engineering",
+    eyebrow: "How it is built",
+    title: "The receipts.",
+    // The engineering page narrows its measure; without this the loading block
+    // sits on a different left edge than the content that replaces it.
+    main: "st-main eg-main",
+  },
+  file: {
+    // The real header brands with the business name, which is in the document
+    // we are still fetching. This is the honest stand-in for it.
+    brand: "Smart file",
+    eyebrow: "Smart file",
+    title: "Opening your file.",
+    main: "sf-main",
+  },
+} as const;
+
+export type Surface = keyof typeof SURFACES;
+
+/** Each page links to the other two working surfaces, in this order, never to /f. */
+const NAV: { key: Surface; href: string }[] = [
+  { key: "studio", href: "/studio" },
+  { key: "console", href: "/console" },
+  { key: "engineering", href: "/engineering" },
+];
+
+export default function RouteLoading({ surface }: { surface: Surface }) {
+  const page = SURFACES[surface];
+  const isFile = surface === "file";
 
   return (
     <div className={`hbapp ld ${isFile ? "sf" : "st"}`}>
       {isFile ? (
         <header className="sf-top">
-          <span className="sf-brand">Smart file</span>
+          <span className="sf-brand">{page.brand}</span>
         </header>
       ) : (
         <header className="st-top">
-          <span className="sf-brand">Smart files</span>
-          <nav className="st-nav" aria-label="The working surfaces">
-            <Link href="/f">The file</Link>
-            <Link href="/studio">Studio</Link>
-            <Link href="/console">Console</Link>
-            <Link href="/engineering">Engineering</Link>
+          <span className="sf-brand">{page.brand}</span>
+          <nav className="st-nav">
+            {NAV.filter((n) => n.key !== surface).map((n) => (
+              <Link key={n.key} href={n.href}>
+                {SURFACES[n.key].brand}
+              </Link>
+            ))}
           </nav>
         </header>
       )}
 
-      <main className={isFile ? "sf-main" : "st-main"} id="main">
-        <p className="sf-eyebrow">{eyebrow}</p>
-        <h1 className="sf-title">{title}</h1>
+      <main className={page.main} id="main">
+        <p className="sf-eyebrow">{page.eyebrow}</p>
+        <h1 className="sf-title">{page.title}</h1>
 
         <div className="ld-wrap">
           <p className="sf-sr" role="status">

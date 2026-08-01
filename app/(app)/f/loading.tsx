@@ -6,5 +6,5 @@ import RouteLoading from "../RouteLoading";
  * purpose: the hop should read as one continuous wait rather than two loaders.
  */
 export default function Loading() {
-  return <RouteLoading eyebrow="Smart file" title="Opening your file." chrome="file" />;
+  return <RouteLoading surface="file" />;
 }

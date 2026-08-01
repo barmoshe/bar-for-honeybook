@@ -1786,7 +1786,11 @@
 .ld-wrap {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* Left, not centre. Every one of these pages sets its heading against the
+     left edge of a measure much wider than this motif, so centring the motif
+     parked it on its own in the middle of the column with nothing to line up
+     against. It belongs on the same edge as the title above it. */
+  align-items: flex-start;
   justify-content: center;
   gap: 1.75rem;
   /* Sits in the space the content will fill rather than clinging to the title,
@@ -1868,7 +1872,6 @@
 .ld-note {
   max-width: 26rem;
   font-size: 0.875rem;
-  text-align: center;
   text-wrap: balance;
   color: var(--hb-muted);
   /* Held back so a warm instance renders the real page before anybody reads an
