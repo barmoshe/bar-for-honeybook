@@ -64,10 +64,10 @@ jobs:
       - name: Prove the database
         run: npm run prove:db
 
-      # The parser is deterministic and has no model behind it, so its output
-      # can simply be asserted. The engine has to be up: this step also pushes
-      # every document the parser produces through the real validator.
-      - name: Prove the parser
+      # Both remaining proofs need the engine up. The parser proof pushes every
+      # document it produces through the real validator; the actions proof is
+      # the gate, and the gate is the engine answering.
+      - name: Start the engine
         run: |
           go run ./cmd/engine &
           for _ in $(seq 1 30); do
@@ -75,7 +75,16 @@ jobs:
               -H 'content-type: application/json' -d '{"op":"health"}' >/dev/null && break
             sleep 1
           done
-          npm run prove:parser
+
+      - name: Prove the parser
+        run: npm run prove:parser
+
+      # The load-bearing claim of the whole demo: the invoice is unreachable
+      # until the contract is signed. Driven through the real functions the
+      # server actions call, against a real database, checking the tables rather
+      # than the return value.
+      - name: Prove the gate
+        run: npm run prove:actions
 
       - name: Build
         run: npm run build
