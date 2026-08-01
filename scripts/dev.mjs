@@ -8,8 +8,11 @@ import { spawn } from "node:child_process";
 
 const procs = [];
 
-function run(name, cmd, args, colour) {
-  const child = spawn(cmd, args, { stdio: ["ignore", "pipe", "pipe"] });
+function run(name, cmd, args, colour, env) {
+  const child = spawn(cmd, args, {
+    stdio: ["ignore", "pipe", "pipe"],
+    env: { ...process.env, ...env },
+  });
   procs.push(child);
 
   const prefix = `\x1b[${colour}m[${name}]\x1b[0m `;
@@ -46,5 +49,7 @@ function shutdown(code) {
 process.on("SIGINT", () => shutdown(0));
 process.on("SIGTERM", () => shutdown(0));
 
-run("engine", "go", ["run", "./cmd/engine"], "36");
+// PORT is stripped from the engine's environment: it belongs to Next, and
+// handing it to both leaves them racing for the same socket.
+run("engine", "go", ["run", "./cmd/engine"], "36", { PORT: "" });
 run("next", "npx", ["next", "dev"], "35");

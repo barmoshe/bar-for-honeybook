@@ -10,8 +10,8 @@
 // there is nothing to keep in sync: if this server answers, the deployed
 // function answers identically.
 //
-//	go run ./cmd/engine        # listens on :4310
-//	PORT=5000 go run ./cmd/engine
+//	go run ./cmd/engine               # listens on :4310
+//	ENGINE_PORT=5000 go run ./cmd/engine
 package main
 
 import (
@@ -23,7 +23,13 @@ import (
 )
 
 func main() {
-	port := os.Getenv("PORT")
+	// ENGINE_PORT rather than PORT on purpose. Next also reads PORT, and any
+	// harness that runs `npm run dev` with one injected (a preview runner, a
+	// container, a CI job) would otherwise hand the same port to both processes
+	// and leave whichever bound first serving everything. That failure is
+	// especially unhelpful because it looks like a routing bug in the app: the
+	// pages return Go's plain "404 page not found".
+	port := os.Getenv("ENGINE_PORT")
 	if port == "" {
 		port = "4310"
 	}

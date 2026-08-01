@@ -5,30 +5,16 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ClientflowGraphic from "./ClientflowGraphic";
 import ProductPreview from "./ProductPreviews";
-import { Sparkle, IdeaIcon } from "./Decor";
+import { Sparkle } from "./Decor";
 import BriefModal from "./BriefModal";
-import McpCatalog from "./McpCatalog";
 import HoneyBookLogo from "./HoneyBookLogo";
 import { DEMO_SURFACES, PROJECTS } from "@/lib/projects";
-import { PRODUCT_FEATURES, PRODUCT_FACTS, PRODUCT_IDEAS, PRODUCT_SOURCES } from "@/lib/honeybookProduct";
+import { PRODUCT_FEATURES, PRODUCT_SOURCES } from "@/lib/honeybookProduct";
 import { whatsappHref, mailtoHref, cvHref } from "@/lib/contact";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const HERO_TITLE = "I want to build the next thing at HoneyBook.";
-const SKILLS = [
-  "Claude Code",
-  "AI agent workflows",
-  "Temporal · durable workflows",
-  "Any stack, fit to the job",
-  "Idea → production",
-];
-const IDEA_ACCENTS = ["var(--hb-yellow)", "var(--hb-mint)", "var(--hb-slate)"];
-const FITS = [
-  { n: "01", t: "Faster decisions", d: "Ideas reach a clickable, deployed surface the same day. You decide on a running thing, not a doc." },
-  { n: "02", t: "AI on the weight, judgment human", d: "Agents carry the repetitive load. I own the architecture, the taste, and the last 10%." },
-  { n: "03", t: "Fluent in clientflow", d: "Async, identity, proposal to payment. I'm comfortable in the systems you run on and learn a codebase fast." },
-];
 
 function Blobs({ dim = false }: { dim?: boolean }) {
   return (
@@ -177,10 +163,9 @@ export default function HoneyBookApp() {
             </span>
           </span>
           <nav className="hb-nav-links" aria-label="Sections">
-            <a href="#about">About</a>
+            <a href="#demo">The demo</a>
             <a href="#ai">HoneyBook</a>
             <a href="#work">Work</a>
-            <a href="#demo">The demo</a>
             <button className="hb-btn hb-btn--primary hb-btn--sm hb-magnetic" onClick={open} tabIndex={navShown ? 0 : -1}>
               Let&apos;s talk
             </button>
@@ -226,11 +211,8 @@ export default function HoneyBookApp() {
               <a className="hb-btn hb-btn--ghost" href={cvHref} download target="_blank" rel="noopener">
                 Download CV
               </a>
-              <a className="hb-btn hb-btn--ghost" href="#ai">
-                I did my research →
-              </a>
               <a className="hb-btn hb-btn--ghost" href="#demo">
-                And I built one →
+                See it working →
               </a>
             </div>
           </div>
@@ -244,88 +226,43 @@ export default function HoneyBookApp() {
       </header>
 
       <main id="main">
-        {/* ===== Pull quote / the hybrid method ===== */}
-        <section className="hb-section hb-section--quote" id="method" aria-label="How I work">
+        {/* ===== The working demo =====
+            Sits directly after "studied up close" on purpose: the narrative is
+            I read your product, then I built a working piece of it, and only
+            then here is where I would plug in. */}
+        <section className="hb-section hb-section--demo" id="demo">
+          <span className="hb-deco hb-deco--ring hb-spin-slow" style={{ width: 54, height: 54, top: "10%", left: "5%", color: "var(--hb-slate)" }} />
           <div className="hb-wrap">
-            <figure className="hb-quote hb-reveal">
-              <blockquote className="hb-quote-body">
-                <p>
-                  <strong>Today anyone can open an AI tool and get something working in minutes.</strong>{" "}
-                  That&apos;s amazing, but you&apos;re still left alone with a blank prompt, and
-                  the code was never really the hard part.
-                </p>
-                <p>
-                  <strong>The hard part is figuring out what&apos;s worth making, how to put it,
-                  and what to leave out.</strong>{" "}You don&apos;t need it all worked out first.
-                  Just describe it, I build a first version, and once it&apos;s real it&apos;s
-                  much easier to see what to change. That&apos;s the idea: a person who actually
-                  gets what you&apos;re after, with AI and code that move fast.
-                </p>
-                <p>
-                  <strong>I figure out what&apos;s needed, dig into it, find the words, build it
-                  with AI, and go over everything like a developer.</strong>{" "}I only take on
-                  things I genuinely want to make, and if it&apos;s not a fit, I&apos;ll say so
-                  up front.
-                </p>
-              </blockquote>
-              <figcaption className="hb-quote-cite">Bar Moshe</figcaption>
-            </figure>
-          </div>
-        </section>
-
-        {/* ===== About / How I build (consolidated) ===== */}
-        <section className="hb-section hb-section--about" id="about">
-          <Sparkle className="hb-deco hb-floaty2" style={{ top: "12%", right: "9%", color: "var(--hb-yellow-deep)", width: 26, height: 26 }} />
-          <div className="hb-wrap hb-about">
-            <div className="hb-about-copy">
-              <p className="hb-eyebrow hb-reveal">About</p>
-              <h2 className="hb-h2 hb-reveal">Claude Code. Any stack. Always current.</h2>
-              <p className="hb-lead hb-reveal">
-                I build with AI agents on Claude Code every day. It lets one builder move like
-                a small team: a short brief becomes working software in days. I track the
-                frontier and verify against live
-                docs, not stale memory. The stack is whatever fits; the judgment, taste, and
-                last 10% are the constant. I would rather hand you a running thing than a deck.
-              </p>
-              <ul className="hb-skills hb-reveal" aria-label="What I bring">
-                {SKILLS.map((s) => (
-                  <li key={s} className="hb-skill">
-                    {s}
-                  </li>
-                ))}
-              </ul>
-              <McpCatalog />
-            </div>
-            <div className="hb-about-card hb-reveal">
-              <div className="hb-about-monogram" aria-hidden="true">
-                BM
-                <Sparkle className="hb-about-spark" />
-              </div>
-              <div className="hb-about-name">Bar Moshe</div>
-              <div className="hb-about-role">AI-native builder</div>
-              <div className="hb-about-meta" aria-hidden="true">
-                <span>Idea → deployed</span>
-                <span>Ships solo, fast</span>
-                <span>Current by default</span>
-              </div>
-              <button className="hb-btn hb-btn--yellow hb-about-cta hb-magnetic" onClick={open}>
-                Let&apos;s talk
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== Researched HoneyBook facts ===== */}
-        <section className="hb-section hb-section--stats hb-inset" aria-label="HoneyBook facts">
-          <div className="hb-wrap">
-            <div className="hb-stats">
-              {PRODUCT_FACTS.map((f) => (
-                <div className="hb-stat hb-reveal" key={f.num}>
-                  <div className="hb-stat-num">{f.num}</div>
-                  <div className="hb-stat-label">{f.label}</div>
-                </div>
+            <p className="hb-eyebrow hb-reveal">Not a mockup</p>
+            <h2 className="hb-h2 hb-reveal">So I built a working one.</h2>
+            <p className="hb-demo-lede hb-reveal">
+              A smart file is a block graph with gating rules: choosing services
+              recomputes the invoice, the contract interpolates from both, and a
+              required signature makes the invoice genuinely unreachable until
+              it is signed. That last one is a real backend problem, so I built
+              it rather than drew it. The rules are a Go package with no I/O and
+              its own tests, the state is PostgreSQL with every query written by
+              hand, and all four surfaces below run on this domain.
+            </p>
+            <div className="hb-demo-grid">
+              {DEMO_SURFACES.map((s) => (
+                <a key={s.href} className={`hb-tile hb-tile--${s.accent}`} href={s.href}>
+                  <span className="hb-tile-tag">Live here</span>
+                  <span className="hb-tile-name">{s.name}</span>
+                  <span className="hb-tile-blurb">{s.proves}</span>
+                  <span className="hb-tile-go" aria-hidden="true">
+                    Open →
+                  </span>
+                </a>
               ))}
             </div>
+            <p className="hb-demo-note hb-reveal">
+              <Sparkle style={{ width: 14, height: 14, color: "var(--hb-yellow-deep)" }} />
+              Fictional inventory, no card taken, nothing charged. The database
+              is real Postgres compiled to WebAssembly and it resets when the
+              instance recycles, which the engineering page explains rather than
+              hides.
+            </p>
           </div>
         </section>
 
@@ -396,94 +333,6 @@ export default function HoneyBookApp() {
                 {s.label}
               </a>
             ))}
-          </div>
-        </section>
-
-        {/* ===== The working demo =====
-            Sits directly after "studied up close" on purpose: the narrative is
-            I read your product, then I built a working piece of it, and only
-            then here is where I would plug in. */}
-        <section className="hb-section hb-section--demo" id="demo">
-          <span className="hb-deco hb-deco--ring hb-spin-slow" style={{ width: 54, height: 54, top: "10%", left: "5%", color: "var(--hb-slate)" }} />
-          <div className="hb-wrap">
-            <p className="hb-eyebrow hb-reveal">Not a mockup</p>
-            <h2 className="hb-h2 hb-reveal">So I built a working one.</h2>
-            <p className="hb-demo-lede hb-reveal">
-              A smart file is a block graph with gating rules: choosing services
-              recomputes the invoice, the contract interpolates from both, and a
-              required signature makes the invoice genuinely unreachable until
-              it is signed. That last one is a real backend problem, so I built
-              it rather than drew it. The rules are a Go package with no I/O and
-              its own tests, the state is PostgreSQL with every query written by
-              hand, and all four surfaces below run on this domain.
-            </p>
-            <div className="hb-demo-grid">
-              {DEMO_SURFACES.map((s) => (
-                <a key={s.href} className={`hb-tile hb-tile--${s.accent}`} href={s.href}>
-                  <span className="hb-tile-tag">Live here</span>
-                  <span className="hb-tile-name">{s.name}</span>
-                  <span className="hb-tile-blurb">{s.proves}</span>
-                  <span className="hb-tile-go" aria-hidden="true">
-                    Open →
-                  </span>
-                </a>
-              ))}
-            </div>
-            <p className="hb-demo-note hb-reveal">
-              <Sparkle style={{ width: 14, height: 14, color: "var(--hb-yellow-deep)" }} />
-              Fictional inventory, no card taken, nothing charged. The database
-              is real Postgres compiled to WebAssembly and it resets when the
-              instance recycles, which the engineering page explains rather than
-              hides.
-            </p>
-          </div>
-        </section>
-
-        {/* ===== What I'd build on it ===== */}
-        <section className="hb-section hb-section--ai hb-inset" aria-label="What I'd build on it">
-          <div className="hb-wrap">
-            <p className="hb-eyebrow hb-eyebrow--onink hb-reveal">Where I&apos;d plug in</p>
-            <h2 className="hb-h2 hb-h2--invert hb-reveal">Three ideas, to start.</h2>
-            <ol className="hb-ideas">
-              {PRODUCT_IDEAS.map((idea, i) => (
-                <li
-                  className="hb-idea hb-reveal"
-                  key={idea.key}
-                  style={{ "--ac": IDEA_ACCENTS[i % IDEA_ACCENTS.length] } as React.CSSProperties}
-                >
-                  <span className="hb-idea-index" aria-hidden="true">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="hb-idea-icon">
-                    <IdeaIcon kind={idea.key} />
-                  </span>
-                  <h3>{idea.t}</h3>
-                  <p>{idea.d}</p>
-                </li>
-              ))}
-            </ol>
-            <p className="hb-ideas-note hb-reveal">
-              <Sparkle style={{ width: 14, height: 14, color: "var(--hb-yellow-deep)" }} />
-              Not a roadmap — point me anywhere.
-            </p>
-          </div>
-        </section>
-
-        {/* ===== Why I'd fit ===== */}
-        <section className="hb-section hb-section--fit">
-          <span className="hb-deco hb-deco--ring hb-spin-slow" style={{ width: 60, height: 60, top: "9%", right: "6%", color: "var(--hb-slate)" }} />
-          <div className="hb-wrap">
-            <p className="hb-eyebrow hb-reveal">Why I&apos;d fit at HoneyBook</p>
-            <h2 className="hb-h2 hb-reveal">The way you build is how I already work.</h2>
-            <div className="hb-fit-grid">
-              {FITS.map((f) => (
-                <div className="hb-fit-card hb-reveal" key={f.n}>
-                  <span className="hb-fit-num">{f.n}</span>
-                  <h3>{f.t}</h3>
-                  <p>{f.d}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
